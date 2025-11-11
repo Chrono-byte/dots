@@ -32,7 +32,7 @@ set $menu $rofi_cmd -show combi -combi-modes drun#run -modes combi
 # Start keyring agent and ensure the session exports the keyring sockets
 # so sway-launched clients (and terminals launched from sway) see the
 # SSH agent and Secret Service sockets.
-exec --no-startup-id /usr/bin/gnome-keyring-daemon --start --components=ssh,secrets,pkcs11
+exec --no-startup-id /usr/bin/gnome-keyring-daemon --start --components=ssh,pkcs11
 # Export the runtime socket paths for the sway session. Replace 1000 with
 # your UID if different; these paths follow the standard XDG_RUNTIME_DIR layout.
 # set GNOME_KEYRING_CONTROL /run/user/1000/keyring
@@ -50,6 +50,9 @@ output * bg /usr/share/backgrounds/default.jxl fill
 #   output HDMI-A-1 resolution 1920x1080 position 1920,0
 #
 # You can get the names of your outputs by running: swaymsg -t get_outputs
+
+output eDP-1 resolution 2240x1400 position 0,0 scale 1.0
+output HDMI-1 resolution 1920x1080 position 1920,0 scale 1.0
 
 ### Idle configuration
 #
