@@ -25,5 +25,5 @@
     "explorer.confirmDragAndDrop": false,
     "[markdown]": {
         "editor.defaultFormatter": "DavidAnson.vscode-markdownlint"
-    },
+    }
 }
