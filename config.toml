@@ -1,0 +1,50 @@
+[general]
+repo_path = "~/.dotfiles"
+current_profile = "default"
+backup_dir = "~/.dotfiles-backups"
+symlink_resolution = "auto"
+
+[[tools.zen.files]]
+repo = "zen/zen.json"
+dest = ".zen/zen.json"
+
+[[tools.sway.files]]
+repo = "sway/config"
+dest = ".config/sway/config"
+
+[[tools.zsh.files]]
+repo = "zsh/.zshrc"
+dest = ".zshrc"
+
+[[tools.cursor.files]]
+repo = "cursor/settings.json"
+dest = ".config/Cursor/User/settings.json"
+
+[[tools.cursor.files]]
+repo = "cursor/keybindings.json"
+dest = ".config/Cursor/User/keybindings.json"
+
+[[tools.fonts.files]]
+repo = "fonts/SF-Mono-Regular.otf"
+dest = ".local/share/fonts/SF-Mono-Regular.otf"
+
+[[tools.fonts.files]]
+repo = "fonts/SFHello-Regular.otf"
+dest = ".local/share/fonts/SFHello-Regular.otf"
+
+[[tools.fonts.files]]
+repo = "fonts/SFMonoNerdFont-Regular.otf"
+dest = ".local/share/fonts/SFMonoNerdFont-Regular.otf"
+
+[[tools.starship.files]]
+repo = "starship/starship.toml"
+dest = ".config/starship.toml"
+
+[[tools.waybar.files]]
+repo = "waybar/config"
+dest = ".config/waybar/config"
+
+[[tools.waybar.files]]
+repo = "waybar/style.css"
+dest = ".config/waybar/style.css"
+
