@@ -36,6 +36,10 @@ dest = ".local/share/fonts/SFHello-Regular.otf"
 repo = "fonts/SFMonoNerdFont-Regular.otf"
 dest = ".local/share/fonts/SFMonoNerdFont-Regular.otf"
 
+[[tools.fonts.files]]
+repo = "fonts/JetBrainsMonoNerdFont-Regular.ttf"
+dest = ".local/share/fonts/JetBrainsMonoNerdFont-Regular.ttf"
+
 [[tools.starship.files]]
 repo = "starship/starship.toml"
 dest = ".config/starship.toml"
@@ -47,6 +51,8 @@ dest = ".config/waybar/config"
 [[tools.waybar.files]]
 repo = "waybar/style.css"
 dest = ".config/waybar/style.css"
+
+
 
 
 

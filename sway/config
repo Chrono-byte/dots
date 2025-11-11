@@ -82,6 +82,11 @@ input type:keyboard {
     xkb_options ralt:menu
 }
 
+### Switch bindings
+#
+# Lock screen when laptop lid is closed
+bindswitch lid:on exec swaylock
+
 ### Gaps
 gaps inner 4
 gaps outer 4
