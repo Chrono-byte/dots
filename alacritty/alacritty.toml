@@ -1,0 +1,68 @@
+[general]
+live_config_reload = true
+
+[env]
+TERM = "xterm-256color"
+
+[window]
+padding = { x = 5, y = 1 }
+decorations = "full"
+title = "Alacritty"
+dynamic_title = true
+dynamic_padding = true
+opacity = 0.5
+
+[scrolling]
+history = 10000
+multiplier = 3
+
+[font]
+normal = { family = "JetBrains Mono Nerd Font", style = "" }
+size = 13.0
+
+[selection]
+save_to_clipboard = true
+
+[cursor]
+style = { shape = "Block", blinking = "Always" }
+vi_mode_style = { shape = "Block", blinking = "Always" }
+
+[bell]
+animation = "EaseOutExpo"
+duration = 0
+
+[mouse]
+bindings = [{ mouse = "Middle", action = "Paste" }]
+
+[hints]
+enabled = [
+  { regex = "(ipv4)", command = "open", post_processing = true, mouse.enabled = true }
+]
+
+[[keyboard.bindings]]
+key = "Back"
+mods = "Control"
+chars = "\u0017"
+
+[[keyboard.bindings]]
+key = "C"
+mods = "Control"
+action = "Copy"
+
+[[keyboard.bindings]]
+key = "V"
+mods = "Control"
+action = "Paste"
+
+[colors]
+draw_bold_text_with_bright_colors = true
+normal = { black = "#4b4945", red = "#e0163d", green = "#009e58", yellow = "#f7921d", blue = "#00a3e5", magenta = "#91268e", cyan = "#f28ab2", white = "#f5f5f7" }
+bright = { black = "#8a8c8d", red = "#e0163d", green = "#009e58", yellow = "#f7921d", blue = "#00a3e5", magenta = "#91268e", cyan = "#ac5a0f", white = "#f5f5f7" }
+
+[colors.cursor]
+text = "#fef3da"
+cursor = "#4b4945"
+
+[colors.selection]
+text = "#4b4945"
+background = "#c5bfb4"
