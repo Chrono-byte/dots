@@ -1,20 +1,9 @@
+#:schema /home/chrono/Dev/dotfiles-manager/schemas/config.schema.json
 [general]
 repo_path = "~/.dotfiles"
-current_profile = "default"
 backup_dir = "~/.dotfiles-backups"
+current_profile = "default"
 symlink_resolution = "auto"
-
-[[tools.zen.files]]
-repo = "zen/zen.json"
-dest = ".zen/zen.json"
-
-[[tools.sway.files]]
-repo = "sway/config"
-dest = ".config/sway/config"
-
-[[tools.zsh.files]]
-repo = "zsh/.zshrc"
-dest = ".zshrc"
 
 [[tools.cursor.files]]
 repo = "cursor/settings.json"
@@ -40,10 +29,6 @@ dest = ".local/share/fonts/SFMonoNerdFont-Regular.otf"
 repo = "fonts/JetBrainsMonoNerdFont-Regular.ttf"
 dest = ".local/share/fonts/JetBrainsMonoNerdFont-Regular.ttf"
 
-[[tools.starship.files]]
-repo = "starship/starship.toml"
-dest = ".config/starship.toml"
-
 [[tools.waybar.files]]
 repo = "waybar/config"
 dest = ".config/waybar/config"
@@ -52,7 +37,19 @@ dest = ".config/waybar/config"
 repo = "waybar/style.css"
 dest = ".config/waybar/style.css"
 
+[[tools.zsh.files]]
+repo = "zsh/.zshrc"
+dest = ".zshrc"
 
+[[tools.sway.files]]
+repo = "sway/config"
+dest = ".config/sway/config"
 
+[[tools.starship.files]]
+repo = "starship/starship.toml"
+dest = ".config/starship.toml"
 
+[packages]
+sway = {name = "sway", version = "latest"}
 
+[services]
