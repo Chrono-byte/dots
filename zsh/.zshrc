@@ -30,6 +30,10 @@ source $ZSH/custom/plugins/zsh-syntax-highlighting/zsh-syntax-highlighting.zsh 2
 source $ZSH/plugins/zsh-syntax-highlighting/zsh-syntax-highlighting.zsh 2>/dev/null || \
 echo "Warning: zsh-syntax-highlighting not found"
 
+# Flux completions
+fpath=(~/.zsh/completions $fpath)
+autoload -U compinit && compinit
+
 # History configuration
 HISTFILE=~/.zsh_history
 HISTSIZE=10000
