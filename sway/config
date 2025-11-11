@@ -27,6 +27,11 @@ set $rofi_cmd rofi \
 # TODO: add window with the next release of rofi-wayland
 set $menu $rofi_cmd -show combi -combi-modes drun#run -modes combi
 
+### Startup applications
+#
+# Start keyring agent
+exec --no-startup-id bash -c "eval $(gnome-keyring-daemon --start --components=ssh,secrets,pkcs11)"
+
 ### Output configuration
 #
 # Default wallpaper (more resolutions are available in /usr/share/backgrounds/sway/)
