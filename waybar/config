@@ -1,0 +1,136 @@
+{
+    "layer": "top",
+    "position": "top",
+    "height": 30,
+    "spacing": 4,
+    "modules-left": ["custom/logo", "sway/workspaces"],
+    "modules-center": [],
+    "modules-right": [
+        "custom/weather",
+        "network",
+        "pulseaudio",
+        "battery",
+        "tray",
+        "clock"
+    ],
+
+    "tray": {
+        "icon-size": 16,
+        "spacing": 16
+    },
+
+    "custom/logo": {
+        "format": "󱄛",
+        "tooltip": false
+    },
+
+    "sway/workspaces": {
+        "format": "{name}: {icon}",
+        "format-icons": {
+            "1": "󰨞",
+            "2": "󰈹",
+            "3": "󰊯",
+            "4": "󰈔",
+            "5": "󰝰",
+            "6": "󰨞",
+            "7": "󰈹",
+            "8": "󰊯",
+            "9": "󰈔",
+            "10": "󰝰",
+            "urgent": "󰝰",
+            "focused": "󰝰",
+            "default": "󰝰"
+        },
+        "all-outputs": true,
+        "disable-scroll": true,
+        "on-click": "activate",
+        "on-click-middle": "close",
+        "format-window-separator": " | ",
+        "window-rewrite-default": "{title}",
+        "window-format": "<span color='#2a2a2a'>{title}</span>",
+        "window-rewrite": {
+            "class<firefox> title<.*chat.gig.tech.*>": "",
+            "class<kitty>": ""
+        }
+    },
+
+    "custom/weather": {
+        "format": "☀️ {}",
+        "interval": 1800,
+        "exec": "curl -s 'wttr.in/?format=%t' || echo '+N/A°F'",
+        "tooltip": true
+    },
+
+    "network": {
+        "format-wifi": "📶 {signalStrength}%",
+        "format-ethernet": "󰈀 Connected",
+        "format-linked": "󰈀 {ifname} (No IP)",
+        "format-disconnected": "󰤭 Disconnected",
+        "tooltip-format": "{essid} - {ipaddr}/{cidr}",
+        "tooltip-format-wifi": "{essid} ({signalStrength}%) - {ipaddr}/{cidr}",
+        "tooltip-format-ethernet": "{ipaddr}/{cidr}",
+        "tooltip-format-disconnected": "Not connected"
+    },
+
+    "pulseaudio": {
+        "format": "🔊 {volume}%",
+        "format-bluetooth": "󰋋 {volume}%",
+        "format-bluetooth-muted": "󰂲 {volume}%",
+        "format-muted": "🔇 {volume}%",
+        "format-source": "{volume}% 󰍬",
+        "format-source-muted": "󰍭",
+        "on-click": "pavucontrol"
+    },
+
+    "battery": {
+        "states": {
+            "warning": 30,
+            "critical": 15
+        },
+        "format": "{icon} {capacity}%",
+        "format-charging": "󰂄 {capacity}%",
+        "format-plugged": "󰂄 {capacity}%",
+        "format-alt": "{icon} {time}",
+        "format-full": "󰁹 {capacity}%",
+        "format-icons": ["󰁺", "󰁻", "󰁼", "󰁽", "󰁾", "󰁿", "󰂀", "󰂁", "󰂂", "󰁹"]
+    },
+
+    "custom/discord": {
+        "format": "󰙯",
+        "exec": "pgrep -x Discord > /dev/null && echo '󰙯' || echo ''",
+        "interval": 5,
+        "tooltip": false
+    },
+
+    "custom/signal": {
+        "format": "📊",
+        "tooltip": false
+    },
+
+    "custom/vpn": {
+        "format": "🌐",
+        "exec": "ip link show 2>/dev/null | grep -q 'tun\\|wg' && echo '🌐' || echo ''",
+        "interval": 5,
+        "tooltip": false
+    },
+
+    "clock": {
+        "format": "{:%a %b %d %H:%M}",
+        "format-alt": "{:%A, %B %d, %Y (%R)}",
+        "tooltip-format": "<tt><small>{calendar}</small></tt>",
+        "calendar": {
+            "mode": "year",
+            "mode-mon-col": 3,
+            "weeks-pos": "right",
+            "on-scroll": 1,
+            "on-click-right": "mode"
+        },
+        "actions": {
+            "on-click-right": "mode",
+            "on-click-forward": "tz_up",
+            "on-click-backward": "tz_down",
+            "on-scroll-up": "shift_up",
+            "on-scroll-down": "shift_down"
+        }
+    }
+}
