@@ -28,6 +28,3 @@ files = [{ repo = "sway/config", dest = ".config/sway/config" },
 [tools.starship]
 files = [{ repo = "starship/starship.toml", dest = ".config/starship.toml" },
 ]
-
-[packages]
-sway = {name = "sway", version = "latest"}
