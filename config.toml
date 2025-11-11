@@ -48,3 +48,5 @@ dest = ".config/waybar/config"
 repo = "waybar/style.css"
 dest = ".config/waybar/style.css"
 
+
+

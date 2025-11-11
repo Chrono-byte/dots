@@ -23,4 +23,7 @@
     "breadcrumbs.enabled": true,
     "explorer.confirmDelete": false,
     "explorer.confirmDragAndDrop": false,
+    "[markdown]": {
+        "editor.defaultFormatter": "DavidAnson.vscode-markdownlint"
+    },
 }
