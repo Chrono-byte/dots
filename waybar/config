@@ -1,8 +1,8 @@
 {
     "layer": "top",
     "position": "top",
-    "height": 30,
-    "spacing": 4,
+    "height": 35,
+    "spacing": 6,
     "modules-left": ["custom/logo", "sway/workspaces"],
     "modules-center": [],
     "modules-right": [
@@ -15,8 +15,8 @@
     ],
 
     "tray": {
-        "icon-size": 16,
-        "spacing": 16
+        "icon-size": 18,
+        "spacing": 12
     },
 
     "custom/logo": {
@@ -25,32 +25,17 @@
     },
 
     "sway/workspaces": {
-        "format": "{name}: {icon}",
-        "format-icons": {
-            "1": "󰨞",
-            "2": "󰈹",
-            "3": "󰊯",
-            "4": "󰈔",
-            "5": "󰝰",
-            "6": "󰨞",
-            "7": "󰈹",
-            "8": "󰊯",
-            "9": "󰈔",
-            "10": "󰝰",
-            "urgent": "󰝰",
-            "focused": "󰝰",
-            "default": "󰝰"
-        },
-        "all-outputs": true,
-        "disable-scroll": true,
-        "on-click": "activate",
-        "on-click-middle": "close",
+        "format": "{name}: {windows}",
         "format-window-separator": " | ",
-        "window-rewrite-default": "{title}",
-        "window-format": "<span color='#2a2a2a'>{title}</span>",
+        "window-format": "{class}",
+        "window-rewrite-default": "{class}",
+        "max-length": 15,
         "window-rewrite": {
-            "class<firefox> title<.*chat.gig.tech.*>": "",
-            "class<kitty>": ""
+            "class<app.zen_browser.zen>": "", // zen browser
+            "class<alacritty>": "",    // alacritty
+            "class<cursor>": "",       // cursor
+            "class<helium>": "󰊯",    // helium browser
+            "class<discord>": "󰙯"     // discord
         }
     },
 

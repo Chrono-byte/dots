@@ -81,6 +81,14 @@ input type:keyboard {
     xkb_options ralt:menu
 }
 
+### Gaps
+gaps inner 10
+gaps outer 10
+gaps top 10
+gaps bottom 10
+gaps left 10
+gaps right 10
+
 ### Key bindings
 #
 # Basics:

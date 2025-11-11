@@ -2,5 +2,6 @@
     "workbench.colorTheme": "Better Selenized Light",
     "files.simpleDialog.enable": true,
     "vscord.app.name": "Cursor",
-    "vscord.status.idle.disconnectOnIdle": true
+    "vscord.status.idle.disconnectOnIdle": true,
+    "workbench.sideBar.location": "right"
 }

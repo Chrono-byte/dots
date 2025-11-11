@@ -1,0 +1,37 @@
+# OS files
+.DS_Store
+Thumbs.db
+*.swp
+*.swo
+*~
+.#*
+
+# Editor files
+.idea/
+.vscode/
+*.swp
+*.swo
+*~
+.vim/
+.swapfile
+
+# Temporary files
+*.tmp
+*.temp
+*.log
+
+# Backup files
+*.bak
+*.backup
+*~
+
+# Node modules (if configs contain web stuff)
+node_modules/
+
+# Python cache
+__pycache__/
+*.pyc
+
+# System files
+.directory
+desktop.ini
