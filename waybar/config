@@ -131,6 +131,7 @@
             "on-click-backward": "tz_down",
             "on-scroll-up": "shift_up",
             "on-scroll-down": "shift_down"
-        }
+        },
+        "timezone": "America/New_York"
     }
 }
