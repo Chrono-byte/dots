@@ -32,6 +32,7 @@ set $menu $rofi_cmd -show combi -combi-modes drun#run -modes combi
 # Default wallpaper (more resolutions are available in /usr/share/backgrounds/sway/)
 # Requires: desktop-backgrounds-compat, swaybg, jxl-pixbuf-loader
 output * bg /usr/share/backgrounds/default.jxl fill
+# output * bg /home/chrono/Downloads/nord-lake.png fill
 #
 # Example configuration:
 #
@@ -82,12 +83,12 @@ input type:keyboard {
 }
 
 ### Gaps
-gaps inner 10
-gaps outer 10
-gaps top 10
-gaps bottom 10
-gaps left 10
-gaps right 10
+gaps inner 4
+gaps outer 4
+gaps top 4
+gaps bottom 4
+gaps left 4
+gaps right 4
 
 ### Key bindings
 #
