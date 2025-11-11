@@ -35,8 +35,8 @@ set $menu $rofi_cmd -show combi -combi-modes drun#run -modes combi
 exec --no-startup-id /usr/bin/gnome-keyring-daemon --start --components=ssh,secrets,pkcs11
 # Export the runtime socket paths for the sway session. Replace 1000 with
 # your UID if different; these paths follow the standard XDG_RUNTIME_DIR layout.
-set GNOME_KEYRING_CONTROL /run/user/1000/keyring
-set SSH_AUTH_SOCK /run/user/1000/keyring/ssh
+# set GNOME_KEYRING_CONTROL /run/user/1000/keyring
+# set SSH_AUTH_SOCK /run/user/1000/keyring/ssh
 
 ### Output configuration
 #
