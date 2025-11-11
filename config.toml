@@ -6,25 +6,36 @@ current_profile = "default"
 symlink_resolution = "auto"
 
 [tools.cursor]
-files = [{ repo = "cursor/settings.json", dest = ".config/Cursor/User/settings.json" }, { repo = "cursor/keybindings.json", dest = ".config/Cursor/User/keybindings.json" },
+files = [
+  { repo = "cursor/settings.json", dest = ".config/Cursor/User/settings.json" },
+  { repo = "cursor/keybindings.json", dest = ".config/Cursor/User/keybindings.json" },
 ]
 
 [tools.fonts]
-files = [{ repo = "fonts/SF-Mono-Regular.otf", dest = ".local/share/fonts/SF-Mono-Regular.otf" }, { repo = "fonts/SFHello-Regular.otf", dest = ".local/share/fonts/SFHello-Regular.otf" }, { repo = "fonts/SFMonoNerdFont-Regular.otf", dest = ".local/share/fonts/SFMonoNerdFont-Regular.otf" }, { repo = "fonts/JetBrainsMonoNerdFont-Regular.ttf", dest = ".local/share/fonts/JetBrainsMonoNerdFont-Regular.ttf" },
+files = [
+  { repo = "fonts/SF-Mono-Regular.otf", dest = ".local/share/fonts/SF-Mono-Regular.otf" },
+  { repo = "fonts/SFHello-Regular.otf", dest = ".local/share/fonts/SFHello-Regular.otf" },
+  { repo = "fonts/SFMonoNerdFont-Regular.otf", dest = ".local/share/fonts/SFMonoNerdFont-Regular.otf" },
+  { repo = "fonts/JetBrainsMonoNerdFont-Regular.ttf", dest = ".local/share/fonts/JetBrainsMonoNerdFont-Regular.ttf" },
 ]
 
 [tools.waybar]
-files = [{ repo = "waybar/config", dest = ".config/waybar/config" }, { repo = "waybar/style.css", dest = ".config/waybar/style.css" },
+files = [
+  { repo = "waybar/config", dest = ".config/waybar/config" },
+  { repo = "waybar/style.css", dest = ".config/waybar/style.css" },
 ]
 
 [tools.zsh]
-files = [{ repo = "zsh/.zshrc", dest = ".zshrc" },
+files = [
+  { repo = "zsh/.zshrc", dest = ".zshrc" },
 ]
 
 [tools.sway]
-files = [{ repo = "sway/config", dest = ".config/sway/config" },
+files = [
+  { repo = "sway/config", dest = ".config/sway/config" },
 ]
 
 [tools.starship]
-files = [{ repo = "starship/starship.toml", dest = ".config/starship.toml" },
+files = [
+  { repo = "starship/starship.toml", dest = ".config/starship.toml" },
 ]
