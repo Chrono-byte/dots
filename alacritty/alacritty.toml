@@ -44,16 +44,6 @@ key = "Back"
 mods = "Control"
 chars = "\u0017"
 
-[[keyboard.bindings]]
-key = "C"
-mods = "Control"
-action = "Copy"
-
-[[keyboard.bindings]]
-key = "V"
-mods = "Control"
-action = "Paste"
-
 [colors]
 draw_bold_text_with_bright_colors = true
 normal = { black = "#4b4945", red = "#e0163d", green = "#009e58", yellow = "#f7921d", blue = "#00a3e5", magenta = "#91268e", cyan = "#f28ab2", white = "#f5f5f7" }

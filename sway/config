@@ -24,15 +24,14 @@ set $rofi_cmd rofi \
         -terminal '$term'
 # Shows a combined list of the applications with desktop files and
 # executables from PATH.
-# TODO: add window with the next release of rofi-wayland
-set $menu $rofi_cmd -show combi -combi-modes drun#run -modes combi
+set $menu $rofi_cmd -show drun
 
 ### Startup applications
 #
 # Start keyring agent and ensure the session exports the keyring sockets
 # so sway-launched clients (and terminals launched from sway) see the
 # SSH agent and Secret Service sockets.
-exec --no-startup-id /usr/bin/gnome-keyring-daemon --start --components=ssh,pkcs11
+exec --no-startup-id /usr/bin/gnome-keyring-daemon --start --components=ssh
 # Export the runtime socket paths for the sway session. Replace 1000 with
 # your UID if different; these paths follow the standard XDG_RUNTIME_DIR layout.
 # set GNOME_KEYRING_CONTROL /run/user/1000/keyring
@@ -42,7 +41,7 @@ exec --no-startup-id /usr/bin/gnome-keyring-daemon --start --components=ssh,pkcs
 #
 # Default wallpaper (more resolutions are available in /usr/share/backgrounds/sway/)
 # Requires: desktop-backgrounds-compat, swaybg, jxl-pixbuf-loader
-output * bg /usr/share/backgrounds/default.jxl fill
+output * bg /usr/share/backgrounds/f43/default/f43-01-day.jxl fill
 # output * bg /home/chrono/Downloads/nord-lake.png fill
 #
 # Example configuration:
@@ -98,7 +97,6 @@ input type:mouse {
 
 input type:keyboard {
     xkb_layout us
-    xkb_options ralt:menu
 }
 
 ### Switch bindings
