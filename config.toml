@@ -1,4 +1,5 @@
-#:schema https://github.com/Chrono-byte/dotfiles-manager/raw/refs/heads/master/schemas/config.schema.json
+#:schema /home/chrono/Dev/dotfiles-manager/schemas/config.schema.json
+
 [general]
 repo_path = "~/.dotfiles"
 backup_dir = "~/.dotfiles-backups"
@@ -33,6 +34,8 @@ files = [
 [tools.sway]
 files = [
   { repo = "sway/config", dest = ".config/sway/config" },
+  { repo = "sway/config.d/60-bindings-screenshot.conf", dest = ".config/sway/config.d/60-bindings-screenshot.conf" },
+  { repo = "sway/config.d/90-bar.conf", dest = ".config/sway/config.d/90-bar.conf" },
 ]
 
 [tools.starship]
