@@ -28,5 +28,6 @@
     },
     "[toml]": {
         "editor.defaultFormatter": "tombi-toml.tombi"
-    }
+    },
+    "update.mode": "none"
 }

@@ -36,6 +36,13 @@
             "class<cursor>": "",       // cursor
             "class<helium>": "󰊯",    // helium browser
             "class<discord>": "󰙯"     // discord
+        },
+        // show workspaces 1-4 on monitor 1 always
+        "persistent-workspaces": {
+            "1": [],
+            "2": [],
+            "3": [],
+            "4": []
         }
     },
 
