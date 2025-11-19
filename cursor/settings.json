@@ -29,12 +29,20 @@
     "[toml]": {
         "editor.defaultFormatter": "tombi-toml.tombi"
     },
-    "update.mode": "none",
     "gitlens.ai.model": "gitkraken",
     "gitlens.ai.gitkraken.model": "gemini:gemini-2.0-flash",
     "workbench.preferredDarkColorTheme": "Better Selenized Dark",
     "workbench.preferredLightColorTheme": "Better Selenized Light",
     "[typescriptreact]": {
+        "editor.defaultFormatter": "biomejs.biome"
+    },
+    "[typescript]": {
+        "editor.defaultFormatter": "biomejs.biome"
+    },
+    "[javascript]": {
+        "editor.defaultFormatter": "biomejs.biome"
+    },
+    "[json]": {
         "editor.defaultFormatter": "biomejs.biome"
     }
 }
