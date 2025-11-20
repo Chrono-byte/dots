@@ -44,5 +44,6 @@
     },
     "[json]": {
         "editor.defaultFormatter": "biomejs.biome"
-    }
+    },
+    "extensions.ignoreRecommendations": true
 }

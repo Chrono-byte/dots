@@ -87,3 +87,4 @@ alias mv='mv -i'
 
 # Load local overrides
 [[ -f ~/.zshrc.local ]] && source ~/.zshrc.local
+export PATH=~/.npm-global/bin:$PATH
