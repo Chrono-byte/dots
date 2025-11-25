@@ -1,0 +1,9 @@
+# Lazy-loaded completions and slow initialization
+# This file is loaded after the shell prompt appears to improve startup time
+
+# Tool completions (only load if commands exist)
+[[ -n $(command -v glab) ]] && eval "$(glab completion -s zsh 2>/dev/null || true)"
+[[ -n $(command -v flux) ]] && eval "$(flux completion zsh 2>/dev/null || true)"
+[[ -n $(command -v pnpm) ]] && eval "$(pnpm completion zsh 2>/dev/null || true)"
+[[ -n $(command -v bun) ]] && [ -s "$HOME/.bun/_bun" ] && source "$HOME/.bun/_bun"
+

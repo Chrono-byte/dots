@@ -10,8 +10,8 @@
     "editor.renderWhitespace": "boundary",
     "files.autoSave": "onFocusChange",
     "files.exclude": {
-        "**/.git": true,
         "**/.DS_Store": true,
+        "**/.git": true,
         "**/node_modules": true,
         "**/target": true
     },
@@ -45,5 +45,7 @@
     "[json]": {
         "editor.defaultFormatter": "biomejs.biome"
     },
-    "extensions.ignoreRecommendations": true
+    "extensions.ignoreRecommendations": true,
+    "editor.lightbulb.enabled": "on",
+    "editor.codeActions.triggerOnFocusChange": true
 }
