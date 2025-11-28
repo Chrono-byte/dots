@@ -10,7 +10,7 @@ decorations = "full"
 title = "Alacritty"
 dynamic_title = true
 dynamic_padding = true
-opacity = 0.5
+opacity = 0.9
 
 [scrolling]
 history = 10000

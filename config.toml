@@ -47,5 +47,5 @@ files = [
 
 [tools.alacritty]
 files = [
-  { repo = "alacritty/alacritty.toml", dest = "..config/alacritty/alacritty.toml" },
+  { repo = "alacritty/alacritty.toml", dest = ".config/alacritty/alacritty.toml" },
 ]
