@@ -47,5 +47,9 @@
     },
     "extensions.ignoreRecommendations": true,
     "editor.lightbulb.enabled": "on",
-    "editor.codeActions.triggerOnFocusChange": true
+    "editor.codeActions.triggerOnFocusChange": true,
+    "remote.SSH.remotePlatform": {
+        "192.168.1.23": "linux",
+        "192.168.1.17": "linux"
+    }
 }
