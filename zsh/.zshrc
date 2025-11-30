@@ -74,6 +74,9 @@ bindkey '^[[B' history-substring-search-down
 bindkey -M vicmd 'k' history-substring-search-up
 bindkey -M vicmd 'j' history-substring-search-down
 
+bindkey '\e[1;3D' backward-word  # Alt+Left
+bindkey '\e[1;3C' forward-word   # Alt+Right
+
 # ============================================================================
 # 9. STARSHIP PROMPT (Relatively fast, but can defer if needed)
 # ============================================================================
