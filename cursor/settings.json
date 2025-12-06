@@ -1,7 +1,7 @@
 {
     "workbench.colorTheme": "Better Selenized Dark",
     "files.simpleDialog.enable": true,
-    "vscord.app.name": "Cursor",
+    "vscord.app.name": "",
     "vscord.status.idle.disconnectOnIdle": true,
     "workbench.sideBar.location": "right",
     "editor.tabSize": 4,
@@ -34,7 +34,7 @@
     "workbench.preferredDarkColorTheme": "Better Selenized Dark",
     "workbench.preferredLightColorTheme": "Better Selenized Light",
     "[typescriptreact]": {
-        "editor.defaultFormatter": "biomejs.biome"
+        "editor.defaultFormatter": "TypeScriptTeam.native-preview"
     },
     "[typescript]": {
         "editor.defaultFormatter": "biomejs.biome"
@@ -45,11 +45,21 @@
     "[json]": {
         "editor.defaultFormatter": "biomejs.biome"
     },
+    
     "extensions.ignoreRecommendations": true,
     "editor.lightbulb.enabled": "on",
     "editor.codeActions.triggerOnFocusChange": true,
     "remote.SSH.remotePlatform": {
         "192.168.1.23": "linux",
         "192.168.1.17": "linux"
-    }
+    },
+    "diffEditor.ignoreTrimWhitespace": false,
+    "[jsonc]": {
+        "editor.defaultFormatter": "vscode.json-language-features"
+    },
+    "window.titleBarStyle": "custom",
+    "extensions.gallery.serviceUrl": "https://marketplace.visualstudio.com/_apis/public/gallery",
+    "extensions.autoCheckUpdates": true,
+    "extensions.autoUpdate": true,
+    "extensiontotal.apiKeySetting": ""
 }
