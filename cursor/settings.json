@@ -61,5 +61,12 @@
     "extensions.gallery.serviceUrl": "https://marketplace.visualstudio.com/_apis/public/gallery",
     "extensions.autoCheckUpdates": true,
     "extensions.autoUpdate": true,
-    "extensiontotal.apiKeySetting": ""
+    "json.schemaDownload.enable": true,
+    "typescript.experimental.useTsgo": true,
+    "biome.lsp.bin": "/home/chrono/.deno/bin/biome",
+    "biome.lsp.trace.server": "messages",
+    "biome.requireConfiguration": true,
+    "cursor.cpp.disabledLanguages": [
+        "plaintext"
+    ],
 }
