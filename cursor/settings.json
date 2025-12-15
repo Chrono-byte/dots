@@ -1,7 +1,6 @@
 {
     "workbench.colorTheme": "Better Selenized Dark",
     "files.simpleDialog.enable": true,
-    "vscord.app.name": "",
     "vscord.status.idle.disconnectOnIdle": true,
     "workbench.sideBar.location": "right",
     "editor.tabSize": 4,
@@ -69,4 +68,10 @@
     "cursor.cpp.disabledLanguages": [
         "plaintext"
     ],
+    "vscord.app.name": "Cursor",
+    "vscord.app.privacyMode.enable": true,
+    "rust-analyzer.testExplorer": true,
+    "rust-analyzer.assist.emitMustUse": true,
+    "rust-analyzer.diagnostics.styleLints.enable": true,
+    "rust-analyzer.check.command": "clippy",
 }
