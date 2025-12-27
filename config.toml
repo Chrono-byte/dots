@@ -1,4 +1,4 @@
-#:schema /home/chrono/Dev/dotfiles-manager/schemas/config.schema.json
+#:schema /home/ellie/Dev/dotfiles-manager/schemas/config.schema.json
 
 [general]
 repo_path = "~/.dotfiles"

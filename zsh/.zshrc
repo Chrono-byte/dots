@@ -102,6 +102,9 @@ export PATH="$HOME/.bun/bin:$PATH"
 # deno
 export PATH="$HOME/.deno/bin:$PATH"
 
+# opencode
+export PATH=/home/ellie/.opencode/bin:$PATH
+
 # Rust/Cargo (fast check, source if exists)
 [[ -f "$HOME/.cargo/env" ]] && source "$HOME/.cargo/env"
 
