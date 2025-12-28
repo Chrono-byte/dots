@@ -110,7 +110,7 @@ export PATH="$HOME/.bun/bin:$PATH"
 export PATH="$HOME/.deno/bin:$PATH"
 
 # opencode
-export PATH=/home/ellie/.opencode/bin:$PATH
+export PATH="$HOME/.opencode/bin:$PATH"
 
 # Rust/Cargo (fast check, source if exists)
 [[ -f "$HOME/.cargo/env" ]] && source "$HOME/.cargo/env"
@@ -132,6 +132,7 @@ alias gd='git diff'
 alias rm='rm -i'
 alias cp='cp -i'
 alias mv='mv -i'
+alias oc-clean-models="rm $HOME/.local/state/opencode/model.json $HOME/.cache/opencode/models.json"
 
 # ============================================================================
 # 13. LAZY LOADING (Defer slow operations)
