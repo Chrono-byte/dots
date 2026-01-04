@@ -118,6 +118,9 @@ export PATH="$HOME/.opencode/bin:$PATH"
 # npm global
 export PATH=~/.npm-global/bin:$PATH
 
+# Flux dotfiles manager - config is source of truth in repo
+export DOTFILES_CONFIG="$HOME/.dotfiles/config.toml"
+
 # ============================================================================
 # 12. ALIASES (Fast)
 # ============================================================================
