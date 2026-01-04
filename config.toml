@@ -6,11 +6,6 @@ backup_dir = "~/.dotfiles-backups"
 current_profile = "default"
 symlink_resolution = "auto"
 
-[tools.flux]
-files = [
-  { repo = "./config.toml", dest = ".config/flux/config.toml" },
-]
-
 [tools.cursor]
 files = [
   { repo = "cursor/settings.json", dest = ".config/Cursor/User/settings.json" },
