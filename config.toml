@@ -1,4 +1,4 @@
-#:schema /home/ellie/Dev/dotfiles-manager/schemas/config.schema.json
+#:schema https://gitlab.com/Chrono-byte/flux/-/raw/master/schemas/config.schema.json
 
 [general]
 repo_path = "~/.dotfiles"
