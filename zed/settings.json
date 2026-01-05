@@ -43,8 +43,7 @@
             },
         },
     },
-    "context_servers": {
-        },
+    "context_servers": {},
     "buffer_font_family": "JetBrains Mono",
     "agent_servers": {},
     "project_panel": {
