@@ -7,61 +7,73 @@
 // custom settings, run `zed: open default settings` from the
 // command palette (cmd-shift-p / ctrl-shift-p)
 {
-  "terminal": {
-    "dock": "bottom",
-  },
-  "lsp": {
-    "rust-analyzer": {
-      "initialization_options": {
-        "checkOnSave": {
-          "enable": true,
-          "command": "clippy",
+    "ui_font_weight": 500.0,
+    "agent": {
+        "default_profile": "write",
+        "dock": "left",
+        "inline_assistant_model": {
+            "provider": "copilot_chat",
+            "model": "claude-haiku-4.5"
         },
-      },
+        "play_sound_when_agent_done": true,
+        "always_allow_tool_actions": false,
+        "default_model": {
+            "provider": "copilot_chat",
+            "model": "claude-haiku-4.5"
+        },
+        "model_parameters": []
     },
-  },
-  "buffer_line_height": "comfortable",
-  "ui_font_weight": 100.0,
-  "ui_font_family": "Adwaita Mono",
-  "buffer_font_family": "JetBrainsMono Nerd Font",
-  "edit_predictions": {
-    "disabled_globs": [],
-  },
-  "agent": {
-    "always_allow_tool_actions": true,
-    "default_profile": "ask",
-    "inline_assistant_model": {
-      "provider": "copilot_chat",
-      "model": "claude-haiku-4.5",
+    "prettier": {
+        "allowed": false,
     },
-    "dock": "left",
-    "default_model": {
-      "provider": "copilot_chat",
-      "model": "claude-haiku-4.5",
+    "languages": {
+        "Rust": {
+            "prettier": {
+                "allowed": false,
+            },
+        },
     },
-    "model_parameters": [],
-  },
-  "git_panel": {
-    "dock": "right",
-  },
-  "project_panel": {
-    "dock": "right",
-  },
-  "telemetry": {
-    "diagnostics": true,
-    "metrics": true,
-  },
-  "icon_theme": {
-    "mode": "system",
-    "light": "Zed (Default)",
-    "dark": "Zed (Default)",
-  },
-  "base_keymap": "Cursor",
-  "ui_font_size": 14.0,
-  "buffer_font_size": 13.0,
-  "theme": {
-    "mode": "system",
-    "light": "Ayu Light",
-    "dark": "Ayu Dark",
-  },
+    "lsp": {
+        "rust-analyzer": {
+            "initialization_options": {
+                "checkOnSave": {
+                    "enable": true,
+                    "command": "clippy",
+                },
+            },
+        },
+    },
+    "context_servers": {
+        },
+    "buffer_font_family": "JetBrains Mono",
+    "agent_servers": {},
+    "project_panel": {
+        "dock": "right",
+    },
+    "title_bar": {
+        "show_sign_in": false,
+    },
+    "icon_theme": {
+        "mode": "dark",
+        "light": "Zed (Default)",
+        "dark": "Zed (Default)",
+    },
+    "base_keymap": "VSCode",
+    "use_system_path_prompts": true,
+    "autosave": "on_focus_change",
+    "show_whitespaces": "boundary",
+    "hard_tabs": false,
+    "tab_size": 4,
+    "telemetry": {
+        "diagnostics": false,
+        "metrics": false,
+    },
+    "edit_predictions": {},
+    "ui_font_size": 16.0,
+    "buffer_font_size": 15,
+    "theme": {
+        "mode": "dark",
+        "light": "One Light",
+        "dark": "Ayu Mirage",
+    },
 }
