@@ -54,3 +54,8 @@ files = [
 files = [
   { repo = "zed/settings.json", dest = ".config/zed/settings.json" },
 ]
+
+[hooks]
+pre_commit = [
+  { command = "./scripts/check-hostname.sh", conditions = { host = ["anubis"] } }
+]
