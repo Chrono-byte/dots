@@ -1,4 +1,4 @@
-#:schema https://gitlab.com/Chrono-byte/flux/-/raw/master/schemas/config.schema.json
+#:schema /home/ellie/Dev/dotfiles-manager/schemas/config.schema.json
 
 [general]
 repo_path = "~/.dotfiles"
@@ -55,7 +55,17 @@ files = [
   { repo = "zed/settings.json", dest = ".config/zed/settings.json" },
 ]
 
-[hooks]
-pre_commit = [
-  { command = "./scripts/check-hostname.sh", conditions = { host = ["anubis"] } }
+[tools.ghostty]
+files = [
+  { repo = "ghostty/config", dest = ".config/ghostty/config" },
 ]
+
+[[hooks.pre_commit]]
+command = "./scripts/check-hostname.sh"
+
+[hooks.pre_commit.conditions]
+os = []
+host = []
+cmd_exists = []
+
+[hooks.pre_commit.conditions.env]
