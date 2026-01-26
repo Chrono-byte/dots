@@ -146,3 +146,6 @@ alias oc-clean-models="rm $HOME/.local/state/opencode/model.json $HOME/.cache/op
 # Defer slow completion loading until after prompt appears
 # Uses zsh's built-in sched command to load after shell initialization
 sched +0 'source ~/.zshrc.lazy'
+
+# bun completions
+[ -s "/home/chrono/.bun/_bun" ] && source "/home/chrono/.bun/_bun"

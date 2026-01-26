@@ -7,6 +7,14 @@
 // custom settings, run `zed: open default settings` from the
 // command palette (cmd-shift-p / ctrl-shift-p)
 {
+    "minimap": {
+        "show": "always"
+    },
+    "vim_mode": false,
+    "git_panel": {
+        "tree_view": true,
+        "sort_by_path": false
+    },
     "ui_font_weight": 500.0,
     "agent": {
         "default_profile": "write",
@@ -16,10 +24,10 @@
             "model": "claude-haiku-4.5"
         },
         "play_sound_when_agent_done": true,
-        "always_allow_tool_actions": false,
+        "always_allow_tool_actions": true,
         "default_model": {
             "provider": "copilot_chat",
-            "model": "claude-opus-4.5"
+            "model": "claude-haiku-4.5"
         },
         "model_parameters": []
     },
@@ -36,10 +44,10 @@
     "lsp": {
         "rust-analyzer": {
             "initialization_options": {
-                "checkOnSave": {
-                    "enable": true,
-                    "command": "clippy",
-                },
+                "checkOnSave": true,
+                "check": {
+                    "command": "clippy"
+                }
             },
         },
     },
@@ -47,6 +55,8 @@
     "buffer_font_family": "JetBrains Mono",
     "agent_servers": {},
     "project_panel": {
+        "hide_hidden": false,
+        "hide_root": true,
         "dock": "right",
     },
     "title_bar": {
@@ -55,7 +65,7 @@
     "icon_theme": {
         "mode": "dark",
         "light": "Zed (Default)",
-        "dark": "Zed (Default)",
+        "dark": "Material Icon Theme",
     },
     "base_keymap": "VSCode",
     "use_system_path_prompts": true,

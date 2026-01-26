@@ -32,16 +32,16 @@
     "workbench.preferredDarkColorTheme": "Better Selenized Dark",
     "workbench.preferredLightColorTheme": "Better Selenized Light",
     "[typescriptreact]": {
-        "editor.defaultFormatter": "TypeScriptTeam.native-preview"
+        "editor.defaultFormatter": "oxc.oxc-vscode"
     },
     "[typescript]": {
-        "editor.defaultFormatter": "biomejs.biome"
+        "editor.defaultFormatter": "oxc.oxc-vscode"
     },
     "[javascript]": {
         "editor.defaultFormatter": "biomejs.biome"
     },
     "[json]": {
-        "editor.defaultFormatter": "biomejs.biome"
+        "editor.defaultFormatter": "vscode.json-language-features"
     },
     
     "extensions.ignoreRecommendations": true,
