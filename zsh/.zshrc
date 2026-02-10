@@ -149,3 +149,4 @@ sched +0 'source ~/.zshrc.lazy'
 
 # bun completions
 [ -s "/home/chrono/.bun/_bun" ] && source "/home/chrono/.bun/_bun"
+[[ "$TERM_PROGRAM" == "vscode" ]] && . "$(code --locate-shell-integration-path zsh)"

@@ -7,6 +7,11 @@
 // custom settings, run `zed: open default settings` from the
 // command palette (cmd-shift-p / ctrl-shift-p)
 {
+    "format_on_save": "off",
+    "tabs": {
+        "file_icons": false
+    },
+    "disable_ai": false,
     "minimap": {
         "show": "always"
     },
@@ -21,13 +26,13 @@
         "dock": "left",
         "inline_assistant_model": {
             "provider": "copilot_chat",
-            "model": "claude-haiku-4.5"
+            "model": "gpt-5.1-codex-mini"
         },
         "play_sound_when_agent_done": true,
         "always_allow_tool_actions": true,
         "default_model": {
             "provider": "copilot_chat",
-            "model": "claude-haiku-4.5"
+            "model": "gpt-5-mini"
         },
         "model_parameters": []
     },
@@ -53,19 +58,29 @@
     },
     "context_servers": {},
     "buffer_font_family": "JetBrains Mono",
-    "agent_servers": {},
+    "agent_servers": {
+        "github-copilot": {
+            "type": "registry"
+        },
+        "opencode": {
+            "type": "registry"
+        }
+    },
     "project_panel": {
         "hide_hidden": false,
         "hide_root": true,
         "dock": "right",
     },
     "title_bar": {
+        "show_user_menu": false,
+        "show_user_picture": false,
+        "show_menus": false,
         "show_sign_in": false,
     },
     "icon_theme": {
         "mode": "dark",
         "light": "Zed (Default)",
-        "dark": "Material Icon Theme",
+        "dark": "Zed (Default)",
     },
     "base_keymap": "VSCode",
     "use_system_path_prompts": true,
@@ -83,6 +98,6 @@
     "theme": {
         "mode": "dark",
         "light": "One Light",
-        "dark": "Ayu Dark",
+        "dark": "Kanagawa Wave",
     },
 }
