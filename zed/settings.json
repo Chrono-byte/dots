@@ -7,6 +7,7 @@
 // custom settings, run `zed: open default settings` from the
 // command palette (cmd-shift-p / ctrl-shift-p)
 {
+    "formatter": "language_server",
     "format_on_save": "off",
     "tabs": {
         "file_icons": false
@@ -98,6 +99,6 @@
     "theme": {
         "mode": "dark",
         "light": "One Light",
-        "dark": "Kanagawa Wave",
+        "dark": "Rosé Pine",
     },
 }

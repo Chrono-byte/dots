@@ -166,17 +166,11 @@ symbol = "nats "
 [netns]
 symbol = "netns "
 
-[nim]
-symbol = "nim "
-
 [nix_shell]
 symbol = "nix "
 
 [ocaml]
 symbol = "ml "
-
-[odin]
-symbol = "odin "
 
 [opa]
 symbol = "opa "
@@ -251,18 +245,6 @@ signal_symbol = "sig"
 
 [sudo]
 symbol = "sudo "
-
-[swift]
-symbol = "swift "
-
-[typst]
-symbol = "typst "
-
-[vagrant]
-symbol = "vagrant "
-
-[terraform]
-symbol = "terraform "
 
 [zig]
 symbol = "zig "

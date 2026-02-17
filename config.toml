@@ -8,9 +8,9 @@ symlink_resolution = "auto"
 
 [tools.cursor]
 files = [
-  { repo = "cursor/settings.json", dest = ".config/Cursor/User/settings.json" },
-  { repo = "cursor/keybindings.json", dest = ".config/Cursor/User/keybindings.json" },
-  { repo = "cursor/argv.json", dest = ".cursor/argv.json" },
+  { repo = "cursor/settings.json", dest = ".config/Code/User/settings.json" },
+  { repo = "cursor/keybindings.json", dest = ".config/Code/User/keybindings.json" },
+  { repo = "cursor/argv.json", dest = ".vscode/argv.json" },
 ]
 
 [tools.fonts]
