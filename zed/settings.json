@@ -12,7 +12,6 @@
     "tabs": {
         "file_icons": false
     },
-    "disable_ai": false,
     "minimap": {
         "show": "always"
     },
@@ -23,6 +22,9 @@
     },
     "ui_font_weight": 500.0,
     "agent": {
+        "tool_permissions": {
+            "default": "allow"
+        },
         "default_profile": "write",
         "dock": "left",
         "inline_assistant_model": {
@@ -30,10 +32,11 @@
             "model": "gpt-5.1-codex-mini"
         },
         "play_sound_when_agent_done": true,
-        "always_allow_tool_actions": true,
         "default_model": {
-            "provider": "copilot_chat",
-            "model": "gpt-5-mini"
+            "effort": "medium",
+            "enable_thinking": true,
+            "provider": "zed.dev",
+            "model": "gpt-5.2-codex"
         },
         "model_parameters": []
     },
@@ -46,6 +49,12 @@
                 "allowed": false,
             },
         },
+        "TypeScript": {
+            "language_servers": ["!typescript-language-server", "vtsls", "!eslint", "..."],
+        },
+        "TSX": {
+            "language_servers": ["!typescript-language-server", "vtsls", "!eslint", "..."],
+        }
     },
     "lsp": {
         "rust-analyzer": {
@@ -60,6 +69,15 @@
     "context_servers": {},
     "buffer_font_family": "JetBrains Mono",
     "agent_servers": {
+        "gemini": {
+            "type": "registry"
+        },
+        "codex-acp": {
+            "type": "registry"
+        },
+        "github-copilot-cli": {
+            "type": "registry"
+        },
         "github-copilot": {
             "type": "registry"
         },
@@ -71,12 +89,6 @@
         "hide_hidden": false,
         "hide_root": true,
         "dock": "right",
-    },
-    "title_bar": {
-        "show_user_menu": false,
-        "show_user_picture": false,
-        "show_menus": false,
-        "show_sign_in": false,
     },
     "icon_theme": {
         "mode": "dark",
@@ -99,6 +111,6 @@
     "theme": {
         "mode": "dark",
         "light": "Kanagawa Lotus",
-        "dark": "Rosé Pine",
+        "dark": "One Dark",
     },
 }
