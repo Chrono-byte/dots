@@ -59,13 +59,3 @@ files = [
 files = [
   { repo = "ghostty/config", dest = ".config/ghostty/config" },
 ]
-
-[[hooks.pre_commit]]
-command = "./scripts/check-hostname.sh"
-
-[hooks.pre_commit.conditions]
-os = []
-host = []
-cmd_exists = []
-
-[hooks.pre_commit.conditions.env]

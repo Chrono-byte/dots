@@ -5,5 +5,5 @@
 [[ -n $(command -v glab) ]] && eval "$(glab completion -s zsh 2>/dev/null || true)"
 [[ -n $(command -v flux) ]] && eval "$(flux completion zsh 2>/dev/null || true)"
 [[ -n $(command -v pnpm) ]] && eval "$(pnpm completion zsh 2>/dev/null || true)"
+[[ -n $(command -v codex) ]] && eval "$(codex completion zsh 2>/dev/null || true)"
 [[ -n $(command -v bun) ]] && [ -s "$HOME/.bun/_bun" ] && source "$HOME/.bun/_bun"
-
