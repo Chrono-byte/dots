@@ -7,6 +7,24 @@
 // custom settings, run `zed: open default settings` from the
 // command palette (cmd-shift-p / ctrl-shift-p)
 {
+    "ssh_connections": [
+        {
+            "host": "192.168.1.23",
+            "args": [],
+            "projects": [
+                {
+                    "paths": [
+                        "/home/ellie"
+                    ]
+                },
+                {
+                    "paths": [
+                        "/home/ellie/docker-compose-nas"
+                    ]
+                }
+            ]
+        }
+    ],
     "formatter": "language_server",
     "format_on_save": "off",
     "tabs": {
