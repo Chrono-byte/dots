@@ -6,13 +6,6 @@ backup_dir = "~/.dotfiles-backups"
 current_profile = "default"
 symlink_resolution = "auto"
 
-[tools.cursor]
-files = [
-  { repo = "cursor/settings.json", dest = ".config/Code/User/settings.json" },
-  { repo = "cursor/keybindings.json", dest = ".config/Code/User/keybindings.json" },
-  { repo = "cursor/argv.json", dest = ".vscode/argv.json" },
-]
-
 [tools.fonts]
 files = [
   { repo = "fonts/SF-Mono-Regular.otf", dest = ".local/share/fonts/SF-Mono-Regular.otf" },
