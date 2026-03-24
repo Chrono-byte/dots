@@ -127,7 +127,7 @@
   "buffer_font_size": 15,
   "theme": {
     "mode": "dark",
-    "light": "Kanagawa Lotus",
+    "light": "Zedokai Light",
     "dark": "Zedokai Darker Classic",
   },
 }
