@@ -5,6 +5,7 @@ zmodload zsh/zprof
 # ============================================================================
 export ZSH="$HOME/.oh-my-zsh"
 ZSH_THEME="" # Using Starship instead
+fpath=(~/.zsh/completions $fpath)
 
 # Plugins
 plugins=(
@@ -21,8 +22,6 @@ plugins=(
 # ============================================================================
 # 2. OH MY ZSH (May take time, but necessary)
 # ============================================================================
-# Disable oh-my-zsh's compinit since we have our own optimized version
-DISABLE_AUTO_COMPINIT=true
 source $ZSH/oh-my-zsh.sh
 
 # ============================================================================
@@ -31,21 +30,6 @@ source $ZSH/oh-my-zsh.sh
 source $ZSH/custom/plugins/zsh-syntax-highlighting/zsh-syntax-highlighting.zsh 2>/dev/null || \
 source $ZSH/plugins/zsh-syntax-highlighting/zsh-syntax-highlighting.zsh 2>/dev/null || \
 echo "Warning: zsh-syntax-highlighting not found"
-
-# ============================================================================
-# 4. OPTIMIZED COMPLETIONS (Aggressive caching)
-# ============================================================================
-fpath=(~/.zsh/completions $fpath)
-autoload -U compinit
-
-# Skip compaudit on cached runs (major speedup)
-# -C flag skips security audit (saves ~15ms)
-# Only do full compinit if cache is older than 24 hours
-if [[ -n ${ZDOTDIR:-$HOME}/.zcompdump(Nmh+24) ]]; then
-  compinit
-else
-  compinit -C
-fi
 
 # ============================================================================
 # 5. HISTORY CONFIGURATION (Fast)
@@ -112,9 +96,6 @@ export PATH="$HOME/.deno/bin:$PATH"
 # opencode
 export PATH="$HOME/.opencode/bin:$PATH"
 
-# Rust/Cargo (fast check, source if exists)
-[[ -f "$HOME/.cargo/env" ]] && source "$HOME/.cargo/env"
-
 # npm global
 export PATH=~/.npm-global/bin:$PATH
 
@@ -147,6 +128,12 @@ alias oc-clean-models="rm $HOME/.local/state/opencode/model.json $HOME/.cache/op
 # Uses zsh's built-in sched command to load after shell initialization
 sched +0 'source ~/.zshrc.lazy'
 
-# bun completions
-[ -s "/home/chrono/.bun/_bun" ] && source "/home/chrono/.bun/_bun"
 [[ "$TERM_PROGRAM" == "vscode" ]] && . "$(code --locate-shell-integration-path zsh)"
+
+# pnpm
+export PNPM_HOME="/home/chrono/.local/share/pnpm"
+case ":$PATH:" in
+  *":$PNPM_HOME:"*) ;;
+  *) export PATH="$PNPM_HOME:$PATH" ;;
+esac
+# pnpm end

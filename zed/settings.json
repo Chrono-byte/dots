@@ -7,128 +7,127 @@
 // custom settings, run `zed: open default settings` from the
 // command palette (cmd-shift-p / ctrl-shift-p)
 {
-    "ssh_connections": [
+  "ssh_connections": [
+    {
+      "host": "192.168.1.23",
+      "args": [],
+      "projects": [
         {
-            "host": "192.168.1.23",
-            "args": [],
-            "projects": [
-                {
-                    "paths": [
-                        "/home/ellie"
-                    ]
-                },
-                {
-                    "paths": [
-                        "/home/ellie/docker-compose-nas"
-                    ]
-                }
-            ]
-        }
-    ],
-    "formatter": "language_server",
-    "format_on_save": "off",
-    "tabs": {
-        "file_icons": false
-    },
-    "minimap": {
-        "show": "always"
-    },
-    "vim_mode": false,
-    "git_panel": {
-        "tree_view": true,
-        "sort_by_path": false
-    },
-    "ui_font_weight": 500.0,
-    "agent": {
-        "tool_permissions": {
-            "default": "allow"
+          "paths": ["/home/ellie"],
         },
-        "default_profile": "write",
-        "dock": "left",
-        "inline_assistant_model": {
-            "provider": "copilot_chat",
-            "model": "gpt-5.1-codex-mini"
+        {
+          "paths": ["/home/ellie/docker-compose-nas"],
         },
-        "play_sound_when_agent_done": true,
-        "default_model": {
-            "effort": "medium",
-            "enable_thinking": true,
-            "provider": "zed.dev",
-            "model": "gpt-5.2-codex"
-        },
-        "model_parameters": []
+      ],
     },
-    "prettier": {
+  ],
+  "inlay_hints": {
+    "enabled": true,
+  },
+  "formatter": "language_server",
+  "format_on_save": "off",
+  "tabs": {
+    "file_icons": false,
+  },
+  "minimap": {
+    "show": "always",
+  },
+  "vim_mode": false,
+  "git_panel": {
+    "tree_view": true,
+    "sort_by_path": false,
+  },
+  "ui_font_weight": 500.0,
+  "agent": {
+    "default_model": {
+      "provider": "copilot_chat",
+      "model": "gpt-4o",
+      "enable_thinking": false,
+    },
+    "favorite_models": [],
+    "model_parameters": [],
+  },
+  "prettier": {
+    "allowed": false,
+  },
+  "languages": {
+    "Rust": {
+      "prettier": {
         "allowed": false,
+      },
     },
-    "languages": {
-        "Rust": {
-            "prettier": {
-                "allowed": false,
-            },
+    "TypeScript": {
+      "language_servers": [
+        "!typescript-language-server",
+        "vtsls",
+        "!eslint",
+        "...",
+      ],
+    },
+    "TSX": {
+      "language_servers": [
+        "!typescript-language-server",
+        "vtsls",
+        "!eslint",
+        "...",
+      ],
+    },
+  },
+  "lsp": {
+    "rust-analyzer": {
+      "initialization_options": {
+        "checkOnSave": true,
+        "check": {
+          "command": "clippy",
         },
-        "TypeScript": {
-            "language_servers": ["!typescript-language-server", "vtsls", "!eslint", "..."],
-        },
-        "TSX": {
-            "language_servers": ["!typescript-language-server", "vtsls", "!eslint", "..."],
-        }
+      },
     },
-    "lsp": {
-        "rust-analyzer": {
-            "initialization_options": {
-                "checkOnSave": true,
-                "check": {
-                    "command": "clippy"
-                }
-            },
-        },
+  },
+  "context_servers": {},
+  "buffer_font_family": "JetBrains Mono",
+  "agent_servers": {
+    "gemini": {
+      "type": "registry",
     },
-    "context_servers": {},
-    "buffer_font_family": "JetBrains Mono",
-    "agent_servers": {
-        "gemini": {
-            "type": "registry"
-        },
-        "codex-acp": {
-            "type": "registry"
-        },
-        "github-copilot-cli": {
-            "type": "registry"
-        },
-        "github-copilot": {
-            "type": "registry"
-        },
-        "opencode": {
-            "type": "registry"
-        }
+    "codex-acp": {
+      "type": "registry",
     },
-    "project_panel": {
-        "hide_hidden": false,
-        "hide_root": true,
-        "dock": "right",
+    "github-copilot-cli": {
+      "type": "registry",
     },
-    "icon_theme": {
-        "mode": "dark",
-        "light": "Zed (Default)",
-        "dark": "Zed (Default)",
+    "github-copilot": {
+      "type": "registry",
     },
-    "base_keymap": "VSCode",
-    "use_system_path_prompts": true,
-    "autosave": "on_focus_change",
-    "show_whitespaces": "boundary",
-    "hard_tabs": false,
-    "tab_size": 4,
-    "telemetry": {
-        "diagnostics": false,
-        "metrics": false,
+    "opencode": {
+      "type": "registry",
     },
-    "edit_predictions": {},
-    "ui_font_size": 16.0,
-    "buffer_font_size": 15,
-    "theme": {
-        "mode": "dark",
-        "light": "Kanagawa Lotus",
-        "dark": "One Dark",
-    },
+  },
+  "project_panel": {
+    "hide_hidden": false,
+    "hide_root": true,
+    "dock": "right",
+  },
+  "icon_theme": {
+    "mode": "dark",
+    "light": "Zed (Default)",
+    "dark": "Zed (Default)",
+  },
+  "base_keymap": "VSCode",
+  "use_system_path_prompts": true,
+  "autosave": "on_focus_change",
+  "show_whitespaces": "boundary",
+  "hard_tabs": false,
+  "tab_size": 4,
+  "telemetry": {
+    "diagnostics": false,
+    "metrics": false,
+  },
+  "edit_predictions": {},
+  "ui_font_size": 16.0,
+  "buffer_font_size": 15,
+  "theme": {
+    "mode": "dark",
+    "light": "Kanagawa Lotus",
+    "dark": "Zedokai Darker Classic",
+  },
 }
