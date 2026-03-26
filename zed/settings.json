@@ -39,9 +39,17 @@
   },
   "ui_font_weight": 500.0,
   "agent": {
-    "default_model": {
+    "default_profile": "ask",
+    "inline_assistant_model": {
       "provider": "copilot_chat",
-      "model": "gpt-4o",
+      "model": "gpt-5-mini",
+      "enable_thinking": false
+    },
+    "dock": "left",
+    "default_model": {
+      "effort": "high",
+      "provider": "copilot_chat",
+      "model": "gpt-5-mini",
       "enable_thinking": false,
     },
     "favorite_models": [],
