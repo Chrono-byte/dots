@@ -7,18 +7,39 @@
 // custom settings, run `zed: open default settings` from the
 // command palette (cmd-shift-p / ctrl-shift-p)
 {
+  "collaboration_panel": {
+    "button": false
+  },
+  "relative_line_numbers": "disabled",
   "ssh_connections": [
     {
       "host": "192.168.1.23",
+      ""
       "args": [],
       "projects": [
         {
-          "paths": ["/home/ellie"],
+          "paths": [
+            "/home/ellie"
+          ]
         },
         {
-          "paths": ["/home/ellie/docker-compose-nas"],
-        },
-      ],
+          "paths": [
+            "/home/ellie/docker-compose-nas"
+          ]
+        }
+      ]
+    },
+    {
+      "host": "100.105.82.36",
+      "username": "ellie",
+      "args": [],
+      "projects": [
+        {
+          "paths": [
+            "/home/ellie/docker-compose-nas"
+          ]
+        }
+      ]
     },
   ],
   "inlay_hints": {
@@ -30,7 +51,7 @@
     "file_icons": false,
   },
   "minimap": {
-    "show": "always",
+    "show": "auto",
   },
   "vim_mode": false,
   "git_panel": {
@@ -39,10 +60,21 @@
   },
   "ui_font_weight": 500.0,
   "agent": {
-    "default_profile": "ask",
+    "tool_permissions": {
+      "tools": {
+        "terminal": {
+          "always_allow": [
+            {
+              "pattern": "^cargo\\s+run(\\s|$)"
+            }
+          ]
+        }
+      }
+    },
+    "default_profile": "write",
     "inline_assistant_model": {
       "provider": "copilot_chat",
-      "model": "gpt-5-mini",
+      "model": "claude-haiku-4.5",
       "enable_thinking": false
     },
     "dock": "left",
@@ -116,7 +148,7 @@
     "dock": "right",
   },
   "icon_theme": {
-    "mode": "dark",
+    "mode": "light",
     "light": "Zed (Default)",
     "dark": "Zed (Default)",
   },
@@ -125,7 +157,7 @@
   "autosave": "on_focus_change",
   "show_whitespaces": "boundary",
   "hard_tabs": false,
-  "tab_size": 4,
+  "tab_size": 2,
   "telemetry": {
     "diagnostics": false,
     "metrics": false,
@@ -136,6 +168,6 @@
   "theme": {
     "mode": "dark",
     "light": "Zedokai Light",
-    "dark": "Zedokai Darker Classic",
+    "dark": "Zedokai",
   },
 }
