@@ -7,6 +7,9 @@ export ZSH="$HOME/.oh-my-zsh"
 ZSH_THEME="" # Using Starship instead
 fpath=(~/.zsh/completions $fpath)
 
+# disable the evil beep
+unsetopt BEEP
+
 # Plugins
 plugins=(
   git

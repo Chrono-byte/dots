@@ -59,6 +59,7 @@
   },
   "ui_font_weight": 500.0,
   "agent": {
+    "default_width": 315.0,
     "tool_permissions": {
       "tools": {
         "terminal": {
@@ -70,7 +71,7 @@
         }
       }
     },
-    "default_profile": "write",
+    "default_profile": "minimal",
     "inline_assistant_model": {
       "provider": "copilot_chat",
       "model": "claude-haiku-4.5",
@@ -146,11 +147,7 @@
     "hide_root": true,
     "dock": "right",
   },
-  "icon_theme": {
-    "mode": "light",
-    "light": "Zed (Default)",
-    "dark": "Zed (Default)",
-  },
+  "icon_theme": "Zed (Default)",
   "base_keymap": "VSCode",
   "use_system_path_prompts": true,
   "autosave": "on_focus_change",
@@ -164,9 +161,5 @@
   "edit_predictions": {},
   "ui_font_size": 16.0,
   "buffer_font_size": 15,
-  "theme": {
-    "mode": "dark",
-    "light": "Zedokai Light",
-    "dark": "Zedokai",
-  },
+  "theme": "Zedokai",
 }
