@@ -71,7 +71,7 @@
         }
       }
     },
-    "default_profile": "minimal",
+    "default_profile": "write",
     "inline_assistant_model": {
       "provider": "copilot_chat",
       "model": "claude-haiku-4.5",

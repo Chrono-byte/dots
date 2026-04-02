@@ -34,26 +34,19 @@ files = [
 ]
 
 [tools.starship]
-files = [
-  { repo = "starship/starship.toml", dest = ".config/starship.toml" },
-]
+files = [{ repo = "starship/starship.toml", dest = ".config/starship.toml" }]
 
 [tools.alacritty]
-files = [
-  { repo = "alacritty/alacritty.toml", dest = ".config/alacritty/alacritty.toml" },
-]
+files = [{ repo = "alacritty/alacritty.toml", dest = ".config/alacritty/alacritty.toml" }]
 
 [tools.zed]
-files = [
-  { repo = "zed/settings.json", dest = ".config/zed/settings.json" },
-]
+files = [{ repo = "zed/settings.json", dest = ".config/zed/settings.json" }]
 
 [tools.ghostty]
-files = [
-  { repo = "ghostty/config", dest = ".config/ghostty/config" },
-]
+files = [{ repo = "ghostty/config", dest = ".config/ghostty/config" }]
 
 [tools.nvim]
-folders = [
-  { repo = "nvim", dest = ".config/nvim" },
-]
+folders = [{ repo = "nvim", dest = ".config/nvim" }]
+
+[tools.codex]
+files = [{ repo = "codex/config.toml", dest = "./.codex/config.toml" }]

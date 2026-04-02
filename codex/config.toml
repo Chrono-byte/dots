@@ -1,0 +1,81 @@
+#:schema https://github.com/openai/codex/blob/main/codex-rs/core/config.schema.json
+model = "gpt-5.1-codex-mini"
+model_reasoning_effort = "medium"
+
+
+[projects."/home/chrono"]
+trust_level = "untrusted"
+
+[projects."/home/chrono/Dev"]
+trust_level = "trusted"
+
+[projects."/home/chrono/Dev/GameplayScripting/Some Dumb Project"]
+trust_level = "trusted"
+
+[projects."/home/chrono/Dev/parcant"]
+trust_level = "trusted"
+
+[projects."/home/chrono/Dev/commenthawk"]
+trust_level = "trusted"
+
+[projects."/home/chrono/Dev/cadence"]
+trust_level = "trusted"
+
+[projects."/home/chrono/Dev/Work/velx-us"]
+trust_level = "trusted"
+
+[projects."/home/chrono/Dev/Pivot"]
+trust_level = "trusted"
+
+[projects."/home/chrono/Dev/wassite"]
+trust_level = "trusted"
+
+[projects."/home/chrono/Dev/codex-flatpak"]
+trust_level = "trusted"
+
+[projects."/home/chrono/Dev/t3code"]
+trust_level = "trusted"
+
+[projects."/home/chrono/Videos"]
+trust_level = "trusted"
+
+[projects."/home/chrono/AppImages"]
+trust_level = "trusted"
+
+[projects."/home/chrono/Dev/artcard"]
+trust_level = "trusted"
+
+[projects."/home/chrono/Dev/unravel"]
+trust_level = "trusted"
+
+[projects."/home/chrono/Dev/docker-compose-nas"]
+trust_level = "trusted"
+
+[projects."/home/chrono/Dev/moonlight"]
+trust_level = "trusted"
+
+[projects."/home/chrono/Dev/blitz"]
+trust_level = "trusted"
+
+[projects."/home/chrono/Dev/personal-site-alyx"]
+trust_level = "trusted"
+
+[projects."/home/chrono/.dotfiles"]
+trust_level = "trusted"
+
+[projects."/home/chrono/Dev/flux"]
+trust_level = "trusted"
+
+[notice.model_migrations]
+"gpt-5.2-codex" = "gpt-5.3-codex"
+"gpt-5.1-codex-mini" = "gpt-5.4"
+"gpt-5.3-codex" = "gpt-5.4"
+
+[tui]
+status_line = ["model-with-reasoning", "context-remaining", "current-dir", "five-hour-limit"]
+
+[tui.model_availability_nux]
+"gpt-5.3-codex-spark" = 4
+
+[plugins."github@openai-curated"]
+enabled = true
