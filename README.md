@@ -1,6 +1,6 @@
 # Dotfiles Repository
 
-A dotfiles setup using [Flux](https://gitlab.com/Chrono-byte/flux), a powerful dotfiles manager that handles configuration synchronization across multiple environments.
+A dotfiles setup using [Flux](https://forgejo.disilla.org/chrono/flux), a powerful dotfiles manager that handles configuration synchronization across multiple environments.
 
 ## Overview
 
