@@ -1,8 +1,7 @@
-#:schema /home/ellie/Dev/dotfiles-manager/schemas/config.schema.json
+#:schema https://forgejo.disilla.org/chrono/flux/raw/branch/main/schemas/config.schema.json
 
 [general]
 repo_path = "~/.dotfiles"
-backup_dir = "~/.dotfiles-backups"
 current_profile = "default"
 symlink_resolution = "auto"
 
@@ -49,4 +48,4 @@ files = [{ repo = "ghostty/config", dest = ".config/ghostty/config" }]
 folders = [{ repo = "nvim", dest = ".config/nvim" }]
 
 [tools.codex]
-files = [{ repo = "codex/config.toml", dest = "./.codex/config.toml" }]
+files = [{ repo = "codex/config.toml", dest = ".codex/config.toml" }]
