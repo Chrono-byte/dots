@@ -11,9 +11,7 @@ fpath=(~/.zsh/completions $fpath)
 unsetopt BEEP
 
 # flux hook
-if [[ -o interactive ]]; then
-  flux remote check >/dev/null 2>&1
-fi
+flux remote check 2>&1
 
 # Plugins
 plugins=(
