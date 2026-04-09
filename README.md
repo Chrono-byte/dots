@@ -1,4 +1,4 @@
-# Dotfiles Repository
+# Ellie's Dotfiles
 
 A dotfiles setup using [Flux](https://forgejo.disilla.org/chrono/flux), a powerful dotfiles manager that handles configuration synchronization across multiple environments.
 
