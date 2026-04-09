@@ -10,6 +10,11 @@ fpath=(~/.zsh/completions $fpath)
 # disable the evil beep
 unsetopt BEEP
 
+# flux hook
+if [[ -o interactive ]]; then
+  flux remote check >/dev/null 2>&1
+fi
+
 # Plugins
 plugins=(
   git
