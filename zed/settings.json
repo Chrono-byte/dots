@@ -7,7 +7,12 @@
 // custom settings, run `zed: open default settings` from the
 // command palette (cmd-shift-p / ctrl-shift-p)
 {
+  "outline_panel": {
+    "dock": "left"
+  },
+  "diff_view_style": "unified",
   "collaboration_panel": {
+    "dock": "left",
     "button": false
   },
   "relative_line_numbers": "disabled",
@@ -54,6 +59,7 @@
   },
   "vim_mode": false,
   "git_panel": {
+    "dock": "left",
     "tree_view": true,
     "sort_by_path": false,
   },
@@ -74,7 +80,7 @@
     "default_profile": "write",
     "inline_assistant_model": {
       "provider": "copilot_chat",
-      "model": "claude-haiku-4.5",
+      "model": "gpt-5-mini",
       "enable_thinking": false
     },
     "dock": "left",
@@ -126,6 +132,9 @@
   "context_servers": {},
   "buffer_font_family": "JetBrains Mono",
   "agent_servers": {
+    "pi-acp": {
+      "type": "registry"
+    },
     "gemini": {
       "type": "registry",
     },
