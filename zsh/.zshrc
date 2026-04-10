@@ -11,7 +11,7 @@ fpath=(~/.zsh/completions $fpath)
 unsetopt BEEP
 
 # flux hook
-# flux remote check 2>&1
+flux remote check 2>&1
 
 # Plugins
 plugins=(
