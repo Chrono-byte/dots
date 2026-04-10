@@ -11,7 +11,7 @@ fpath=(~/.zsh/completions $fpath)
 unsetopt BEEP
 
 # flux hook
-flux remote check 2>&1
+# flux remote check 2>&1
 
 # Plugins
 plugins=(
@@ -19,7 +19,6 @@ plugins=(
   sudo
   dnf
   rust
-  deno
   history-substring-search
   zsh-autosuggestions
   extract
@@ -134,15 +133,4 @@ alias oc-clean-models="rm $HOME/.local/state/opencode/model.json $HOME/.cache/op
 # Uses zsh's built-in sched command to load after shell initialization
 sched +0 'source ~/.zshrc.lazy'
 
-[[ "$TERM_PROGRAM" == "vscode" ]] && . "$(code --locate-shell-integration-path zsh)"
-
-# pnpm
-export PNPM_HOME="/home/chrono/.local/share/pnpm"
-case ":$PATH:" in
-  *":$PNPM_HOME:"*) ;;
-  *) export PATH="$PNPM_HOME:$PATH" ;;
-esac
-# pnpm end
-
-# bun completions
-[ -s "/home/chrono/.bun/_bun" ] && source "/home/chrono/.bun/_bun"
+# zprof

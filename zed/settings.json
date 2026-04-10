@@ -168,8 +168,8 @@
   "hard_tabs": false,
   "tab_size": 2,
   "telemetry": {
-    "diagnostics": false,
-    "metrics": false,
+    "diagnostics": true,
+    "metrics": true,
   },
   "edit_predictions": {},
   "ui_font_size": 16.0,
