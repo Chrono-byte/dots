@@ -1,5 +1,5 @@
 #:schema https://raw.githubusercontent.com/openai/codex/refs/heads/main/codex-rs/core/config.schema.json
-model = "gpt-5.4-mini"
+model = "gpt-5.3-codex"
 model_reasoning_effort = "medium"
 
 
@@ -69,6 +69,15 @@ trust_level = "trusted"
 [projects."/home/chrono/Dev/sylveon"]
 trust_level = "trusted"
 
+[projects."/home/chrono/Dev/DataStructures"]
+trust_level = "trusted"
+
+[projects."/home/chrono/Dev/Work/Coven"]
+trust_level = "trusted"
+
+[projects."/home/chrono/Dev/mako"]
+trust_level = "trusted"
+
 [notice.model_migrations]
 "gpt-5.2-codex" = "gpt-5.3-codex"
 "gpt-5.1-codex-mini" = "gpt-5.4"
@@ -76,6 +85,7 @@ trust_level = "trusted"
 
 [tui]
 status_line = ["model-with-reasoning", "context-remaining", "current-dir", "five-hour-limit"]
+theme = "zenburn"
 
 [tui.model_availability_nux]
 "gpt-5.3-codex-spark" = 4

@@ -11,7 +11,7 @@ fpath=(~/.zsh/completions $fpath)
 unsetopt BEEP
 
 # flux hook
-flux remote check 2>&1
+# flux remote check 2>&1
 
 # Plugins
 plugins=(
@@ -134,3 +134,6 @@ alias oc-clean-models="rm $HOME/.local/state/opencode/model.json $HOME/.cache/op
 sched +0 'source ~/.zshrc.lazy'
 
 # zprof
+
+# bun completions
+[ -s "/home/chrono/.bun/_bun" ] && source "/home/chrono/.bun/_bun"
