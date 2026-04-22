@@ -78,6 +78,12 @@ trust_level = "trusted"
 [projects."/home/chrono/Dev/mako"]
 trust_level = "trusted"
 
+[projects."/home/ellie/Dev/flux-linux"]
+trust_level = "trusted"
+
+[projects."/home/ellie/Dev/MakoHarness"]
+trust_level = "trusted"
+
 [notice.model_migrations]
 "gpt-5.2-codex" = "gpt-5.3-codex"
 "gpt-5.1-codex-mini" = "gpt-5.4"
