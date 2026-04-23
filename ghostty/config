@@ -1,3 +1,3 @@
 shell-integration = zsh
 theme = Flexoki Dark
-shell-integration-features = sudo
+shell-integration-features = sudo,ssh-env,ssh-terminfo
