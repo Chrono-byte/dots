@@ -1,98 +1,7 @@
 #:schema https://raw.githubusercontent.com/openai/codex/refs/heads/main/codex-rs/core/config.schema.json
-model = "gpt-5.3-codex"
+model = "gpt-5.4"
 model_reasoning_effort = "medium"
 personality = "pragmatic"
-
-
-[projects."/home/chrono"]
-trust_level = "untrusted"
-
-[projects."/home/chrono/Dev"]
-trust_level = "trusted"
-
-[projects."/home/chrono/Dev/GameplayScripting/Some Dumb Project"]
-trust_level = "trusted"
-
-[projects."/home/chrono/Dev/parcant"]
-trust_level = "trusted"
-
-[projects."/home/chrono/Dev/commenthawk"]
-trust_level = "trusted"
-
-[projects."/home/chrono/Dev/cadence"]
-trust_level = "trusted"
-
-[projects."/home/chrono/Dev/Work/velx-us"]
-trust_level = "trusted"
-
-[projects."/home/chrono/Dev/Pivot"]
-trust_level = "trusted"
-
-[projects."/home/chrono/Dev/wassite"]
-trust_level = "trusted"
-
-[projects."/home/chrono/Dev/codex-flatpak"]
-trust_level = "trusted"
-
-[projects."/home/chrono/Dev/t3code"]
-trust_level = "trusted"
-
-[projects."/home/chrono/Videos"]
-trust_level = "trusted"
-
-[projects."/home/chrono/AppImages"]
-trust_level = "trusted"
-
-[projects."/home/chrono/Dev/artcard"]
-trust_level = "trusted"
-
-[projects."/home/chrono/Dev/unravel"]
-trust_level = "trusted"
-
-[projects."/home/chrono/Dev/docker-compose-nas"]
-trust_level = "trusted"
-
-[projects."/home/chrono/Dev/moonlight"]
-trust_level = "trusted"
-
-[projects."/home/chrono/Dev/blitz"]
-trust_level = "trusted"
-
-[projects."/home/chrono/Dev/personal-site-alyx"]
-trust_level = "trusted"
-
-[projects."/home/chrono/.dotfiles"]
-trust_level = "trusted"
-
-[projects."/home/chrono/Dev/flux"]
-trust_level = "trusted"
-
-[projects."/home/chrono/Dev/sylveon"]
-trust_level = "trusted"
-
-[projects."/home/chrono/Dev/DataStructures"]
-trust_level = "trusted"
-
-[projects."/home/chrono/Dev/Work/Coven"]
-trust_level = "trusted"
-
-[projects."/home/chrono/Dev/mako"]
-trust_level = "trusted"
-
-[projects."/home/ellie/Dev/flux-linux"]
-trust_level = "trusted"
-
-[projects."/home/ellie/Dev/MakoHarness"]
-trust_level = "trusted"
-
-[projects."/home/ellie/Dev/mako"]
-trust_level = "trusted"
-
-[projects."/home/ellie/Dev/t3code"]
-trust_level = "trusted"
-
-[projects."/home/ellie"]
-trust_level = "trusted"
 
 [notice.model_migrations]
 "gpt-5.2-codex" = "gpt-5.3-codex"
@@ -102,9 +11,14 @@ trust_level = "trusted"
 [tui]
 status_line = ["model-with-reasoning", "context-remaining", "current-dir", "five-hour-limit"]
 theme = "zenburn"
+notification_condition = "unfocused"
 
 [tui.model_availability_nux]
 "gpt-5.3-codex-spark" = 4
+"gpt-5.5" = 1
 
 [plugins."github@openai-curated"]
 enabled = true
+
+[projects."/home/chrono/Dev/Homelab/docker-compose-nas"]
+trust_level = "trusted"
