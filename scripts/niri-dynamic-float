@@ -1,0 +1,235 @@
+#!/usr/bin/env python3
+"""
+Like open-floating, but dynamically.
+
+Some windows only set their final title and app-id after they open. This helper
+subscribes to the Niri event stream and moves matching windows to floating when
+they become identifiable.
+"""
+
+import json
+import os
+import re
+import sys
+from dataclasses import dataclass, field
+from socket import AF_UNIX, SHUT_WR, socket
+from time import sleep
+
+BITWARDEN_EXTENSION_TITLE_RE = (
+    r"^Extension:\s*"
+    r"\(Bitwarden Password Manager\)"
+    r"\s*-\s*"
+    r"(Bitwarden\s*)?"
+    r"[—-]\s*"
+    r".+$"
+)
+BITWARDEN_SHORT_TITLE_RE = r"(^Bitwarden Password Manager$)|(^Bitwarden$)"
+# Chromium-based browsers that expose the Bitwarden extension as its own app-id.
+BITWARDEN_CHROMIUM_APP_ID_RE = r"^chrome-nngceckbapebfimnlniiiahkandclblb(?:-.+)?$"
+# Firefox and Zen identify the Bitwarden popup with the browser app-id.
+FIREFOX_DERIVATIVE_APP_ID_RE = (
+    r"(^firefox$)"
+    r"|(^org\.mozilla\.firefox$)"
+    r"|(^.*zen-twilight*$)"
+    r"|(^.*zen-browser*$)"
+)
+
+
+@dataclass(kw_only=True)
+class Match:
+    title: str | None = None
+    app_id: str | None = None
+    title_re: re.Pattern[str] | None = field(init=False, default=None)
+    app_id_re: re.Pattern[str] | None = field(init=False, default=None)
+
+    def __post_init__(self):
+        if self.title is not None:
+            self.title_re = re.compile(self.title)
+        if self.app_id is not None:
+            self.app_id_re = re.compile(self.app_id)
+
+    def matches(self, window):
+        if self.title is None and self.app_id is None:
+            return False
+
+        matched = True
+        title = window.get("title") or ""
+        app_id = window.get("app_id") or ""
+
+        if self.title_re is not None:
+            matched &= self.title_re.search(title) is not None
+        if self.app_id_re is not None:
+            matched &= self.app_id_re.search(app_id) is not None
+
+        return matched
+
+
+@dataclass
+class Rule:
+    match: list[Match] = field(default_factory=list)
+    exclude: list[Match] = field(default_factory=list)
+    width: int = 0
+    height: int = 0
+    centered: bool = False
+
+    def matches(self, window):
+        if self.match and not any(m.matches(window) for m in self.match):
+            return False
+        if any(m.matches(window) for m in self.exclude):
+            return False
+
+        return True
+
+
+RULES = [
+    Rule(
+        match=[
+            Match(title=BITWARDEN_EXTENSION_TITLE_RE),
+            Match(
+                title=BITWARDEN_SHORT_TITLE_RE,
+                app_id=FIREFOX_DERIVATIVE_APP_ID_RE,
+            ),
+            Match(
+                title=BITWARDEN_SHORT_TITLE_RE,
+                app_id=r"(?i:^.*helium.*$)",
+            ),
+            Match(
+                title=BITWARDEN_SHORT_TITLE_RE,
+                app_id=BITWARDEN_CHROMIUM_APP_ID_RE,
+            ),
+        ],
+        width=500,
+        height=800,
+        centered=True,
+    ),
+]
+
+
+def send(request):
+    with socket(AF_UNIX) as niri_socket:
+        niri_socket.connect(os.environ["NIRI_SOCKET"])
+        file = niri_socket.makefile("rw")
+        _ = file.write(json.dumps(request))
+        file.flush()
+
+
+def float_window(window_id: int):
+    send({"Action": {"MoveWindowToFloating": {"id": window_id}}})
+
+
+def set_height(window_id: int, height: int):
+    send(
+        {
+            "Action": {
+                "SetWindowHeight": {
+                    "id": window_id,
+                    "change": {"SetFixed": height},
+                }
+            }
+        }
+    )
+
+
+def set_width(window_id: int, width: int):
+    send(
+        {
+            "Action": {
+                "SetWindowWidth": {
+                    "id": window_id,
+                    "change": {"SetFixed": width},
+                }
+            }
+        }
+    )
+
+
+def set_centered(window_id: int, width: int, height: int):
+    send(
+        {
+            "Action": {
+                "MoveFloatingWindow": {
+                    "id": window_id,
+                    "x": {"SetProportion": 50.0},
+                    "y": {"SetProportion": 50.0},
+                }
+            }
+        }
+    )
+
+    send(
+        {
+            "Action": {
+                "MoveFloatingWindow": {
+                    "id": window_id,
+                    "x": {"AdjustFixed": -(width / 2)},
+                    "y": {"AdjustFixed": -(height / 2)},
+                }
+            }
+        }
+    )
+
+
+def update_matched(windows, window):
+    window["matched"] = False
+    if existing := windows.get(window["id"]):
+        window["matched"] = existing.get("matched", False)
+
+    matched_before = window["matched"]
+    matched_rule = next((rule for rule in RULES if rule.matches(window)), None)
+    window["matched"] = matched_rule is not None
+
+    if window["matched"] and not matched_before:
+        print(
+            "floating"
+            f" title={window.get('title', '')!r}"
+            f" app_id={window.get('app_id', '')!r}",
+            file=sys.stderr,
+        )
+        float_window(window["id"])
+        if matched_rule.height:
+            set_height(window["id"], matched_rule.height)
+        if matched_rule.width:
+            set_width(window["id"], matched_rule.width)
+        if matched_rule.centered:
+            set_centered(window["id"], matched_rule.width, matched_rule.height)
+
+
+def main():
+    if not RULES:
+        print("fill in RULES, then run the script", file=sys.stderr)
+        return
+
+    niri_socket = socket(AF_UNIX)
+    niri_socket.connect(os.environ["NIRI_SOCKET"])
+    file = niri_socket.makefile("rw")
+
+    _ = file.write('"EventStream"')
+    file.flush()
+    niri_socket.shutdown(SHUT_WR)
+
+    windows = {}
+
+    for line in file:
+        event = json.loads(line)
+
+        if changed := event.get("WindowsChanged"):
+            for window in changed["windows"]:
+                update_matched(windows, window)
+            windows = {window["id"]: window for window in changed["windows"]}
+        elif changed := event.get("WindowOpenedOrChanged"):
+            window = changed["window"]
+            update_matched(windows, window)
+            windows[window["id"]] = window
+        elif changed := event.get("WindowClosed"):
+            windows.pop(changed["id"], None)
+
+
+if __name__ == "__main__":
+    while True:
+        try:
+            main()
+        except KeyboardInterrupt:
+            raise SystemExit(0)
+        except Exception as err:
+            print(f"niri-dynamic-float: {err}; restarting in 5s", file=sys.stderr)
+            sleep(5.0)
