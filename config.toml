@@ -60,7 +60,9 @@ folders = [{ repo = "mako", dest = ".config/mako" }]
 files = [{ repo = "fuzzel/fuzzel.ini", dest = ".config/fuzzel/fuzzel.ini" }]
 
 [tools.applications]
-files = [{ repo = "applications/com.discordapp.Discord.desktop", dest = ".local/share/applications/com.discordapp.Discord.desktop" }]
+files = [
+  { repo = "applications/com.discordapp.Discord.desktop", dest = ".local/share/applications/com.discordapp.Discord.desktop" },
+]
 
 [tools.icons]
 folders = [{ repo = "icons", dest = ".icons" }]

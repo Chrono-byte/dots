@@ -10,17 +10,17 @@ This repository contains configuration files for various applications and tools,
 
 ```markdown
 .dotfiles/
-├── config.toml              # Flux configuration file
-├── scripts/                 # Utility and hook scripts
-│   └── check-hostname.sh    # Pre-commit hook for hostname validation
-├── alacritty/               # Alacritty terminal emulator configs
-├── cursor/                  # Cursor editor settings
-├── fonts/                   # Font files for the system
-├── starship/                # Starship prompt configuration
-├── sway/                    # Sway window manager configs
-├── waybar/                  # Waybar status bar configs
-├── zed/                     # Zed editor settings
-└── zsh/                     # Z shell configuration
+├── config.toml # Flux configuration file
+├── scripts/ # Utility and hook scripts
+│ └── check-hostname.sh # Pre-commit hook for hostname validation
+├── alacritty/ # Alacritty terminal emulator configs
+├── cursor/ # Cursor editor settings
+├── fonts/ # Font files for the system
+├── starship/ # Starship prompt configuration
+├── sway/ # Sway window manager configs
+├── waybar/ # Waybar status bar configs
+├── zed/ # Zed editor settings
+└── zsh/ # Z shell configuration
 ```
 
 ## Usage

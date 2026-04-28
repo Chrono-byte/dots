@@ -23,14 +23,10 @@
       "args": [],
       "projects": [
         {
-          "paths": [
-            "/home/ellie"
-          ]
+          "paths": ["/home/ellie"]
         },
         {
-          "paths": [
-            "/home/ellie/docker-compose-nas"
-          ]
+          "paths": ["/home/ellie/docker-compose-nas"]
         }
       ]
     },
@@ -40,29 +36,27 @@
       "args": [],
       "projects": [
         {
-          "paths": [
-            "/home/ellie/docker-compose-nas"
-          ]
+          "paths": ["/home/ellie/docker-compose-nas"]
         }
       ]
-    },
+    }
   ],
   "inlay_hints": {
-    "enabled": true,
+    "enabled": true
   },
   "formatter": "language_server",
   "format_on_save": "off",
   "tabs": {
-    "file_icons": false,
+    "file_icons": false
   },
   "minimap": {
-    "show": "auto",
+    "show": "auto"
   },
   "vim_mode": false,
   "git_panel": {
     "dock": "left",
     "tree_view": true,
-    "sort_by_path": false,
+    "sort_by_path": false
   },
   "ui_font_weight": 500.0,
   "agent": {
@@ -90,49 +84,39 @@
       "effort": "high",
       "provider": "copilot_chat",
       "model": "gpt-5-mini",
-      "enable_thinking": false,
+      "enable_thinking": false
     },
     "favorite_models": [],
-    "model_parameters": [],
+    "model_parameters": []
   },
   "prettier": {
-    "allowed": false,
+    "allowed": false
   },
   "languages": {
     "Rust": {
       "prettier": {
-        "allowed": false,
-      },
+        "allowed": false
+      }
     },
     "TypeScript": {
-      "language_servers": [
-        "!typescript-language-server",
-        "vtsls",
-        "!eslint",
-        "...",
-      ],
+      "language_servers": ["!typescript-language-server", "vtsls", "!eslint", "..."]
     },
     "TSX": {
-      "language_servers": [
-        "!typescript-language-server",
-        "vtsls",
-        "!eslint",
-        "...",
-      ],
-    },
+      "language_servers": ["!typescript-language-server", "vtsls", "!eslint", "..."]
+    }
   },
   "lsp": {
     "rust-analyzer": {
       "initialization_options": {
         "checkOnSave": true,
         "check": {
-          "command": "clippy",
-        },
-      },
-    },
+          "command": "clippy"
+        }
+      }
+    }
   },
   "context_servers": {},
-  "buffer_font_family": "JetBrains Mono",
+  "buffer_font_family": "JetBrainsMono Nerd Font",
   "agent_servers": {
     "opencode": {
       "type": "registry"
@@ -141,16 +125,16 @@
       "type": "registry"
     },
     "codex-acp": {
-      "type": "registry",
+      "type": "registry"
     },
     "github-copilot": {
-      "type": "registry",
-    },
+      "type": "registry"
+    }
   },
   "project_panel": {
     "hide_hidden": false,
     "hide_root": true,
-    "dock": "right",
+    "dock": "right"
   },
   "icon_theme": {
     "mode": "dark",
@@ -165,7 +149,7 @@
   "tab_size": 2,
   "telemetry": {
     "diagnostics": true,
-    "metrics": true,
+    "metrics": true
   },
   "edit_predictions": {},
   "ui_font_size": 16.0,
@@ -174,5 +158,5 @@
     "mode": "dark",
     "light": "One Light",
     "dark": "Flexoki Dark"
-  },
+  }
 }

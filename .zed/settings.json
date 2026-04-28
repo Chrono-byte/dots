@@ -1,7 +1,5 @@
 {
   "file_types": {
-    "JSONC": [
-      "**/waybar/config**"
-    ]
+    "JSONC": ["**/waybar/config**"]
   }
 }
