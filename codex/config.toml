@@ -15,10 +15,13 @@ notification_condition = "unfocused"
 
 [tui.model_availability_nux]
 "gpt-5.3-codex-spark" = 4
-"gpt-5.5" = 1
+"gpt-5.5" = 2
 
 [plugins."github@openai-curated"]
 enabled = true
 
 [projects."/home/chrono/Dev/Homelab/docker-compose-nas"]
+trust_level = "trusted"
+
+[projects."/home/chrono/.dotfiles"]
 trust_level = "trusted"

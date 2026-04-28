@@ -1,0 +1,24 @@
+sort=-time
+layer=overlay
+anchor=top-right
+
+font=SF Hello 11
+background-color=#1f2023dd
+text-color=#f6f5f4ff
+border-color=#b7a6ffff
+progress-color=over #3d4048ff
+
+border-size=2
+border-radius=12
+padding=14
+default-timeout=5000
+ignore-timeout=0
+
+width=360
+height=110
+margin=16
+
+icons=1
+markup=1
+actions=1
+history=1

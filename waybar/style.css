@@ -1,220 +1,108 @@
-/*
- * macOS 15 Sequoia-inspired Waybar Theme
- * Based on: https://github.com/kamlendras/waybar-macos-sequoia
- */
-
 * {
-    border: none;
-    border-radius: 8px;
-    font-family:
-        "JetBrainsMono Nerd Font", "SF Mono", sans-serif;
-    font-size: 13px;
-    font-weight: 500;
-    min-height: 0;
+  border: none;
+  border-radius: 999px;
+  font-family: "SF Mono", "SF Pro Display", sans-serif;
+  font-size: 13px;
+  font-weight: 500;
+  min-height: 0;
 }
 
 window#waybar {
-    background-color: rgba(28, 28, 30, 0.85);
-    border-bottom: 1px solid rgba(255, 255, 255, 0.1);
-    color: #ffffff;
-    transition-property: background-color;
-    transition-duration: 0.3s;
+  background: rgba(31, 32, 35, 0.999);
+  /*border-bottom: 1px solid #2f3136;*/
+  color: #f6f5f4;
 }
 
-window#waybar.hidden {
-    opacity: 0.3;
+window#waybar.empty,
+window#waybar.solo {
+  background: rgba(31, 32, 35, 0.999);
 }
 
-button {
-    border: none;
-    border-radius: 6px;
-    padding: 0 8px;
-    transition: all 0.2s cubic-bezier(0.4, 0, 0.2, 1);
+tooltip {
+  background: #24262b;
+  border: 1px solid #3d4048;
+  border-radius: 12px;
 }
 
-button:hover {
-    background: rgba(255, 255, 255, 0.1);
+tooltip label {
+  color: #f6f5f4;
 }
 
-#workspaces {
-    padding: 0 4px;
-}
-
-#workspaces button {
-    padding: 4px 10px;
-    margin: 0 2px;
-    background-color: transparent;
-    color: rgba(255, 255, 255, 0.6);
-    border-radius: 6px;
-    transition: all 0.2s ease;
-}
-
-#workspaces button:hover {
-    background: rgba(255, 255, 255, 0.1);
-    color: rgba(255, 255, 255, 0.9);
-}
-
-#workspaces button.focused {
-    background-color: rgba(10, 132, 255, 0.3);
-    color: #ffffff;
-    border: 1px solid rgba(10, 132, 255, 0.5);
-}
-
-#workspaces button.urgent {
-    background-color: rgba(255, 59, 48, 0.4);
-    color: #ffffff;
-    border: 1px solid rgba(255, 59, 48, 0.6);
-}
-
-/* Custom Logo */
-#custom-logo {
-    font-size: 18px;
-    margin-left: 12px;
-    padding: 0 8px;
-    color: rgba(255, 255, 255, 0.9);
-    background-color: transparent;
-}
-
-/* Modules */
-#custom-weather,
+#custom-activities,
+#window,
+#tray,
 #network,
 #pulseaudio,
 #battery,
-#custom-discord,
-#custom-signal,
-#custom-vpn,
-#clock,
-#tray {
-    padding: 4px 10px;
-    margin: 0 2px;
-    color: rgba(255, 255, 255, 0.9);
-    background-color: transparent;
-    border-radius: 6px;
-    transition: all 0.2s ease;
-}
-
-#custom-weather:hover,
-#network:hover,
-#pulseaudio:hover,
-#battery:hover,
-#clock:hover {
-    background: rgba(255, 255, 255, 0.1);
-}
-
-/* Clock */
 #clock {
-    padding: 4px 12px;
-    font-weight: 500;
+  margin: 4px 0;
+  padding: 0 12px;
 }
 
-/* Battery */
+#custom-activities {
+  margin-left: 10px;
+  color: #f6f5f4;
+  font-weight: 600;
+}
+
+#window {
+  color: #c0bfbc;
+  padding-left: 6px;
+}
+
+#workspaces {
+  margin: 4px 0;
+}
+
+#workspaces button {
+  min-width: 24px;
+  padding: 0 6px;
+  margin: 0 2px;
+  color: #9a9996;
+  background: transparent;
+}
+
+#workspaces button.empty {
+  color: #6f737a;
+}
+
+#workspaces button.active,
+#workspaces button.focused {
+  color: #f6f5f4;
+  background: #3d4048;
+}
+
+#workspaces button:hover {
+  color: #f6f5f4;
+  background: #33363d;
+}
+
+#tray {
+  padding-right: 6px;
+}
+
+#network,
+#pulseaudio,
 #battery {
-    color: rgba(255, 255, 255, 0.9);
+  color: #deddda;
+  padding: 0 10px;
+}
+
+#battery.warning:not(.charging) {
+  color: #e5a50a;
+}
+
+#battery.critical:not(.charging) {
+  color: #ff7b63;
 }
 
 #battery.charging,
 #battery.plugged {
-    color: #30d158;
+  color: #57e389;
 }
 
-#battery.warning:not(.charging) {
-    color: #ff9f0a;
-}
-
-#battery.critical:not(.charging) {
-    background-color: rgba(255, 59, 48, 0.4);
-    color: #ffffff;
-    border: 1px solid rgba(255, 59, 48, 0.6);
-}
-
-/* Network */
-#network {
-    color: rgba(255, 255, 255, 0.9);
-}
-
-#network.disconnected {
-    color: rgba(255, 59, 48, 0.8);
-}
-
-/* PulseAudio */
-#pulseaudio {
-    color: rgba(255, 255, 255, 0.9);
-}
-
-#pulseaudio.muted {
-    color: rgba(255, 255, 255, 0.5);
-}
-
-/* Tray */
-#tray {
-    padding: 4px 8px;
-}
-
-#tray > .passive {
-    -gtk-icon-effect: dim;
-}
-
-#tray > .needs-attention {
-    -gtk-icon-effect: highlight;
-    background-color: rgba(255, 59, 48, 0.3);
-}
-
-/* Window */
-#window {
-    padding: 4px 12px;
-    color: rgba(255, 255, 255, 0.9);
-    background-color: transparent;
-    font-weight: 500;
-}
-
-/* Tooltip */
-tooltip {
-    background: rgba(28, 28, 30, 0.95);
-    border: 1px solid rgba(255, 255, 255, 0.1);
-    border-radius: 8px;
-    padding: 8px 12px;
-}
-
-tooltip label {
-    color: rgba(255, 255, 255, 0.9);
-    font-size: 12px;
-}
-
-/* Light mode support (can be toggled via CSS variables if needed) */
-window#waybar.light {
-    background-color: rgba(245, 245, 247, 0.85);
-    color: #1d1d1f;
-    border-bottom: 1px solid rgba(0, 0, 0, 0.1);
-}
-
-window#waybar.light #workspaces button {
-    color: rgba(29, 29, 31, 0.6);
-}
-
-window#waybar.light #workspaces button:hover {
-    background: rgba(0, 0, 0, 0.05);
-    color: rgba(29, 29, 31, 0.9);
-}
-
-window#waybar.light #workspaces button.focused {
-    background-color: rgba(0, 122, 255, 0.2);
-    color: #1d1d1f;
-    border: 1px solid rgba(0, 122, 255, 0.3);
-}
-
-window#waybar.light #custom-weather,
-window#waybar.light #network,
-window#waybar.light #pulseaudio,
-window#waybar.light #battery,
-window#waybar.light #clock {
-    color: rgba(29, 29, 31, 0.9);
-}
-
-window#waybar.light tooltip {
-    background: rgba(245, 245, 247, 0.95);
-    border: 1px solid rgba(0, 0, 0, 0.1);
-}
-
-window#waybar.light tooltip label {
-    color: rgba(29, 29, 31, 0.9);
+#clock {
+  color: #f6f5f4;
+  font-weight: 600;
+  padding: 0 16px;
 }

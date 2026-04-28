@@ -1,129 +1,120 @@
 {
-    "layer": "top",
-    "position": "top",
-    "height": 35,
-    "spacing": 6,
-    "modules-left": ["custom/logo", "sway/workspaces"],
-    "modules-center": [],
-    "modules-right": [
-        "custom/weather",
-        "network",
-        "pulseaudio",
-        "battery",
-        "tray",
-        "clock"
-    ],
-
-    "tray": {
-        "icon-size": 18,
-        "spacing": 12
-    },
-
-    "custom/logo": {
-        "format": "󱄛",
-        "tooltip": false
-    },
-
-    "sway/workspaces": {
-        "format": "{name}: {windows}",
-        "format-window-separator": " | ",
-        "window-format": "{class}",
-        "window-rewrite-default": "{class}",
-        "max-length": 15,
-        "window-rewrite": {
-            "class<app.zen_browser.zen>": "", // zen browser
-            "class<alacritty>": "",    // alacritty
-            "class<cursor>": "",       // cursor
-            "class<helium>": "󰊯",    // helium browser
-            "class<discord>": "󰙯"     // discord
-        },
-        // show workspaces 1-4 on monitor 1 always
-        "persistent-workspaces": {
-            "1": [],
-            "2": [],
-            "3": [],
-            "4": []
-        }
-    },
-
-    "custom/weather": {
-        "format": "☀️ {}",
-        "interval": 1800,
-        "exec": "curl -s 'wttr.in/?format=%t' || echo '+N/A°F'",
-        "tooltip": true
-    },
-
-    "network": {
-        "format-wifi": "📶 {signalStrength}%",
-        "format-ethernet": "󰈀 Connected",
-        "format-linked": "󰈀 {ifname} (No IP)",
-        "format-disconnected": "󰤭 Disconnected",
-        "tooltip-format": "{essid} - {ipaddr}/{cidr}",
-        "tooltip-format-wifi": "{essid} ({signalStrength}%) - {ipaddr}/{cidr}",
-        "tooltip-format-ethernet": "{ipaddr}/{cidr}",
-        "tooltip-format-disconnected": "Not connected"
-    },
-
-    "pulseaudio": {
-        "format": "🔊 {volume}%",
-        "format-bluetooth": "󰋋 {volume}%",
-        "format-bluetooth-muted": "󰂲 {volume}%",
-        "format-muted": "🔇 {volume}%",
-        "format-source": "{volume}% 󰍬",
-        "format-source-muted": "󰍭",
-        "on-click": "pavucontrol"
-    },
-
-    "battery": {
-        "states": {
-            "warning": 30,
-            "critical": 15
-        },
-        "format": "{icon} {capacity}%",
-        "format-charging": "󰂄 {capacity}%",
-        "format-plugged": "󰂄 {capacity}%",
-        "format-alt": "{icon} {time}",
-        "format-full": "󰁹 {capacity}%",
-        "format-icons": ["󰁺", "󰁻", "󰁼", "󰁽", "󰁾", "󰁿", "󰂀", "󰂁", "󰂂", "󰁹"]
-    },
-
-    "custom/discord": {
-        "format": "󰙯",
-        "exec": "pgrep -x Discord > /dev/null && echo '󰙯' || echo ''",
-        "interval": 5,
-        "tooltip": false
-    },
-
-    "custom/signal": {
-        "format": "📊",
-        "tooltip": false
-    },
-
-    "custom/vpn": {
-        "format": "🌐",
-        "exec": "ip link show 2>/dev/null | grep -q 'tun\\|wg' && echo '🌐' || echo ''",
-        "interval": 5,
-        "tooltip": false
-    },
-
-    "clock": {
-        "format": "{:%a %b %d %H:%M}",
-        "format-alt": "{:%A, %B %d, %Y (%R)}",
-        "tooltip-format": "<tt><small>{calendar}</small></tt>",
-        "calendar": {
-            "mode": "year",
-            "mode-mon-col": 3,
-            "weeks-pos": "right",
-            "on-scroll": 1,
-            "on-click-right": "mode"
-        },
-        "actions": {
-            "on-click-right": "mode",
-            "on-click-forward": "tz_up",
-            "on-click-backward": "tz_down",
-            "on-scroll-up": "shift_up",
-            "on-scroll-down": "shift_down"
-        },
-        "timezone": "America/New_York"
+  "layer": "top",
+  "position": "top",
+  "height": 32,
+  "spacing": 8,
+  "margin-top": 8,
+  "margin-left": 8,
+  "margin-right": 8,
+  "modules-left": [
+    "custom/activities",
+    "niri/workspaces",
+    "niri/window"
+  ],
+  "modules-center": [
+    "clock"
+  ],
+  "modules-right": [
+    "tray",
+    "network",
+    "pulseaudio",
+    "battery"
+  ],
+  "custom/activities": {
+    "format": "Activities",
+    "tooltip": false,
+    "on-click": "niri msg action toggle-overview"
+  },
+  "niri/workspaces": {
+    "format": "{icon}",
+    "format-icons": {
+      "default": "",
+      "empty": ""
     }
+  },
+  "niri/window": {
+    "format": "{title}",
+    "icon": true,
+    "icon-size": 16,
+    "separate-outputs": true,
+    "rewrite": {
+      "(.*) - Zen Browser": "$1",
+      "(.*) — Zen Browser": "$1",
+      "(.*) - Mozilla Firefox": "$1",
+      "(.*) — Mozilla Firefox": "$1",
+      "(.*) - Ghostty": "$1",
+      "(.*) — Ghostty": "$1"
+    }
+  },
+  "tray": {
+    "icon-size": 16,
+    "spacing": 8
+  },
+  "network": {
+    "format-wifi": "󰤨",
+    "format-ethernet": "󰈀",
+    "format-linked": "󰈀",
+    "format-disconnected": "󰤭",
+    "tooltip-format": "{ifname}: {ipaddr}/{cidr}",
+    "tooltip-format-wifi": "{essid} ({signalStrength}%)\n{ipaddr}/{cidr}",
+    "tooltip-format-ethernet": "{ifname}\n{ipaddr}/{cidr}",
+    "tooltip-format-disconnected": "Disconnected"
+  },
+  "pulseaudio": {
+    "format": "{icon}",
+    "format-muted": "󰝟",
+    "format-icons": {
+      "default": [
+        "󰕿",
+        "󰖀",
+        "󰕾"
+      ]
+    },
+    "tooltip-format": "{volume}%",
+    "on-click": "pavucontrol"
+  },
+  "battery": {
+    "states": {
+      "warning": 30,
+      "critical": 15
+    },
+    "format": "{icon} {capacity}%",
+    "format-charging": "󰂄 {capacity}%",
+    "format-plugged": "󰂄 {capacity}%",
+    "format-full": "󰁹 {capacity}%",
+    "format-icons": [
+      "󰁺",
+      "󰁻",
+      "󰁼",
+      "󰁽",
+      "󰁾",
+      "󰁿",
+      "󰂀",
+      "󰂁",
+      "󰂂",
+      "󰁹"
+    ]
+  },
+  "clock": {
+    "format": "{:%H:%M}",
+    "tooltip-format": "<tt><small>{calendar}</small></tt>",
+    "calendar": {
+      "mode": "month",
+      "mode-mon-col": 3,
+      "weeks-pos": "right",
+      "on-scroll": 1,
+      "format": {
+        "months": "<span weight='bold'>{}</span>",
+        "days": "{}",
+        "weeks": "<span color='#77767b'>{}</span>",
+        "weekdays": "<span color='#77767b'>{}</span>",
+        "today": "<span weight='bold' underline='single'>{}</span>"
+      }
+    },
+    "actions": {
+      "on-click-right": "mode",
+      "on-scroll-up": "shift_up",
+      "on-scroll-down": "shift_down"
+    }
+  }
 }

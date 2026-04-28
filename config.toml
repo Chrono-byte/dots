@@ -52,3 +52,6 @@ files = [{ repo = "codex/config.toml", dest = ".codex/config.toml" }]
 
 [tools.niri]
 folders = [{ repo = "niri", dest = ".config/niri" }]
+
+[tools.mako]
+folders = [{ repo = "mako", dest = ".config/mako" }]
