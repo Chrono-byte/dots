@@ -328,7 +328,7 @@ window-rule {
 }
 
 window-rule {
-    match title="^Network Manager$"
+    match app-id=r#"^com\.chrono\.NetworkManager$"#
     open-floating true
 }
 
