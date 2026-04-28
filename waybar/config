@@ -15,6 +15,7 @@
     "clock"
   ],
   "modules-right": [
+    "custom/notifications",
     "tray",
     "custom/tailscale",
     "network",
@@ -48,6 +49,13 @@
     "return-type": "json",
     "interval": 10,
     "on-click": "~/.local/bin/tailscale-menu"
+  },
+  "custom/notifications": {
+    "exec": "~/.local/bin/notifications-waybar",
+    "return-type": "json",
+    "interval": 10,
+    "signal": 8,
+    "on-click": "~/.local/bin/notifications-menu"
   },
   "network": {
     "format-wifi": "󰤨",

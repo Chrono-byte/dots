@@ -403,6 +403,8 @@ binds {
 
     // Dismiss the most recent mako notification.
     Mod+N { spawn "makoctl" "dismiss"; }
+    // Open notification history.
+    Mod+Shift+N { spawn "~/.local/bin/notifications-menu"; }
 
     // Example brightness key mappings for brightnessctl.
     // You can use regular spawn with multiple arguments too (to avoid going through "sh"),

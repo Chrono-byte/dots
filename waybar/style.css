@@ -30,6 +30,7 @@ tooltip label {
 
 #custom-activities,
 #custom-window,
+#custom-notifications,
 #tray,
 #custom-tailscale,
 #network,
@@ -83,11 +84,20 @@ tooltip label {
 }
 
 #custom-tailscale,
+#custom-notifications,
 #network,
 #pulseaudio,
 #battery {
   color: #deddda;
   padding: 0 10px;
+}
+
+#custom-notifications.empty {
+  color: #9a9996;
+}
+
+#custom-notifications.has-history {
+  color: #f6f5f4;
 }
 
 #custom-tailscale.connected {
