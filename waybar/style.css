@@ -31,6 +31,7 @@ tooltip label {
 #custom-activities,
 #window,
 #tray,
+#custom-tailscale,
 #network,
 #pulseaudio,
 #battery,
@@ -81,11 +82,22 @@ tooltip label {
   padding-right: 6px;
 }
 
+#custom-tailscale,
 #network,
 #pulseaudio,
 #battery {
   color: #deddda;
   padding: 0 10px;
+}
+
+#custom-tailscale.connected {
+  color: #57e389;
+}
+
+#custom-tailscale.disconnected,
+#custom-tailscale.stopped,
+#custom-tailscale.error {
+  color: #c0bfbc;
 }
 
 #battery.warning:not(.charging) {

@@ -16,6 +16,7 @@
   ],
   "modules-right": [
     "tray",
+    "custom/tailscale",
     "network",
     "pulseaudio",
     "battery"
@@ -50,6 +51,12 @@
   "tray": {
     "icon-size": 16,
     "spacing": 8
+  },
+  "custom/tailscale": {
+    "exec": "~/.local/bin/tailscale-waybar",
+    "return-type": "json",
+    "interval": 10,
+    "on-click": "~/.local/bin/tailscale-menu"
   },
   "network": {
     "format-wifi": "󰤨",

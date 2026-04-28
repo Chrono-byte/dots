@@ -1,0 +1,44 @@
+#!/bin/sh
+
+set -eu
+
+launch_terminal() {
+    ghostty --class=com.chrono.Tailscale --title="$1" -e sh -lc "$2"
+}
+
+status_output="$(timeout 2 tailscale status --json 2>&1 || true)"
+tail_ip=""
+if printf '%s' "$status_output" | jq -e . >/dev/null 2>&1; then
+    tail_ip="$(printf '%s' "$status_output" | jq -r '.TailscaleIPs[0] // .Self.TailscaleIPs[0] // empty')"
+fi
+
+selection="$(
+    printf '%s\n' \
+        'Up' \
+        'Down' \
+        'Status' \
+        'Copy IP' \
+    | fuzzel --dmenu --prompt='Tailscale: '
+)"
+
+[ -n "${selection:-}" ] || exit 0
+
+case "$selection" in
+    Up)
+        launch_terminal "Tailscale Control" "tailscale up; printf '\nPress Enter to close...'; read _"
+        ;;
+    Down)
+        launch_terminal "Tailscale Control" "tailscale down; printf '\nPress Enter to close...'; read _"
+        ;;
+    Status)
+        launch_terminal "Tailscale Status" "tailscale status; printf '\nPress Enter to close...'; read _"
+        ;;
+    "Copy IP")
+        if [ -n "$tail_ip" ]; then
+            printf '%s' "$tail_ip" | wl-copy
+            notify-send "Tailscale" "Copied $tail_ip"
+        else
+            notify-send "Tailscale" "No Tailscale IP available"
+        fi
+        ;;
+esac

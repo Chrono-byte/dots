@@ -64,3 +64,9 @@ files = [{ repo = "applications/com.discordapp.Discord.desktop", dest = ".local/
 
 [tools.icons]
 folders = [{ repo = "icons", dest = ".icons" }]
+
+[tools.scripts]
+files = [
+  { repo = "scripts/tailscale-menu", dest = ".local/bin/tailscale-menu" },
+  { repo = "scripts/tailscale-waybar", dest = ".local/bin/tailscale-waybar" },
+]
