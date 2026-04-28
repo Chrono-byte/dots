@@ -29,7 +29,7 @@ tooltip label {
 }
 
 #custom-activities,
-#window,
+#custom-window,
 #tray,
 #custom-tailscale,
 #network,
@@ -46,7 +46,7 @@ tooltip label {
   font-weight: 600;
 }
 
-#window {
+#custom-window {
   color: #c0bfbc;
   padding-left: 6px;
 }

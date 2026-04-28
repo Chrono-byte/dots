@@ -1,0 +1,111 @@
+#!/bin/sh
+
+set -eu
+
+max_content_length="${1:-${WINDOW_TITLE_MAX_CONTENT:-24}}"
+
+window_json="$(niri msg -j focused-window 2>/dev/null || true)"
+
+if [ -z "$window_json" ] || ! printf '%s' "$window_json" | jq -e . >/dev/null 2>&1; then
+    jq -cn '{text:"",tooltip:"",class:"empty"}'
+    exit 0
+fi
+
+raw_title="$(printf '%s' "$window_json" | jq -r '.title // ""')"
+app_id="$(printf '%s' "$window_json" | jq -r '.app_id // ""')"
+
+case "$app_id" in
+    zen-twilight)
+        app_name="Zen Twilight"
+        ;;
+    zen-browser)
+        app_name="Zen Browser"
+        ;;
+    org.mozilla.firefox|firefox)
+        app_name="Firefox"
+        ;;
+    com.mitchellh.ghostty)
+        app_name="Ghostty"
+        ;;
+    dev.zed.Zed|Zed)
+        app_name="Zed"
+        ;;
+    dev.zed.Zed-Nightly)
+        app_name="Zed Nightly"
+        ;;
+    code|Code|com.visualstudio.code|codium|VSCodium)
+        app_name="Code"
+        ;;
+    org.gnome.Nautilus)
+        app_name="Files"
+        ;;
+    org.gnome.Settings)
+        app_name="Settings"
+        ;;
+    com.discordapp.Discord|discord)
+        app_name="Discord"
+        ;;
+    *)
+        app_name="$(printf '%s' "$app_id" | awk -F. '{print $NF}')"
+        [ -n "$app_name" ] || app_name="App"
+        ;;
+esac
+
+content_title="$raw_title"
+
+strip_suffix() {
+    printf '%s' "$1" | sed -E "s/[[:space:]]+[—-][[:space:]]+$2\$//"
+}
+
+previous_title=""
+while [ "$content_title" != "$previous_title" ]; do
+    previous_title="$content_title"
+    for suffix in \
+        "Zen Browser" \
+        "Zen Twilight" \
+        "Mozilla Firefox" \
+        "Firefox" \
+        "Discord" \
+        "Ghostty" \
+        "Zed" \
+        "Zed Nightly" \
+        "Visual Studio Code" \
+        "Code"
+    do
+        content_title="$(strip_suffix "$content_title" "$suffix")"
+    done
+done
+
+[ -n "$content_title" ] || content_title="$app_name"
+
+short_content="$(printf '%s' "$content_title" | awk '
+    BEGIN {
+        max = '"$max_content_length"'
+    }
+    {
+        if (length($0) > max) {
+            print substr($0, 1, max) "…"
+        } else {
+            print $0
+        }
+    }
+')"
+
+if [ "$content_title" = "$app_name" ]; then
+    display_text="$app_name"
+else
+    display_text="$short_content — $app_name"
+fi
+
+tooltip="$content_title"
+if [ -n "$app_id" ]; then
+    tooltip="$tooltip\n$app_name ($app_id)"
+else
+    tooltip="$tooltip\n$app_name"
+fi
+
+jq -cn \
+    --arg text "$display_text" \
+    --arg tooltip "$tooltip" \
+    --arg class "$app_id" \
+    '{text:$text,tooltip:$tooltip,class:$class}'

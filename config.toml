@@ -71,4 +71,5 @@ folders = [{ repo = "icons", dest = ".icons" }]
 files = [
   { repo = "scripts/tailscale-menu", dest = ".local/bin/tailscale-menu" },
   { repo = "scripts/tailscale-waybar", dest = ".local/bin/tailscale-waybar" },
+  { repo = "scripts/window-title-waybar", dest = ".local/bin/window-title-waybar" },
 ]
