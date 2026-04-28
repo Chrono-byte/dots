@@ -6,7 +6,12 @@ current_profile = "default"
 symlink_resolution = "auto"
 
 [tools.fonts]
-folders = [{ repo = "fonts/", dest = ".local/share/fonts/" }]
+files = [
+  { repo = "fonts/SF-Mono-Regular.otf", dest = ".local/share/fonts/SF-Mono-Regular.otf" },
+  { repo = "fonts/SFHello-Regular.otf", dest = ".local/share/fonts/SFHello-Regular.otf" },
+  { repo = "fonts/SFMonoNerdFont-Regular.otf", dest = ".local/share/fonts/SFMonoNerdFont-Regular.otf" },
+  { repo = "fonts/JetBrainsMonoNerdFont-Regular.ttf", dest = ".local/share/fonts/JetBrainsMonoNerdFont-Regular.ttf" },
+]
 
 [tools.waybar]
 files = [
@@ -44,3 +49,6 @@ folders = [{ repo = "nvim", dest = ".config/nvim" }]
 
 [tools.codex]
 files = [{ repo = "codex/config.toml", dest = ".codex/config.toml" }]
+
+[tools.niri]
+folders = [{ repo = "niri", dest = ".config/niri" }]
