@@ -36,6 +36,7 @@ input {
         // accel-speed 0.2
         // accel-profile "flat"
         // scroll-method "two-finger"
+        click-method "clickfinger"
         // disabled-on-external-mouse
     }
 
@@ -324,6 +325,11 @@ window-rule {
     match app-id=r#"zen-twilight$"# title="^Picture-in-Picture$"
     open-floating true
 
+}
+
+window-rule {
+    match title="^Network Manager$"
+    open-floating true
 }
 
 // Example: block out two password managers from screen capture.

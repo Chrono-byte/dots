@@ -36,6 +36,7 @@
     "format": "{title}",
     "icon": true,
     "icon-size": 16,
+    "max-length": 15,
     "separate-outputs": true,
     "rewrite": {
       "(.*) - Zen Browser": "$1",
@@ -58,7 +59,8 @@
     "tooltip-format": "{ifname}: {ipaddr}/{cidr}",
     "tooltip-format-wifi": "{essid} ({signalStrength}%)\n{ipaddr}/{cidr}",
     "tooltip-format-ethernet": "{ifname}\n{ipaddr}/{cidr}",
-    "tooltip-format-disconnected": "Disconnected"
+    "tooltip-format-disconnected": "Disconnected",
+    "on-click": "ghostty -e sh -lc 'printf \"\\033]0;Network Manager\\007\"; exec nmtui'"
   },
   "pulseaudio": {
     "format": "{icon}",
