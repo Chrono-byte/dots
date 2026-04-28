@@ -11,8 +11,7 @@ This repository contains configuration files for various applications and tools,
 ```markdown
 .dotfiles/
 ├── config.toml # Flux configuration file
-├── scripts/ # Utility and hook scripts
-│ └── check-hostname.sh # Pre-commit hook for hostname validation
+├── scripts/ # Various utils
 ├── alacritty/ # Alacritty terminal emulator configs
 ├── cursor/ # Cursor editor settings
 ├── fonts/ # Font files for the system
@@ -21,6 +20,7 @@ This repository contains configuration files for various applications and tools,
 ├── waybar/ # Waybar status bar configs
 ├── zed/ # Zed editor settings
 └── zsh/ # Z shell configuration
+└── .zed/ # Editor config for this repo
 ```
 
 ## Usage
@@ -29,4 +29,4 @@ This repository contains configuration files for various applications and tools,
 
 1. Clone this repository to `~/.dotfiles`
 2. Install Flux (refer to Flux documentation for installation)
-3. Run `flux apply` to create all symlinks
+3. Run `flux apply --force` to create all symlinks, and overwrite local content
