@@ -1,0 +1,3 @@
+[submodule "icons/MoreWaita"]
+	path = icons/MoreWaita
+	url = git@github.com:somepaulo/MoreWaita.git
