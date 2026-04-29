@@ -25,3 +25,9 @@ trust_level = "trusted"
 
 [projects."/home/chrono/.dotfiles"]
 trust_level = "trusted"
+
+[projects."/home/chrono/Dev/personal-site-alyx"]
+trust_level = "trusted"
+
+[projects."/home/chrono"]
+trust_level = "trusted"

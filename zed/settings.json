@@ -105,6 +105,7 @@
       "language_servers": ["!typescript-language-server", "vtsls", "!eslint", "..."]
     }
   },
+  "language_servers": ["!eslint", "..."],
   "lsp": {
     "rust-analyzer": {
       "initialization_options": {
