@@ -19,7 +19,7 @@ This repository contains configuration files for various applications and tools,
 ├── sway/ # Sway window manager configs
 ├── waybar/ # Waybar status bar configs
 ├── zed/ # Zed editor settings
-└── zsh/ # Z shell configuration
+├── zsh/ # Z shell configuration
 └── .zed/ # Editor config for this repo
 ```
 
