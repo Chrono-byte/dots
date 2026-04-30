@@ -54,7 +54,8 @@ folders = [{ repo = "nvim", dest = ".config/nvim" }]
 
 # Codex (AI assistant)
 [tools.codex]
-files = [{ repo = "codex/config.toml", dest = ".codex/config.toml" }]
+files = [{ repo = "codex/config.toml", dest = ".codex/config.toml" },
+  { repo = "codex/AGENTS.md", dest = ".codex/AGENTS.md" }]
 
 # Niri (Window manager)
 [tools.niri]
