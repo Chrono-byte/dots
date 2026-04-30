@@ -353,10 +353,11 @@
         "pinnedApps": [
             "zen-twilight",
             "org.mozilla.thunderbird",
-            "dev.zed.Zed-Nightly",
             "com.discordapp.Discord",
+            "dev.zed.Zed-Nightly",
+            "com.mitchellh.ghostty",
             "org.gnome.Nautilus",
-            "com.mitchellh.ghostty"
+            "t3_code_nightly"
         ],
         "pinnedStatic": true,
         "position": "bottom",
