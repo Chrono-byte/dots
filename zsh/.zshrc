@@ -74,7 +74,8 @@ eval "$(starship init zsh)"
 # ============================================================================
 # 10. EDITOR CONFIGURATION (Fast)
 # ============================================================================
-export EDITOR=$([[ -n $SSH_CONNECTION ]] && echo 'nano' || echo 'nvim')
+export EDITOR=$([[ -n $SSH_CONNECTION ]] && echo 'nano' || echo 'zed --wait')
+export VISUAL=$([[ -n $SSH_CONNECTION ]] && echo 'nano' || echo 'zed --wait')
 
 # ============================================================================
 # 11. PATH ADDITIONS (Fast - just exports)
