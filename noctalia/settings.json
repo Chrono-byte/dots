@@ -55,7 +55,7 @@
         "capsuleOpacity": 1,
         "contentPadding": 2,
         "density": "default",
-        "displayMode": "auto_hide",
+        "displayMode": "always_visible",
         "enableExclusionZoneInset": true,
         "fontScale": 1,
         "frameRadius": 12,
@@ -145,7 +145,7 @@
                     "hideUnoccupied": false,
                     "iconScale": 0.8,
                     "id": "Workspace",
-                    "labelMode": "index",
+                    "labelMode": "none",
                     "occupiedColor": "secondary",
                     "pillSize": 0.6,
                     "showApplications": false,
@@ -219,22 +219,6 @@
                     "icon": "noctalia",
                     "id": "ControlCenter",
                     "useDistroLogo": false
-                },
-                {
-                    "defaultSettings": {
-                        "debounceMs": 300,
-                        "enabled": true,
-                        "language": "auto",
-                        "maxEventsPerSecond": 20,
-                        "maxVisible": 4,
-                        "perWorkspace": false,
-                        "workspaceMaxVisible": {
-                        }
-                    },
-                    "id": "plugin:niri-auto-tile"
-                },
-                {
-                    "id": "plugin:color-scheme-creator"
                 }
             ]
         }
