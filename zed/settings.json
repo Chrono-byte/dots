@@ -56,7 +56,7 @@
   "git_panel": {
     "dock": "left",
     "tree_view": true,
-    "sort_by_path": false
+    "sort_by_path": true
   },
   "ui_font_weight": 500.0,
   "agent": {

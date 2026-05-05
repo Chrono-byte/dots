@@ -31,3 +31,9 @@ trust_level = "trusted"
 
 [projects."/home/chrono"]
 trust_level = "trusted"
+
+[projects."/home/chrono/Dev/aseprite"]
+trust_level = "trusted"
+
+[projects."/home/chrono/Dev/sylveon"]
+trust_level = "trusted"

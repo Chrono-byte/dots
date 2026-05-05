@@ -9,3 +9,5 @@
 [[ -n $(command -v bun) ]] && [ -s "$HOME/.bun/_bun" ] && source "$HOME/.bun/_bun"
 [[ -n $(command -v tailscale) ]] && [ -s "${fpath[1]}/_tailscale" ] && source "${fpath[1]}/_tailscale"
 [[ -n $(command -v fnm) ]] && eval "$(fnm completions --shell zsh 2>/dev/null || true)"
+# Zed does not ship zsh completions, so use generic file/path completion
+compdef _files zed

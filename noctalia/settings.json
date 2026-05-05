@@ -24,7 +24,8 @@
             "com.mitchellh.ghostty",
             "md.obsidian.Obsidian",
             "org.mozilla.thunderbird",
-            "com.discordapp.Discord"
+            "com.discordapp.Discord",
+            "zen-twilight"
         ],
         "position": "center",
         "screenshotAnnotationTool": "",
@@ -32,7 +33,7 @@
         "showIconBackground": false,
         "sortByMostUsed": true,
         "terminalCommand": "ghostty +new-window -e",
-        "viewMode": "list"
+        "viewMode": "grid"
     },
     "audio": {
         "mprisBlacklist": [
@@ -54,7 +55,7 @@
         "capsuleColorKey": "none",
         "capsuleOpacity": 1,
         "contentPadding": 2,
-        "density": "default",
+        "density": "compact",
         "displayMode": "always_visible",
         "enableExclusionZoneInset": true,
         "fontScale": 1,
@@ -88,7 +89,7 @@
                 {
                     "clockColor": "none",
                     "customFont": "",
-                    "formatHorizontal": "HH:mm ddd, MMM dd",
+                    "formatHorizontal": "HH:mm - MM/dd/yyyy",
                     "formatVertical": "HH mm - dd MM",
                     "id": "Clock",
                     "tooltipFormat": "HH:mm ddd, MMM dd",
@@ -364,7 +365,7 @@
         "showDockIndicator": false,
         "showLauncherIcon": false,
         "sitOnFrame": false,
-        "size": 1.2000000000000002
+        "size": 1.25
     },
     "general": {
         "allowPanelsOnScreenWithoutBar": true,
@@ -377,7 +378,7 @@
         "clockFormat": "hh\\nmm",
         "clockStyle": "digital",
         "compactLockScreen": true,
-        "dimmerOpacity": 0.2,
+        "dimmerOpacity": 0.4,
         "enableBlurBehind": true,
         "enableLockScreenCountdown": true,
         "enableLockScreenMediaControls": false,
@@ -420,7 +421,7 @@
         "passwordChars": false,
         "radiusRatio": 1,
         "reverseScroll": true,
-        "scaleRatio": 1,
+        "scaleRatio": 0.9500000000000001,
         "screenRadiusRatio": 1,
         "shadowDirection": "bottom_right",
         "shadowOffsetX": 2,
@@ -469,13 +470,13 @@
         "showCalendarWeather": true,
         "showWeekNumberInCalendar": false,
         "use12hourFormat": false,
-        "useFahrenheit": false,
+        "useFahrenheit": true,
         "weatherEnabled": true,
         "weatherShowEffects": true,
         "weatherTaliaMascotAlways": false
     },
     "network": {
-        "bluetoothAutoConnect": true,
+        "bluetoothAutoConnect": false,
         "bluetoothDetailsViewMode": "grid",
         "bluetoothHideUnnamedDevices": false,
         "bluetoothRssiPollIntervalMs": 60000,
@@ -646,10 +647,6 @@
             },
             {
                 "enabled": true,
-                "id": "zenBrowser"
-            },
-            {
-                "enabled": true,
                 "id": "zed"
             },
             {
@@ -659,6 +656,10 @@
             {
                 "enabled": true,
                 "id": "starship"
+            },
+            {
+                "enabled": true,
+                "id": "zenBrowser"
             }
         ],
         "enableUserTheming": false
@@ -679,7 +680,7 @@
     },
     "wallpaper": {
         "automationEnabled": false,
-        "directory": "/usr/share/backgrounds/f43/default",
+        "directory": "/home/chrono/Pictures/Wallpapers",
         "enableMultiMonitorDirectories": false,
         "enabled": true,
         "favorites": [
@@ -696,7 +697,7 @@
         "panelPosition": "follow_bar",
         "randomIntervalSec": 300,
         "setWallpaperOnAllMonitors": true,
-        "showHiddenFiles": false,
+        "showHiddenFiles": true,
         "skipStartupTransition": false,
         "solidColor": "#1a1a2e",
         "sortOrder": "name",

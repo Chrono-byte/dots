@@ -16,6 +16,7 @@ unsetopt BEEP
 # Plugins
 plugins=(
   git
+  fnm
   sudo
   dnf
   rust

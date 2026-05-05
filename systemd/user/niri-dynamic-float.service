@@ -1,5 +1,5 @@
 [Unit]
-Description=Niri dynamic floating rules helper
+Description=Niri dynamic floating helper
 Documentation=https://github.com/YaLTeR/niri/wiki/IPC
 After=niri.service
 BindsTo=niri.service
@@ -8,8 +8,7 @@ PartOf=niri.service
 [Service]
 Type=simple
 ExecStart=%h/.dotfiles/scripts/niri-dynamic-float
-Restart=always
-RestartSec=2
+Restart=on-failure
 
 [Install]
 WantedBy=niri.service
