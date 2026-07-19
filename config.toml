@@ -7,30 +7,36 @@ symlink_resolution = "auto"
 
 [tools.fonts]
 files = [
-  { repo = "fonts/SF-Mono-Regular.otf", dest = ".local/share/fonts/SF-Mono-Regular.otf" },
-  { repo = "fonts/SFHello-Regular.otf", dest = ".local/share/fonts/SFHello-Regular.otf" },
-  { repo = "fonts/SFMonoNerdFont-Regular.otf", dest = ".local/share/fonts/SFMonoNerdFont-Regular.otf" },
-  { repo = "fonts/JetBrainsMonoNerdFont-Regular.ttf", dest = ".local/share/fonts/JetBrainsMonoNerdFont-Regular.ttf" },
-  { repo = "fonts/IBMPlexSans.ttf", dest = ".local/share/fonts/IBMPlexSans.ttf" },
+  { repo = "fonts/SF-Mono-Regular.otf", dest = ".local/share/fonts/SF-Mono-Regular.otf", conditions = { os = ["linux"] } },
+  { repo = "fonts/SFHello-Regular.otf", dest = ".local/share/fonts/SFHello-Regular.otf", conditions = { os = ["linux"] } },
+  { repo = "fonts/SFMonoNerdFont-Regular.otf", dest = ".local/share/fonts/SFMonoNerdFont-Regular.otf", conditions = { os = ["linux"] } },
+  { repo = "fonts/JetBrainsMonoNerdFont-Regular.ttf", dest = ".local/share/fonts/JetBrainsMonoNerdFont-Regular.ttf", conditions = { os = ["linux"] } },
+  { repo = "fonts/IBMPlexSans.ttf", dest = ".local/share/fonts/IBMPlexSans.ttf", conditions = { os = ["linux"] } },
+  { repo = "fonts/SF-Mono-Regular.otf", dest = "Library/Fonts/SF-Mono-Regular.otf", conditions = { os = ["darwin"] } },
+  { repo = "fonts/SFHello-Regular.otf", dest = "Library/Fonts/SFHello-Regular.otf", conditions = { os = ["darwin"] } },
+  { repo = "fonts/SFMonoNerdFont-Regular.otf", dest = "Library/Fonts/SFMonoNerdFont-Regular.otf", conditions = { os = ["darwin"] } },
+  { repo = "fonts/JetBrainsMonoNerdFont-Regular.ttf", dest = "Library/Fonts/JetBrainsMonoNerdFont-Regular.ttf", conditions = { os = ["darwin"] } },
+  { repo = "fonts/IBMPlexSans.ttf", dest = "Library/Fonts/IBMPlexSans.ttf", conditions = { os = ["darwin"] } },
 ]
 
 [tools.waybar]
 files = [
-  { repo = "waybar/config", dest = ".config/waybar/config" },
-  { repo = "waybar/style.css", dest = ".config/waybar/style.css" },
+  { repo = "waybar/config", dest = ".config/waybar/config", conditions = { os = ["linux"] } },
+  { repo = "waybar/style.css", dest = ".config/waybar/style.css", conditions = { os = ["linux"] } },
 ]
 
 [tools.zsh]
 files = [
-  { repo = "zsh/.zshrc", dest = ".zshrc" },
-  { repo = "zsh/.zshrc.lazy", dest = ".zshrc.lazy" },
+  { repo = "zsh/.zshrc", dest = ".zshrc", conditions = { os = ["linux"] } },
+  { repo = "zsh/.zshrc.lazy", dest = ".zshrc.lazy", conditions = { os = ["linux"] } },
+  { repo = "zsh/.zshrc.macos", dest = ".zshrc", conditions = { os = ["darwin"] } },
 ]
 
 [tools.sway]
 files = [
-  { repo = "sway/config", dest = ".config/sway/config" },
-  { repo = "sway/config.d/60-bindings-screenshot.conf", dest = ".config/sway/config.d/60-bindings-screenshot.conf" },
-  { repo = "sway/config.d/90-bar.conf", dest = ".config/sway/config.d/90-bar.conf" },
+  { repo = "sway/config", dest = ".config/sway/config", conditions = { os = ["linux"] } },
+  { repo = "sway/config.d/60-bindings-screenshot.conf", dest = ".config/sway/config.d/60-bindings-screenshot.conf", conditions = { os = ["linux"] } },
+  { repo = "sway/config.d/90-bar.conf", dest = ".config/sway/config.d/90-bar.conf", conditions = { os = ["linux"] } },
 ]
 
 [tools.starship]
@@ -54,46 +60,46 @@ folders = [{ repo = "nvim", dest = ".config/nvim" }]
 
 # Codex (AI assistant)
 [tools.codex]
-files = [{ repo = "codex/config.toml", dest = ".codex/config.toml" },
+files = [{ repo = "codex/config.toml", dest = ".codex/config.toml", conditions = { os = ["linux"] } },
   { repo = "codex/AGENTS.md", dest = ".codex/AGENTS.md" }]
 
 # Niri (Window manager)
 [tools.niri]
-folders = [{ repo = "niri", dest = ".config/niri" }]
+folders = [{ repo = "niri", dest = ".config/niri", conditions = { os = ["linux"] } }]
 
 # Noctalia (Desktop shell thing under Niri)
 [tools.noctalia]
-folders = [{ repo = "noctalia", dest = ".config/noctalia" }]
+folders = [{ repo = "noctalia", dest = ".config/noctalia", conditions = { os = ["linux"] } }]
 
 # Mako (Notification daemon)
 [tools.mako]
-folders = [{ repo = "mako", dest = ".config/mako" }]
+folders = [{ repo = "mako", dest = ".config/mako", conditions = { os = ["linux"] } }]
 
 # Fuzzel (Launcher)
 [tools.fuzzel]
-files = [{ repo = "fuzzel/fuzzel.ini", dest = ".config/fuzzel/fuzzel.ini" }]
+files = [{ repo = "fuzzel/fuzzel.ini", dest = ".config/fuzzel/fuzzel.ini", conditions = { os = ["linux"] } }]
 
 # Overrides for applications
 # For Discord, I do this to launch with Wayland. Electron by default would run under Xwayland.
 [tools.applications]
 files = [
-  { repo = "applications/com.discordapp.Discord.desktop", dest = ".local/share/applications/com.discordapp.Discord.desktop" },
+  { repo = "applications/com.discordapp.Discord.desktop", dest = ".local/share/applications/com.discordapp.Discord.desktop", conditions = { os = ["linux"] } },
 ]
 
 # Icon themes.
 [tools.icons]
-folders = [{ repo = "icons", dest = ".icons" }]
+folders = [{ repo = "icons", dest = ".icons", conditions = { os = ["linux"] } }]
 
 # Scripts for various utilities
 # Most of these are simple tools for tools under Niri.
 [tools.scripts]
 files = [
-  { repo = "scripts/window-title-waybar", dest = ".local/bin/window-title-waybar" },
-  { repo = "scripts/niri-dynamic-float", dest = ".local/bin/niri-dynamic-float" },
+  { repo = "scripts/window-title-waybar", dest = ".local/bin/window-title-waybar", conditions = { os = ["linux"] } },
+  { repo = "scripts/niri-dynamic-float", dest = ".local/bin/niri-dynamic-float", conditions = { os = ["linux"] } },
 ]
 
 # Background service that handles the Bitwarden floating window from Zen/Helium
 [tools.systemd]
 files = [
-  { repo = "systemd/user/niri-dynamic-float.service", dest = ".config/systemd/user/niri-dynamic-float.service" },
+  { repo = "systemd/user/niri-dynamic-float.service", dest = ".config/systemd/user/niri-dynamic-float.service", conditions = { os = ["linux"] } },
 ]
