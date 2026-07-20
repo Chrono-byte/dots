@@ -28,8 +28,9 @@ files = [
 [tools.zsh]
 files = [
   { repo = "zsh/.zshrc", dest = ".zshrc", conditions = { os = ["linux"] } },
-  { repo = "zsh/.zshrc.lazy", dest = ".zshrc.lazy", conditions = { os = ["linux"] } },
   { repo = "zsh/.zshrc.macos", dest = ".zshrc", conditions = { os = ["darwin"] } },
+  { repo = "zsh/.zshrc.common", dest = ".zshrc.common" },
+  { repo = "zsh/.zshrc.lazy", dest = ".zshrc.lazy" },
 ]
 
 [tools.sway]

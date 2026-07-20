@@ -1,43 +1,22 @@
-# macOS shell configuration managed by Flux.
-
-unsetopt BEEP
-setopt AUTO_CD AUTO_PUSHD PUSHD_IGNORE_DUPS PUSHD_SILENT
-setopt SHARE_HISTORY HIST_IGNORE_DUPS HIST_IGNORE_ALL_DUPS
-setopt HIST_REDUCE_BLANKS HIST_IGNORE_SPACE HIST_VERIFY INC_APPEND_HISTORY
-
-HISTFILE="$HOME/.zsh_history"
-HISTSIZE=10000
-SAVEHIST=10000
+# macOS wrapper for the shared shell configuration managed by Flux.
 
 if [[ -x /opt/homebrew/bin/brew ]]; then
   eval "$(/opt/homebrew/bin/brew shellenv zsh)"
 fi
 
-export BUN_INSTALL="$HOME/.bun"
-export PATH="$HOME/.local/bin:$HOME/.local/opt/node/bin:$HOME/.cargo/bin:$BUN_INSTALL/bin:$PATH"
-export DOTFILES_CONFIG="$HOME/.dotfiles/config.toml"
+plugins=(
+  git
+  fnm
+  sudo
+  rust
+  history-substring-search
+  zsh-autosuggestions
+  extract
+  macos
+  brew
+  zsh-syntax-highlighting
+)
 
-fpath=("$HOME/.zsh/completions" $fpath)
-autoload -Uz compinit && compinit
-
-if command -v starship >/dev/null 2>&1; then
-  eval "$(starship init zsh)"
-fi
-
-export EDITOR="nano"
-export VISUAL="$EDITOR"
-if command -v zed >/dev/null 2>&1; then
-  export EDITOR="zed --wait"
-  export VISUAL="$EDITOR"
-fi
+source "$HOME/.zshrc.common"
 
 alias ls='ls -G'
-alias ll='ls -lh'
-alias la='ls -lah'
-alias gl='git log --oneline --graph --decorate'
-alias gd='git diff'
-alias rm='rm -i'
-alias cp='cp -i'
-alias mv='mv -i'
-
-[[ -f "$HOME/.zshrc.local" ]] && source "$HOME/.zshrc.local"
