@@ -1,5 +1,7 @@
 # Portable interactive Zsh configuration shared by Linux and macOS.
 
+alias aiusage="bunx tokscale@latest"
+
 # Make a user-installed fnm visible before Oh My Zsh loads its plugin.
 typeset -U path PATH
 FNM_PATH="$HOME/.local/share/fnm"
