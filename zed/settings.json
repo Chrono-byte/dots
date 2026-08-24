@@ -81,10 +81,15 @@
     },
     "dock": "left",
     "default_model": {
-      "effort": "high",
-      "provider": "copilot_chat",
-      "model": "gpt-5-mini",
-      "enable_thinking": false
+      "effort": "medium",
+      "provider": "openai-subscribed",
+      "model": "gpt-5.6-sol",
+      "enable_thinking": true
+    },
+    "commit_message_model": {
+      "provider": "zed.dev",
+      "model": "gpt-5.6-luna",
+      "effort": "low"
     },
     "favorite_models": [],
     "model_parameters": []

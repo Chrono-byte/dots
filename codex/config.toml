@@ -1,12 +1,8 @@
 #:schema https://raw.githubusercontent.com/openai/codex/refs/heads/main/codex-rs/core/config.schema.json
 model = "gpt-5.6-sol"
-model_reasoning_effort = "medium"
+model_reasoning_effort = "low"
 personality = "pragmatic"
-
-[notice.model_migrations]
-"gpt-5.2-codex" = "gpt-5.3-codex"
-"gpt-5.1-codex-mini" = "gpt-5.4"
-"gpt-5.3-codex" = "gpt-5.4"
+service_tier = "default"
 
 [tui]
 status_line = ["model-with-reasoning", "context-remaining", "current-dir", "five-hour-limit"]
@@ -38,6 +34,18 @@ enabled = true
 
 [plugins."template-creator@openai-primary-runtime"]
 enabled = true
+
+[plugins."visualize@openai-bundled"]
+enabled = true
+
+[plugins."sites@openai-bundled"]
+enabled = true
+
+[plugins."codex-security@openai-curated"]
+enabled = true
+
+[plugins."cloudflare@openai-curated-remote"]
+enabled = false
 
 [projects."/home/chrono/Dev/Homelab/docker-compose-nas"]
 trust_level = "trusted"
@@ -72,17 +80,50 @@ trust_level = "trusted"
 [projects."/home/chrono/Dev/Cadence"]
 trust_level = "trusted"
 
+[projects."/home/chrono/Dev/vectorzero"]
+trust_level = "trusted"
+
+[projects."/home/chrono/Dev/fesp"]
+trust_level = "trusted"
+
+[projects."/home/chrono/Dev/t3code"]
+trust_level = "trusted"
+
+[projects."/home/chrono/Dev/velx-us"]
+trust_level = "trusted"
+
+[projects."/home/chrono/Documents/Codex/2026-08-11/w"]
+trust_level = "trusted"
+
+[projects."/home/chrono/Dev/tsswork"]
+trust_level = "trusted"
+
+[projects."/home/chrono/Dev"]
+trust_level = "trusted"
+
+[projects."/home/chrono/Dev/fleet"]
+trust_level = "trusted"
+
+[projects."/home/chrono/Documents/Codex/2026-08-20/referenced-chatgpt-conversation-this-is-an"]
+trust_level = "trusted"
+
+[projects."/home/chrono/Dev/parallax"]
+trust_level = "trusted"
+
+[projects."/home/chrono/Dev/hermes-interface"]
+trust_level = "trusted"
+
 [desktop]
 followUpQueueMode = "queue"
 conversationDetailMode = "STEPS_COMMANDS"
 
 [marketplaces.openai-bundled]
-last_updated = "2026-07-31T02:50:30Z"
+last_updated = "2026-08-20T16:47:09Z"
 source_type = "local"
 source = "/home/chrono/.codex/.tmp/bundled-marketplaces/openai-bundled"
 
 [marketplaces.openai-primary-runtime]
-last_updated = "2026-07-31T03:43:44Z"
+last_updated = "2026-08-20T16:47:36Z"
 source_type = "local"
 source = "/home/chrono/.cache/codex-runtimes/codex-primary-runtime/plugins/openai-primary-runtime"
 
@@ -91,23 +132,24 @@ js_repl = false
 
 [mcp_servers.node_repl]
 args = []
-command = "/opt/codex-desktop/resources/node_repl"
+command = "/usr/lib/chatgpt/resources/cua_node/bin/node_repl"
 startup_timeout_sec = 120
 
 [mcp_servers.node_repl.env]
 NODE_REPL_NATIVE_PIPE_CONNECT_TIMEOUT_MS = "1000"
-NODE_REPL_NODE_MODULE_DIRS = ""
-NODE_REPL_NODE_PATH = "/opt/codex-desktop/resources/node-runtime/bin/node"
-NODE_REPL_TRUSTED_CODE_PATHS = "/home/chrono/.codex"
+NODE_REPL_NODE_MODULE_DIRS = "/usr/lib/chatgpt/resources/cua_node/lib/node_modules"
+NODE_REPL_NODE_PATH = "/usr/lib/chatgpt/resources/cua_node/bin/node"
+NODE_REPL_TRUSTED_CODE_PATHS = "/home/chrono/.codex:/usr/lib/chatgpt/resources/cua_node/lib/node_modules"
 CODEX_HOME = "/home/chrono/.codex"
-NODE_REPL_TRUSTED_BROWSER_CLIENT_SHA256S = "6d25aa7656feac858f3a3bdaea5bcbab0dbfd426c9de8e6931ce90c399ee8e4f,e13fd947e846d3d306e9249dd3c73d14931b6494803dbafb16cef85e6add9506"
+NODE_REPL_TRUSTED_BROWSER_CLIENT_SHA256S = "9230e2bd8b24b7ac7a0ba6774c64bf0d78ecdabbdd91d0ed627b02a587bae2df"
 BROWSER_USE_AVAILABLE_BACKENDS = "chrome,iab"
 NODE_REPL_INSTRUCTIONS_USE_CASE_BROWSER = "Control the in-app browser in conjunction with the Browser Plugin."
 NODE_REPL_INSTRUCTIONS_USE_CASE_CHROME = "Control the Chrome browser in conjunction with the Chrome Plugin. Prefer this method of controlling Chrome over alternatives (such as Computer Use) unless the user explicitly mentions an alternative."
 BROWSER_USE_CODEX_APP_BUILD_FLAVOR = "prod"
-BROWSER_USE_CODEX_APP_VERSION = "26.721.41059"
+BROWSER_USE_CODEX_APP_VERSION = "26.810.52044"
+CODEX_CLI_PATH = "/usr/lib/chatgpt/resources/codex"
 
-[mcp_servers.node_repl.tools]
-
-[mcp_servers.node_repl.tools.js]
-approval_mode = "approve"
+[shell_environment_policy.set]
+BROWSER_USE_AVAILABLE_BACKENDS = "chrome,iab"
+NODE_REPL_TRUSTED_BROWSER_CLIENT_SHA256S = "9230e2bd8b24b7ac7a0ba6774c64bf0d78ecdabbdd91d0ed627b02a587bae2df"
+NODE_REPL_TRUSTED_CODE_PATHS = "/home/chrono/.codex:/usr/lib/chatgpt/resources/cua_node/lib/node_modules"

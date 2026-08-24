@@ -7,8 +7,8 @@ When working in TypeScript:
 
 ## Commands
 
-- Do not run dev server commands such as `bun run dev`; assume the server is already running.
-- Do not run build commands unless specifically told to.
+- Do not start or restart dev servers, including commands such as `bun run dev`; assume the server is already running.
+- Run build commands when they are needed to implement or verify a requested change.
 - Focus on checking commands such as `bun run typecheck` and `bun run lint`.
 
 ## Package Managers

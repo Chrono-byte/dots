@@ -26,3 +26,6 @@ alias egrep='egrep --color=auto'
 alias oc-clean-models="rm $HOME/.local/state/opencode/model.json $HOME/.cache/opencode/models.json"
 
 # zprof
+
+# Vite+ bin (https://viteplus.dev)
+. "$HOME/.vite-plus/env"
