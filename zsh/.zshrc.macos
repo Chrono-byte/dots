@@ -20,3 +20,6 @@ plugins=(
 source "$HOME/.zshrc.common"
 
 alias ls='ls -G'
+
+# Unity CLI
+. "/Users/chrono/.unity/env"

@@ -23,10 +23,14 @@
       "args": [],
       "projects": [
         {
-          "paths": ["/home/ellie"]
+          "paths": [
+            "/home/ellie"
+          ]
         },
         {
-          "paths": ["/home/ellie/docker-compose-nas"]
+          "paths": [
+            "/home/ellie/docker-compose-nas"
+          ]
         }
       ]
     },
@@ -36,7 +40,21 @@
       "args": [],
       "projects": [
         {
-          "paths": ["/home/ellie/docker-compose-nas"]
+          "paths": [
+            "/home/ellie/docker-compose-nas"
+          ]
+        }
+      ]
+    },
+    {
+      "host": "horus-linux",
+      "username": "chrono",
+      "args": [],
+      "projects": [
+        {
+          "paths": [
+            "/home/chrono/Dev/spotmitm"
+          ]
         }
       ]
     }
@@ -131,6 +149,9 @@
       "type": "registry"
     },
     "codex-acp": {
+      "default_config_options": {
+        "model": "gpt-5.6-luna"
+      },
       "type": "registry"
     },
     "github-copilot": {
