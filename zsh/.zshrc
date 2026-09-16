@@ -29,3 +29,8 @@ alias oc-clean-models="rm $HOME/.local/state/opencode/model.json $HOME/.cache/op
 
 # Vite+ bin (https://viteplus.dev)
 . "$HOME/.vite-plus/env"
+
+# >>> vercel ai-gateway >>>
+# Managed by `vercel ai-gateway coding-agents setup` — safe to remove this block.
+export AI_GATEWAY_API_KEY='vck_8V8fLFoK5GTNwCGmQoKZdON1sE9cljCCzss0NcR9RGVpmXlqcb0UetqW'
+# <<< vercel ai-gateway <<<
