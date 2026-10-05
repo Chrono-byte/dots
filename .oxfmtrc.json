@@ -1,3 +1,3 @@
 {
-  "ignorePatterns": ["icons/"]
+  "ignorePatterns": ["skills/shared/", "codex/skills/", "pi/skills/", "pi/agent/"]
 }

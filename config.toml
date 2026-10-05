@@ -7,16 +7,36 @@ symlink_resolution = "auto"
 
 [tools.fonts]
 files = [
-  { repo = "fonts/SF-Mono-Regular.otf", dest = ".local/share/fonts/SF-Mono-Regular.otf" },
-  { repo = "fonts/SFHello-Regular.otf", dest = ".local/share/fonts/SFHello-Regular.otf" },
-  { repo = "fonts/SFMonoNerdFont-Regular.otf", dest = ".local/share/fonts/SFMonoNerdFont-Regular.otf" },
-  { repo = "fonts/JetBrainsMonoNerdFont-Regular.ttf", dest = ".local/share/fonts/JetBrainsMonoNerdFont-Regular.ttf" },
-  { repo = "fonts/IBMPlexSans.ttf", dest = ".local/share/fonts/IBMPlexSans.ttf" },
-  { repo = "fonts/SF-Mono-Regular.otf", dest = "Library/Fonts/SF-Mono-Regular.otf" },
-  { repo = "fonts/SFHello-Regular.otf", dest = "Library/Fonts/SFHello-Regular.otf" },
-  { repo = "fonts/SFMonoNerdFont-Regular.otf", dest = "Library/Fonts/SFMonoNerdFont-Regular.otf" },
-  { repo = "fonts/JetBrainsMonoNerdFont-Regular.ttf", dest = "Library/Fonts/JetBrainsMonoNerdFont-Regular.ttf" },
-  { repo = "fonts/IBMPlexSans.ttf", dest = "Library/Fonts/IBMPlexSans.ttf" },
+  { repo = "fonts/SF-Mono-Regular.otf", dest = ".local/share/fonts/SF-Mono-Regular.otf", conditions = { os = [
+    "linux",
+  ] } },
+  { repo = "fonts/SFHello-Regular.otf", dest = ".local/share/fonts/SFHello-Regular.otf", conditions = { os = [
+    "linux",
+  ] } },
+  { repo = "fonts/SFMonoNerdFont-Regular.otf", dest = ".local/share/fonts/SFMonoNerdFont-Regular.otf", conditions = { os = [
+    "linux",
+  ] } },
+  { repo = "fonts/JetBrainsMonoNerdFont-Regular.ttf", dest = ".local/share/fonts/JetBrainsMonoNerdFont-Regular.ttf", conditions = { os = [
+    "linux",
+  ] } },
+  { repo = "fonts/IBMPlexSans.ttf", dest = ".local/share/fonts/IBMPlexSans.ttf", conditions = { os = [
+    "linux",
+  ] } },
+  { repo = "fonts/SF-Mono-Regular.otf", dest = "Library/Fonts/SF-Mono-Regular.otf", conditions = { os = [
+    "darwin",
+  ] } },
+  { repo = "fonts/SFHello-Regular.otf", dest = "Library/Fonts/SFHello-Regular.otf", conditions = { os = [
+    "darwin",
+  ] } },
+  { repo = "fonts/SFMonoNerdFont-Regular.otf", dest = "Library/Fonts/SFMonoNerdFont-Regular.otf", conditions = { os = [
+    "darwin",
+  ] } },
+  { repo = "fonts/JetBrainsMonoNerdFont-Regular.ttf", dest = "Library/Fonts/JetBrainsMonoNerdFont-Regular.ttf", conditions = { os = [
+    "darwin",
+  ] } },
+  { repo = "fonts/IBMPlexSans.ttf", dest = "Library/Fonts/IBMPlexSans.ttf", conditions = { os = [
+    "darwin",
+  ] } },
 ]
 
 [tools.waybar]
@@ -71,9 +91,9 @@ files = [
 ]
 folders = [{ repo = "codex/skills", dest = ".codex/skills" }]
 
-# Pi agent skills
-[tools.pi]
-folders = [{ repo = "pi/skills", dest = ".pi/agent/skills" }]
+# Pi setup includes its own link to the shared skills view.
+[tools."pi/agent"]
+folders = [{ repo = "pi/agent", dest = ".pi/agent" }]
 
 # Niri (Window manager)
 [tools.niri]
@@ -113,4 +133,4 @@ files = [
 ]
 
 [tools.fastfetch]
-files = [{ repo = "fastfetch/config.jsonc", dest = "./.config/fastfetch/config.jsonc" }]
+files = [{ repo = "fastfetch/config.jsonc", dest = ".config/fastfetch/config.jsonc" }]

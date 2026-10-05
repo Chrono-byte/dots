@@ -9,9 +9,6 @@ Thumbs.db
 # Editor files
 .idea/
 .vscode/
-*.swp
-*.swo
-*~
 .vim/
 .swapfile
 
@@ -24,7 +21,6 @@ Thumbs.db
 # Backup files
 *.bak
 *.backup
-*~
 
 # Node modules (if configs contain web stuff)
 node_modules/

@@ -13,9 +13,12 @@ See [the agent guide](docs/agents/flux.md) for mapping examples, commands, insta
 ```markdown
 .dotfiles/
 ├── config.toml # Flux configuration file
+├── codex/ # Codex configuration and skills view
+├── pi/agent/ # my-pi-setup Git submodule
+├── pi/skills/ # Pi skills view
+├── skills/shared/ # Common skill files used by both agents
 ├── scripts/ # Various utils
 ├── alacritty/ # Alacritty terminal emulator configs
-├── cursor/ # Cursor editor settings
 ├── fonts/ # Font files for the system
 ├── starship/ # Starship prompt configuration
 ├── sway/ # Sway window manager configs
@@ -35,3 +38,7 @@ See [the agent guide](docs/agents/flux.md) for mapping examples, commands, insta
 4. Run `flux --config ~/.dotfiles/config.toml apply` after reviewing the preview. Use `--force` when you intend to replace existing local configuration with repository content.
 
 Pi's [my-pi-setup](https://forgejo.disilla.org/chrono/my-pi-setup) repository is pinned as a submodule at `pi/agent`. See the [agent guide](docs/agents/flux.md) for its installed location and shared skills link.
+
+### Checks
+
+Run `python3 docs/check-dotfiles.py` (Python 3.11+) and `flux --config ~/.dotfiles/config.toml doctor` to check mappings and links. Preview installation with `flux --config ~/.dotfiles/config.toml apply --dry-run --diff`.

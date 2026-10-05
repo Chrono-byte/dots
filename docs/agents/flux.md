@@ -31,9 +31,9 @@ Codex and Pi skills use one shared store with two harness views:
 
 An identical skill folder links directly to the shared store. When a skill needs different instructions for each harness, its view keeps those files and links its common files to the shared store. Edit a shared file to update both harnesses; edit a variant in the appropriate view to change only that harness. Check `readlink` before deciding where to edit. Preserve the separate entrypoints' invocation policies, delegation tools, and model configuration paths when updating upstream skills.
 
-The `[tools.pi]` folder mapping installs the Pi view. Pi's setup repository, [my-pi-setup](https://forgejo.disilla.org/chrono/my-pi-setup), is pinned as the `pi/agent` Git submodule. Initialize it with `git submodule update --init pi/agent`; use `--recursive` when initializing all repository submodules.
+The `[tools."pi/agent"]` folder mapping installs the setup, which includes its own link to the Pi skills view. The tool name matches its repository directory so Flux resolves and checks that directory. Pi's setup repository, [my-pi-setup](https://forgejo.disilla.org/chrono/my-pi-setup), is pinned as the `pi/agent` Git submodule. Initialize it with `git submodule update --init pi/agent`; use `--recursive` when initializing all repository submodules.
 
-The active Pi configuration lives in a separate checkout at `~/.pi/agent`. Flux currently maps only its skills folder. The setup repository's tracked `skills` symlink resolves from that installed location into `~/.dotfiles/pi/skills`; it does not resolve inside the submodule checkout. Keep the active checkout and its local configuration intact when updating the submodule. On a fresh machine, clone my-pi-setup into `~/.pi/agent` at the commit recorded by the submodule before applying the skills mapping.
+The active Pi directory, `~/.pi/agent`, links to that submodule. Its tracked `skills` symlink points to the sibling `../skills`, resolving to the Pi view both inside the repository and through the installed directory. Pi's ignored credentials, sessions, settings, and dependencies live locally inside the submodule; Git does not distribute them. Preserve this local state before replacing an existing installation. For a fresh machine, initialize the submodule, preview and apply Flux, then run `bun install --frozen-lockfile` in `~/.pi/agent`.
 
 To update the pinned setup version, fetch inside `pi/agent`, check out the intended commit, and commit the changed submodule pointer in dotfiles. Changes to Pi setup files belong in the setup repository and must be committed and pushed there before dotfiles records their commit.
 
@@ -68,21 +68,21 @@ A folder mapping covers the entire directory. Before replacing an existing skill
 
 ## Commands worth knowing
 
-| Command | Purpose |
-| --- | --- |
-| `flux ls-files` | List paths registered with Flux for the selected profile. |
-| `flux status` | Inspect Git and installation state. |
-| `flux diff` | Compare repository content with its destinations. |
-| `flux doctor` | Check configuration and installation health. |
-| `flux apply --dry-run --diff` | Preview installation operations and differences. |
-| `flux history` | Inspect Flux's operation history. |
-| `flux remote check` | Report when the current branch differs from its remote; stay quiet when the remote is unreachable. |
-| `flux commit` | Synchronize tracked destinations and commit repository changes. |
+| Command                       | Purpose                                                                                            |
+| ----------------------------- | -------------------------------------------------------------------------------------------------- |
+| `flux ls-files`               | List paths registered with Flux for the selected profile.                                          |
+| `flux status`                 | Inspect Git and installation state.                                                                |
+| `flux diff`                   | Compare repository content with its destinations.                                                  |
+| `flux doctor`                 | Check configuration and installation health.                                                       |
+| `flux apply --dry-run --diff` | Preview installation operations and differences.                                                   |
+| `flux history`                | Inspect Flux's operation history.                                                                  |
+| `flux remote check`           | Report when the current branch differs from its remote; stay quiet when the remote is unreachable. |
+| `flux commit`                 | Synchronize tracked destinations and commit repository changes.                                    |
 
 For a task that should commit only selected files, use explicit `git add -- <paths>` and `git commit`. `flux commit` also synchronizes tracked destinations, which can bring additional local configuration into the repository. Check its scope before using it. Push with `git push` or `flux push` when the user requested publication.
 
 ## Verification
 
-After changing a mapping, parse the TOML and confirm the intended path appears in `flux ls-files`. Use a dry run when the task involves installation. After changing content, run checks relevant to that tool and `git diff --check`. The dotfiles repository currently has no general lint or format command.
+Run `python3 docs/check-dotfiles.py` to validate mapping sources, submodule declarations, and tracked symlinks. It requires Python 3.11 or newer. After changing a mapping, confirm the intended path appears in `flux ls-files`. Use a dry run when the task involves installation. After changing content, run checks relevant to that tool and `git diff --check`. The Oxfmt configuration excludes imported skills and the Pi submodule; format those through their own repositories when appropriate.
 
 After applying, inspect the destination with `ls -ld` or `readlink` and check `flux status`. Successful Git commits and successful installation are separate outcomes; report which one was completed.
