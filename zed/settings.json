@@ -53,7 +53,32 @@
       "projects": [
         {
           "paths": [
-            "/home/chrono/Dev/spotmitm"
+            "/home/chrono/Dev/flux"
+          ]
+        },
+        {
+          "paths": [
+            "/home/chrono/Dev/folio-writing"
+          ]
+        },
+        {
+          "paths": [
+            "/home/chrono/Dev/personal-site-alyx"
+          ]
+        },
+        {
+          "paths": [
+            "/home/chrono/Dev/picopowerpal"
+          ]
+        },
+        {
+          "paths": [
+            "/home/chrono/Dev/talesofsylveon"
+          ]
+        },
+        {
+          "paths": [
+            "/home/chrono/Dev/vectorzero"
           ]
         }
       ]

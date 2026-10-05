@@ -1,25 +1,26 @@
 #:schema https://raw.githubusercontent.com/openai/codex/refs/heads/main/codex-rs/core/config.schema.json
-model = "gpt-5.6-sol"
+model = "gpt-6.1-sol"
 model_reasoning_effort = "low"
 personality = "pragmatic"
 service_tier = "default"
 approvals_reviewer = "auto_review"
 
+notify = ["/Users/chrono/.codex/computer-use/Codex Computer Use.app/Contents/SharedSupport/SkyComputerUseClient.app/Contents/MacOS/SkyComputerUseClient", "turn-ended"]
+
 [tui]
 status_line = ["model-with-reasoning", "context-remaining", "current-dir", "five-hour-limit"]
 theme = "one-half-dark"
 notification_condition = "unfocused"
+screen_reader_detection_done = true
 
 [tui.model_availability_nux]
 "gpt-5.3-codex-spark" = 4
 "gpt-5.5" = 4
 "gpt-5.6-sol" = 4
 gpt-6-astra = 4
+"gpt-6.1-sol" = 1
 
 [plugins."github@openai-curated"]
-enabled = true
-
-[plugins."browser@openai-bundled"]
 enabled = true
 
 [plugins."documents@openai-primary-runtime"]
@@ -40,16 +41,22 @@ enabled = true
 [plugins."visualize@openai-bundled"]
 enabled = true
 
-[plugins."sites@openai-bundled"]
-enabled = true
-
 [plugins."codex-security@openai-curated"]
 enabled = true
 
 [plugins."codex-app-tools@openai-bundled"]
 enabled = true
 
+[plugins."browser@openai-bundled"]
+enabled = true
+
 [plugins."unified-computer-use@openai-bundled"]
+enabled = true
+
+[plugins."computer-use@openai-bundled"]
+enabled = true
+
+[plugins."code-review@openai-bundled"]
 enabled = true
 
 [projects."/home/chrono/Dev/Homelab/docker-compose-nas"]
@@ -130,40 +137,86 @@ trust_level = "trusted"
 [projects."/home/chrono/Dev/Assignment0"]
 trust_level = "trusted"
 
+[projects."/Users/chrono/Documents/Codex/2026-09-17/re"]
+trust_level = "trusted"
+
+[projects."/Users/chrono/Dev/cadence-tanstack"]
+trust_level = "trusted"
+
+[projects."/Users/chrono"]
+trust_level = "trusted"
+
+[projects."/Users/chrono/Documents/Codex/2026-09-23/re"]
+trust_level = "trusted"
+
+[projects."/Users/chrono/Documents/Codex/2026-09-24/new-chat"]
+trust_level = "trusted"
+
+[projects."/Users/chrono/Documents/Codex/2026-09-24/computer"]
+trust_level = "trusted"
+
+[projects."/Users/chrono/Dev/Assignment 1 330"]
+trust_level = "trusted"
+
+[projects."/Users/chrono/Downloads"]
+trust_level = "trusted"
+
+[projects."/Users/chrono/Dev/folio-writing"]
+trust_level = "trusted"
+
 [desktop]
 followUpQueueMode = "queue"
 conversationDetailMode = "STEPS_COMMANDS"
 
+[desktop.daybreak-enabled]
+accountId = "b6e61595-2ad8-48d0-b802-8a0703769048"
+userId = "user-MbDvMaBsXJo26COI8u3TFTb7"
+enabled = false
+
+[desktop.open-in-target-preferences]
+global = "zed"
+
+[desktop.open-in-target-preferences.perPath]
+"/Users/chrono/Dev/folio-writing" = "zed"
+
 [marketplaces.openai-bundled]
 source_type = "local"
-source = "/home/chrono/.codex/.tmp/bundled-marketplaces/openai-bundled"
+source = "/Users/chrono/.codex/.tmp/bundled-marketplaces/openai-bundled"
 
 [marketplaces.openai-primary-runtime]
 source_type = "local"
-source = "/home/chrono/.cache/codex-runtimes/codex-primary-runtime/plugins/openai-primary-runtime"
+source = "/Users/chrono/.cache/codex-runtimes/codex-primary-runtime/plugins/openai-primary-runtime"
 
 [features]
 js_repl = false
 
 [mcp_servers.node_repl]
 args = []
-command = "/usr/lib/chatgpt/resources/cua_node/bin/node_repl"
+command = "/Applications/ChatGPT.app/Contents/Resources/cua_node/bin/node_repl"
 startup_timeout_sec = 120
 
 [mcp_servers.node_repl.env]
 NODE_REPL_NATIVE_PIPE_CONNECT_TIMEOUT_MS = "1000"
-NODE_REPL_NODE_MODULE_DIRS = "/usr/lib/chatgpt/resources/cua_node/lib/node_modules"
-NODE_REPL_NODE_PATH = "/usr/lib/chatgpt/resources/cua_node/bin/node"
-NODE_REPL_TRUSTED_CODE_PATHS = "/home/chrono/.codex:/usr/lib/chatgpt/resources/cua_node/lib/node_modules"
-CODEX_HOME = "/home/chrono/.codex"
-BROWSER_USE_AVAILABLE_BACKENDS = "chrome,iab"
+NODE_REPL_NODE_MODULE_DIRS = "/Applications/ChatGPT.app/Contents/Resources/cua_node/lib/node_modules"
+NODE_REPL_NODE_PATH = "/Applications/ChatGPT.app/Contents/Resources/cua_node/bin/node"
+NODE_REPL_TRUSTED_CODE_PATHS = "/Users/chrono/.codex:/Applications/ChatGPT.app/Contents/Resources/cua_node/lib/node_modules"
+CODEX_HOME = "/Users/chrono/.codex"
+BROWSER_USE_AVAILABLE_BACKENDS = "chrome,iab,mcpapps"
 BROWSER_USE_TINYSKY_ENABLED = "1"
 NODE_REPL_INSTRUCTIONS_USE_CASE_BROWSER = ""
 NODE_REPL_INSTRUCTIONS_USE_CASE_CHROME = ""
+NODE_REPL_INSTRUCTIONS_USE_CASE_COMPUTER_USE = ""
 BROWSER_USE_CODEX_APP_BUILD_FLAVOR = "prod"
-BROWSER_USE_CODEX_APP_VERSION = "26.908.40401"
-NODE_REPL_TRUSTED_SERVICES = '{"browser":"/home/chrono/.codex/plugins/cache/openai-bundled/browser/26.908.40401/scripts/browser-service.mjs"}'
-CODEX_CLI_PATH = "/usr/lib/chatgpt/resources/codex"
+BROWSER_USE_CODEX_APP_VERSION = "26.930.51102"
+NODE_REPL_TRUSTED_SERVICES = '{"browser":"/Users/chrono/.codex/plugins/cache/openai-bundled/browser/26.930.51102/scripts/browser-service.mjs","sky":"@oai/sky/service"}'
+SKY_CUA_SERVICE_PATH = "/Users/chrono/.codex/computer-use/Codex Computer Use.app"
+CODEX_CLI_PATH = "/Applications/ChatGPT.app/Contents/Resources/codex-cli/CodexCLI.app/Contents/MacOS/codex"
+
+[mcp_servers.computer-use]
+command = "./Codex Computer Use.app/Contents/SharedSupport/SkyComputerUseClient.app/Contents/MacOS/SkyComputerUseClient"
+args = ["mcp"]
+cwd = "."
+enabled = false
 
 [shell_environment_policy.set]
 NODE_REPL_TRUSTED_BROWSER_CLIENT_SHA256S = "9230e2bd8b24b7ac7a0ba6774c64bf0d78ecdabbdd91d0ed627b02a587bae2df"
