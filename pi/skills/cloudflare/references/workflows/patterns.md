@@ -1,0 +1,1 @@
+../../../../../skills/shared/cloudflare/references/workflows/patterns.md

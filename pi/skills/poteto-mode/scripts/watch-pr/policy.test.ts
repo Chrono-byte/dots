@@ -1,0 +1,1 @@
+../../../../../skills/shared/poteto-mode/scripts/watch-pr/policy.test.ts

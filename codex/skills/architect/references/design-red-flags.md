@@ -1,0 +1,1 @@
+../../../../skills/shared/architect/references/design-red-flags.md

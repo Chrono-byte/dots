@@ -1,0 +1,5 @@
+interface:
+  display_name: "Principle Explain The Number"
+  short_description: "Use the principle-explain-the-number workflow"
+policy:
+  allow_implicit_invocation: false

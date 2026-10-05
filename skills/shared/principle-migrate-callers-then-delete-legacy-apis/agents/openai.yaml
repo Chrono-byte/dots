@@ -1,0 +1,5 @@
+interface:
+  display_name: "Principle Migrate Callers Then Delete Legacy Apis"
+  short_description: "Use the principle-migrate-callers-then-delete-legacy-apis workflow"
+policy:
+  allow_implicit_invocation: false

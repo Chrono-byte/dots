@@ -1,0 +1,1 @@
+../../../../skills/shared/architect/references/rationale-template.md

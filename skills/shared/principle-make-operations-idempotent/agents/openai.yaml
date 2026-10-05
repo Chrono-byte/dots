@@ -1,0 +1,5 @@
+interface:
+  display_name: "Principle Make Operations Idempotent"
+  short_description: "Use the principle-make-operations-idempotent workflow"
+policy:
+  allow_implicit_invocation: false

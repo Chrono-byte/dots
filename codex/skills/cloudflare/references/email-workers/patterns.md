@@ -1,0 +1,1 @@
+../../../../../skills/shared/cloudflare/references/email-workers/patterns.md

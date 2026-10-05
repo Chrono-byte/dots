@@ -1,0 +1,1 @@
+../../../../../skills/shared/create-verification-skill/references/feature-map-example/create-note.md

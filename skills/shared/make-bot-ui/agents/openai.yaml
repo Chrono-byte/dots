@@ -1,0 +1,5 @@
+interface:
+  display_name: "Make Bot Ui"
+  short_description: "Use the make-bot-ui workflow"
+policy:
+  allow_implicit_invocation: false

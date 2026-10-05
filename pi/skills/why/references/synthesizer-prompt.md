@@ -1,0 +1,1 @@
+../../../../skills/shared/why/references/synthesizer-prompt.md
