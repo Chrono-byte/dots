@@ -29,7 +29,9 @@ See [the agent guide](docs/agents/flux.md) for mapping examples, commands, insta
 
 ### Initial Setup
 
-1. Clone this repository to `~/.dotfiles`
+1. Clone this repository to `~/.dotfiles` with `git clone --recurse-submodules <repository-url> ~/.dotfiles`. For an existing checkout, run `git submodule update --init --recursive`.
 2. Install Flux (refer to Flux documentation for installation)
 3. Preview installation with `flux --config ~/.dotfiles/config.toml apply --dry-run --diff`.
 4. Run `flux --config ~/.dotfiles/config.toml apply` after reviewing the preview. Use `--force` when you intend to replace existing local configuration with repository content.
+
+Pi's [my-pi-setup](https://forgejo.disilla.org/chrono/my-pi-setup) repository is pinned as a submodule at `pi/agent`. See the [agent guide](docs/agents/flux.md) for its installed location and shared skills link.

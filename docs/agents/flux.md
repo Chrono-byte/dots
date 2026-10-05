@@ -31,7 +31,11 @@ Codex and Pi skills use one shared store with two harness views:
 
 An identical skill folder links directly to the shared store. When a skill needs different instructions for each harness, its view keeps those files and links its common files to the shared store. Edit a shared file to update both harnesses; edit a variant in the appropriate view to change only that harness. Check `readlink` before deciding where to edit. Preserve the separate entrypoints' invocation policies, delegation tools, and model configuration paths when updating upstream skills.
 
-The `[tools.pi]` folder mapping installs the Pi view. Pi's own repository tracks its `skills` path as a symlink into dotfiles, so both repositories must be available on a fresh machine. Pi's other configuration stays in `~/.pi/agent`.
+The `[tools.pi]` folder mapping installs the Pi view. Pi's setup repository, [my-pi-setup](https://forgejo.disilla.org/chrono/my-pi-setup), is pinned as the `pi/agent` Git submodule. Initialize it with `git submodule update --init pi/agent`; use `--recursive` when initializing all repository submodules.
+
+The active Pi configuration lives in a separate checkout at `~/.pi/agent`. Flux currently maps only its skills folder. The setup repository's tracked `skills` symlink resolves from that installed location into `~/.dotfiles/pi/skills`; it does not resolve inside the submodule checkout. Keep the active checkout and its local configuration intact when updating the submodule. On a fresh machine, clone my-pi-setup into `~/.pi/agent` at the commit recorded by the submodule before applying the skills mapping.
+
+To update the pinned setup version, fetch inside `pi/agent`, check out the intended commit, and commit the changed submodule pointer in dotfiles. Changes to Pi setup files belong in the setup repository and must be committed and pushed there before dotfiles records their commit.
 
 Codex's `.system` directory remains managed locally and is ignored by Git. For the poteto-mode helpers, install dependencies once with `bun install --frozen-lockfile` in `~/.dotfiles/skills/shared/poteto-mode/scripts`. The two views link their `node_modules` to that directory; generated dependencies stay out of Git.
 
