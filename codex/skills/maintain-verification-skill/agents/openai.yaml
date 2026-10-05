@@ -1,5 +1,1 @@
-interface:
-  display_name: "Maintain Verification Skill"
-  short_description: "Use the maintain-verification-skill workflow"
-policy:
-  allow_implicit_invocation: false
+../../../../skills/shared/maintain-verification-skill/agents/openai.yaml

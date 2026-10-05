@@ -1,0 +1,1 @@
+../../../../skills/shared/typescript-best-practices/references/patterns.md

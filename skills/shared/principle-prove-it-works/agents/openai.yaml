@@ -1,0 +1,5 @@
+interface:
+  display_name: "Principle Prove It Works"
+  short_description: "Use the principle-prove-it-works workflow"
+policy:
+  allow_implicit_invocation: false

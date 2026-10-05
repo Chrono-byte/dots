@@ -1,5 +1,1 @@
-interface:
-  display_name: "Technical Writing"
-  short_description: "Use the technical-writing workflow"
-policy:
-  allow_implicit_invocation: false
+../../../../skills/shared/technical-writing/agents/openai.yaml

@@ -1,5 +1,1 @@
-interface:
-  display_name: "Benchmark Checklist"
-  short_description: "Use the benchmark-checklist workflow"
-policy:
-  allow_implicit_invocation: false
+../../../../skills/shared/benchmark-checklist/agents/openai.yaml

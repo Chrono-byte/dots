@@ -1,5 +1,1 @@
-interface:
-  display_name: "Principle Attack The Premise"
-  short_description: "Use the principle-attack-the-premise workflow"
-policy:
-  allow_implicit_invocation: false
+../../../../skills/shared/principle-attack-the-premise/agents/openai.yaml

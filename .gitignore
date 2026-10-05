@@ -36,3 +36,10 @@ __pycache__/
 # System files
 .directory
 desktop.ini
+
+# Codex-managed built-in skills
+/codex/skills/.system/
+
+# The harness views share the helper dependency directory through symlinks.
+!/codex/skills/poteto-mode/scripts/node_modules
+!/pi/skills/poteto-mode/scripts/node_modules

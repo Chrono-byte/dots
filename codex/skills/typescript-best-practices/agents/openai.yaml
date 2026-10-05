@@ -1,5 +1,1 @@
-interface:
-  display_name: "Typescript Best Practices"
-  short_description: "Use the typescript-best-practices workflow"
-policy:
-  allow_implicit_invocation: false
+../../../../skills/shared/typescript-best-practices/agents/openai.yaml

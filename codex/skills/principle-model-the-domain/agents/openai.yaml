@@ -1,5 +1,1 @@
-interface:
-  display_name: "Principle Model The Domain"
-  short_description: "Use the principle-model-the-domain workflow"
-policy:
-  allow_implicit_invocation: false
+../../../../skills/shared/principle-model-the-domain/agents/openai.yaml

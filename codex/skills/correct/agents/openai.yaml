@@ -1,5 +1,1 @@
-interface:
-  display_name: "Correct"
-  short_description: "Use the correct workflow"
-policy:
-  allow_implicit_invocation: false
+../../../../skills/shared/correct/agents/openai.yaml

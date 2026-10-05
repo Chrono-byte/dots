@@ -1,5 +1,1 @@
-interface:
-  display_name: "Figure It Out"
-  short_description: "Use the figure-it-out workflow"
-policy:
-  allow_implicit_invocation: false
+../../../../skills/shared/figure-it-out/agents/openai.yaml

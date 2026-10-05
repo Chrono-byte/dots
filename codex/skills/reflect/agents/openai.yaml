@@ -1,5 +1,1 @@
-interface:
-  display_name: "Reflect"
-  short_description: "Use the reflect workflow"
-policy:
-  allow_implicit_invocation: false
+../../../../skills/shared/reflect/agents/openai.yaml

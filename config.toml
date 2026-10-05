@@ -71,6 +71,10 @@ files = [
 ]
 folders = [{ repo = "codex/skills", dest = ".codex/skills" }]
 
+# Pi agent skills
+[tools.pi]
+folders = [{ repo = "pi/skills", dest = ".pi/agent/skills" }]
+
 # Niri (Window manager)
 [tools.niri]
 folders = [{ repo = "niri", dest = ".config/niri" }]

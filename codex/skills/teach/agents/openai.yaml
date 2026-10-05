@@ -1,5 +1,1 @@
-interface:
-  display_name: "Teach"
-  short_description: "Use the teach workflow"
-policy:
-  allow_implicit_invocation: false
+../../../../skills/shared/teach/agents/openai.yaml

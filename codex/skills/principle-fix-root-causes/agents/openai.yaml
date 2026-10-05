@@ -1,5 +1,1 @@
-interface:
-  display_name: "Principle Fix Root Causes"
-  short_description: "Use the principle-fix-root-causes workflow"
-policy:
-  allow_implicit_invocation: false
+../../../../skills/shared/principle-fix-root-causes/agents/openai.yaml

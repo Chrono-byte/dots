@@ -1,5 +1,1 @@
-interface:
-  display_name: "Principle Build The Lever"
-  short_description: "Use the principle-build-the-lever workflow"
-policy:
-  allow_implicit_invocation: false
+../../../../skills/shared/principle-build-the-lever/agents/openai.yaml

@@ -1,5 +1,1 @@
-interface:
-  display_name: "Principle Encode Lessons In Structure"
-  short_description: "Use the principle-encode-lessons-in-structure workflow"
-policy:
-  allow_implicit_invocation: false
+../../../../skills/shared/principle-encode-lessons-in-structure/agents/openai.yaml

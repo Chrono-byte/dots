@@ -1,0 +1,1 @@
+../../../../../skills/shared/poteto-mode/scripts/watch-pr/types.ts

@@ -1,5 +1,1 @@
-interface:
-  display_name: "Automate Me"
-  short_description: "Use the automate-me workflow"
-policy:
-  allow_implicit_invocation: false
+../../../../skills/shared/automate-me/agents/openai.yaml

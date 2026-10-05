@@ -1,5 +1,1 @@
-interface:
-  display_name: "Create Verification Skill"
-  short_description: "Use the create-verification-skill workflow"
-policy:
-  allow_implicit_invocation: false
+../../../../skills/shared/create-verification-skill/agents/openai.yaml

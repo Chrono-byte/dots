@@ -1,5 +1,1 @@
-interface:
-  display_name: "Principle Laziness Protocol"
-  short_description: "Use the principle-laziness-protocol workflow"
-policy:
-  allow_implicit_invocation: false
+../../../../skills/shared/principle-laziness-protocol/agents/openai.yaml

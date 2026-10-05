@@ -1,0 +1,1 @@
+../../../../skills/shared/poteto-mode/playbooks/authoring-a-skill.md

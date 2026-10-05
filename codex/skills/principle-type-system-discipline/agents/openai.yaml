@@ -1,5 +1,1 @@
-interface:
-  display_name: "Principle Type System Discipline"
-  short_description: "Use the principle-type-system-discipline workflow"
-policy:
-  allow_implicit_invocation: false
+../../../../skills/shared/principle-type-system-discipline/agents/openai.yaml

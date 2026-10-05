@@ -1,3 +1,1 @@
-interface:
-  display_name: "Setup Pstack"
-  short_description: "Use the setup-pstack workflow"
+../../../../skills/shared/setup-pstack/agents/openai.yaml

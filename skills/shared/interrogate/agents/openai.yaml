@@ -1,0 +1,5 @@
+interface:
+  display_name: "Interrogate"
+  short_description: "Use the interrogate workflow"
+policy:
+  allow_implicit_invocation: false

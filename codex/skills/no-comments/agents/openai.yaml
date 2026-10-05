@@ -1,5 +1,1 @@
-interface:
-  display_name: "No Comments"
-  short_description: "Use the no-comments workflow"
-policy:
-  allow_implicit_invocation: false
+../../../../skills/shared/no-comments/agents/openai.yaml

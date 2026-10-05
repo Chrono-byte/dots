@@ -1,5 +1,1 @@
-interface:
-  display_name: "Principle Exhaust The Design Space"
-  short_description: "Use the principle-exhaust-the-design-space workflow"
-policy:
-  allow_implicit_invocation: false
+../../../../skills/shared/principle-exhaust-the-design-space/agents/openai.yaml

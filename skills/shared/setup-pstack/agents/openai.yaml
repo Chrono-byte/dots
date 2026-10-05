@@ -1,0 +1,3 @@
+interface:
+  display_name: "Setup Pstack"
+  short_description: "Use the setup-pstack workflow"

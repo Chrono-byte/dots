@@ -1,5 +1,1 @@
-interface:
-  display_name: "Principle Subtract Before You Add"
-  short_description: "Use the principle-subtract-before-you-add workflow"
-policy:
-  allow_implicit_invocation: false
+../../../../skills/shared/principle-subtract-before-you-add/agents/openai.yaml

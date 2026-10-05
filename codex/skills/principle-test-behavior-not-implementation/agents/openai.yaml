@@ -1,5 +1,1 @@
-interface:
-  display_name: "Principle Test Behavior Not Implementation"
-  short_description: "Use the principle-test-behavior-not-implementation workflow"
-policy:
-  allow_implicit_invocation: false
+../../../../skills/shared/principle-test-behavior-not-implementation/agents/openai.yaml

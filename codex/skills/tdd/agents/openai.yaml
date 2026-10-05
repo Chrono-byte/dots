@@ -1,5 +1,1 @@
-interface:
-  display_name: "Tdd"
-  short_description: "Use the tdd workflow"
-policy:
-  allow_implicit_invocation: false
+../../../../skills/shared/tdd/agents/openai.yaml

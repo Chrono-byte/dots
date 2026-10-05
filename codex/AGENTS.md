@@ -29,6 +29,6 @@ When uncertain, prefer Tailwind, TypeScript, Bun, React, Convex, Better Auth, an
 
 ## Flux and dotfiles
 
-I use `flux`, my Rust dotfiles CLI, to manage `~/.dotfiles` and link its files and folders into application configuration paths. Its mappings live in `~/.dotfiles/config.toml`. Codex skills are tracked as the `codex/skills` folder mapped to `~/.codex/skills`.
+I use `flux`, my Rust dotfiles CLI, to manage `~/.dotfiles` and link its files and folders into application configuration paths. Its mappings live in `~/.dotfiles/config.toml`. Codex and Pi skills share files under `~/.dotfiles/skills/shared`, with harness views in `codex/skills` and `pi/skills` linked to their installed locations.
 
 Read `~/.dotfiles/docs/agents/flux.md` before changing dotfiles mappings, importing local configuration, or running Flux installation commands. Check `flux status` and preview installation with `flux apply --dry-run --diff`.

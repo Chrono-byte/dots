@@ -1,0 +1,1 @@
+../../../../../skills/shared/cloudflare/references/r2/patterns.md

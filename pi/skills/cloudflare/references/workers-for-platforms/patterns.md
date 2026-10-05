@@ -1,0 +1,1 @@
+../../../../../skills/shared/cloudflare/references/workers-for-platforms/patterns.md

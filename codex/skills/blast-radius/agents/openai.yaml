@@ -1,5 +1,1 @@
-interface:
-  display_name: "Blast Radius"
-  short_description: "Use the blast-radius workflow"
-policy:
-  allow_implicit_invocation: false
+../../../../skills/shared/blast-radius/agents/openai.yaml

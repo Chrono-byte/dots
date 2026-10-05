@@ -1,0 +1,1 @@
+../../../../skills/shared/poteto-mode/playbooks/worktree-cleanup.md

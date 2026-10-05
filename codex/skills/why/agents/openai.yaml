@@ -1,5 +1,1 @@
-interface:
-  display_name: "Why"
-  short_description: "Use the why workflow"
-policy:
-  allow_implicit_invocation: false
+../../../../skills/shared/why/agents/openai.yaml

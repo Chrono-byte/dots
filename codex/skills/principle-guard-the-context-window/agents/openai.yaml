@@ -1,5 +1,1 @@
-interface:
-  display_name: "Principle Guard The Context Window"
-  short_description: "Use the principle-guard-the-context-window workflow"
-policy:
-  allow_implicit_invocation: false
+../../../../skills/shared/principle-guard-the-context-window/agents/openai.yaml

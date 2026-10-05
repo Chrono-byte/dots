@@ -1,5 +1,1 @@
-interface:
-  display_name: "Arena"
-  short_description: "Use the arena workflow"
-policy:
-  allow_implicit_invocation: false
+../../../../skills/shared/arena/agents/openai.yaml

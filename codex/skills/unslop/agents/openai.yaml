@@ -1,5 +1,1 @@
-interface:
-  display_name: "Unslop"
-  short_description: "Use the unslop workflow"
-policy:
-  allow_implicit_invocation: false
+../../../../skills/shared/unslop/agents/openai.yaml

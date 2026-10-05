@@ -1,0 +1,5 @@
+interface:
+  display_name: "Principle Separate Before Serializing Shared State"
+  short_description: "Use the principle-separate-before-serializing-shared-state workflow"
+policy:
+  allow_implicit_invocation: false

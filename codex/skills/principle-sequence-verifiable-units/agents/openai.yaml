@@ -1,5 +1,1 @@
-interface:
-  display_name: "Principle Sequence Verifiable Units"
-  short_description: "Use the principle-sequence-verifiable-units workflow"
-policy:
-  allow_implicit_invocation: false
+../../../../skills/shared/principle-sequence-verifiable-units/agents/openai.yaml

@@ -21,6 +21,20 @@ folders = [{ repo = "codex/skills", dest = ".codex/skills" }]
 
 `repo` is relative to the dotfiles repository. `dest` is relative to the user's home directory. `files` tracks individual files; `folders` tracks a whole directory. The skills mapping covers new skills without requiring another Flux entry for every file.
 
+Codex and Pi skills use one shared store with two harness views:
+
+```text
+~/.dotfiles/skills/shared/        shared skill files and references
+~/.dotfiles/codex/skills/        Codex view, linked from ~/.codex/skills
+~/.dotfiles/pi/skills/           Pi view, linked from ~/.pi/agent/skills
+```
+
+An identical skill folder links directly to the shared store. When a skill needs different instructions for each harness, its view keeps those files and links its common files to the shared store. Edit a shared file to update both harnesses; edit a variant in the appropriate view to change only that harness. Check `readlink` before deciding where to edit. Preserve the separate entrypoints' invocation policies, delegation tools, and model configuration paths when updating upstream skills.
+
+The `[tools.pi]` folder mapping installs the Pi view. Pi's own repository tracks its `skills` path as a symlink into dotfiles, so both repositories must be available on a fresh machine. Pi's other configuration stays in `~/.pi/agent`.
+
+Codex's `.system` directory remains managed locally and is ignored by Git. For the poteto-mode helpers, install dependencies once with `bun install --frozen-lockfile` in `~/.dotfiles/skills/shared/poteto-mode/scripts`. The two views link their `node_modules` to that directory; generated dependencies stay out of Git.
+
 Git tracking and Flux tracking are separate. Committing a file makes it available in the repository. Adding a mapping tells Flux where to install it. A mapping does not make an existing destination a symlink until it is applied.
 
 Profiles and platform conditions can select different entries for different machines. Preserve existing selections when editing a mapping. Read the current configuration instead of assuming every entry applies on every host.
@@ -46,7 +60,7 @@ flux --config ~/.dotfiles/config.toml apply --dry-run --diff
 
 Read the operations and differences before applying. A normal apply can encounter conflicts with existing local files. `--force` chooses repository content and replaces destinations that are not already the correct links; `--yes` skips prompts. Use these options only when that behavior is intended by the task.
 
-A folder mapping covers the entire directory. Before replacing `~/.codex/skills`, account for destination-only skills and Codex's `.system` directory. The repository's skill snapshot need not contain everything installed on the current machine. Preserve local-only content before replacing a destination folder.
+A folder mapping covers the entire directory. Before replacing an existing skills folder, account for destination-only skills and Codex's `.system` directory. Preserve local-only content before replacing a destination folder. The existing Codex and Pi skill roots on this machine are already linked to their dotfiles views.
 
 ## Commands worth knowing
 
