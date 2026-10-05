@@ -1,10 +1,12 @@
 # Ellie's Dotfiles
 
-A dotfiles setup using [Flux](https://forgejo.disilla.org/chrono/flux), a powerful dotfiles manager that handles configuration synchronization across multiple environments.
+A dotfiles setup managed by [Flux](https://forgejo.disilla.org/chrono/flux), Ellie's Rust CLI for linking configuration from a Git repository into application paths under the user's home directory.
 
 ## Overview
 
-This repository contains configuration files for various applications and tools, managed by Flux. The flux uses symlinks to keep configuration files synchronized between the repository and their actual destinations.
+This repository stores application configuration and agent skills. The root `config.toml` tells Flux which files and folders to link and where they belong. Once linked, edits through an application's configuration path also change the repository copy. Git commits and pushes share those changes between machines.
+
+See [the agent guide](docs/agents/flux.md) for mapping examples, commands, installation behavior, and verification.
 
 ## Repository Structure
 
@@ -29,4 +31,5 @@ This repository contains configuration files for various applications and tools,
 
 1. Clone this repository to `~/.dotfiles`
 2. Install Flux (refer to Flux documentation for installation)
-3. Run `flux apply --force` to create all symlinks, and overwrite local content
+3. Preview installation with `flux --config ~/.dotfiles/config.toml apply --dry-run --diff`.
+4. Run `flux --config ~/.dotfiles/config.toml apply` after reviewing the preview. Use `--force` when you intend to replace existing local configuration with repository content.
