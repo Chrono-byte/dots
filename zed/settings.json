@@ -47,7 +47,7 @@
       ]
     },
     {
-      "host": "horus-linux",
+      "host": "horus",
       "username": "chrono",
       "args": [],
       "projects": [
@@ -59,6 +59,11 @@
         {
           "paths": [
             "/home/chrono/Dev/folio-writing"
+          ]
+        },
+        {
+          "paths": [
+            "/home/chrono/Dev/member-activity-bot"
           ]
         },
         {
