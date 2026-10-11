@@ -1,6 +1,6 @@
 #:schema https://raw.githubusercontent.com/openai/codex/refs/heads/main/codex-rs/core/config.schema.json
 model = "gpt-6.1-sol"
-model_reasoning_effort = "low"
+model_reasoning_effort = "high"
 personality = "pragmatic"
 service_tier = "priority"
 approvals_reviewer = "auto_review"
@@ -55,6 +55,9 @@ enabled = true
 enabled = true
 
 [plugins."code-review@openai-bundled"]
+enabled = true
+
+[plugins."chrome@openai-bundled"]
 enabled = true
 
 [projects."/home/chrono/Dev/Homelab/docker-compose-nas"]
@@ -174,12 +177,14 @@ conversationDetailMode = "STEPS_COMMANDS"
 external-agent-import-sync-enabled = false
 keepRemoteControlAwakeWhilePluggedIn = true
 sidebarShowYourDotInRecents = true
+sidebar-show-projects-in-recents = true
 
 [desktop.open-in-target-preferences]
 global = "zed"
 
 [desktop.open-in-target-preferences.perPath]
 "/home/chrono/Dev/proton-bridge-mcp" = "zed"
+"/home/chrono/Dev/nextcloud-mcp" = "zed"
 
 [marketplaces.openai-bundled]
 source_type = "local"
@@ -207,7 +212,6 @@ BROWSER_USE_AVAILABLE_BACKENDS = "chrome,iab,mcpapps"
 BROWSER_USE_TINYSKY_ENABLED = "1"
 NODE_REPL_INSTRUCTIONS_USE_CASE_BROWSER = ""
 NODE_REPL_INSTRUCTIONS_USE_CASE_CHROME = ""
-NODE_REPL_INSTRUCTIONS_USE_CASE_COMPUTER_USE = ""
 BROWSER_USE_CODEX_APP_BUILD_FLAVOR = "prod"
 BROWSER_USE_CODEX_APP_VERSION = "26.1007.21434"
 NODE_REPL_TRUSTED_SERVICES = '{"browser":"/home/chrono/.codex/plugins/cache/openai-bundled/browser/26.1007.21434/scripts/browser-service.mjs"}'
@@ -240,4 +244,7 @@ trust_level = "trusted"
 trust_level = "trusted"
 
 [projects."/home/chrono/Dev/frame-finder"]
+trust_level = "trusted"
+
+[projects."/home/chrono/Dev/nextcloud-mcp"]
 trust_level = "trusted"

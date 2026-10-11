@@ -11,14 +11,21 @@ function aiusage() {
   case "$1" in
     submit|autosubmit|import|login|logout|delete-submitted-data) ;;
     *)
-      history_scan=",codex:$history_sessions"
-      if [[ -x "$HOME/.local/bin/aiusage-account-backfill" ]]; then
-        "$HOME/.local/bin/aiusage-account-backfill" --refresh >/dev/null || \
-          print -u2 "aiusage: history refresh failed; using the last estimates."
+      if [[ -x "$HOME/.local/bin/aiusage-account-backfill" ]] &&
+        "$HOME/.local/bin/aiusage-account-backfill" --refresh >/dev/null; then
+        history_scan=",codex:$history_sessions"
+      else
+        print -u2 "aiusage: reconciliation unavailable; showing measured usage only."
       fi
       ;;
   esac
-  TOKSCALE_EXTRA_DIRS="${TOKSCALE_EXTRA_DIRS:+$TOKSCALE_EXTRA_DIRS,}codex:$cloud_sessions$history_scan" \
+  local -a usage_roots
+  local usage_root
+  for usage_root in ${(s:,:)TOKSCALE_EXTRA_DIRS}; do
+    [[ "$usage_root" != "codex:$history_sessions" ]] && usage_roots+=("$usage_root")
+  done
+  local extra_dirs="${(j:,:)usage_roots}"
+  TOKSCALE_EXTRA_DIRS="${extra_dirs:+$extra_dirs,}codex:$cloud_sessions$history_scan" \
     bunx tokscale@latest "$@"
 }
 

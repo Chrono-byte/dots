@@ -5,6 +5,7 @@ import datetime as dt
 import fcntl
 import json
 import os
+import re
 from pathlib import Path
 import subprocess
 import sys
@@ -67,7 +68,45 @@ def plan(account, baseline):
     budget = max(0, account_total - measured_period)
     daily_weights = [max(0, b['tokens'] - sum(tokens(r) for r in observed.get(b['startDate'], [])
                      if overlaps_account(r))) for b in buckets]
-    allocations = apportion(budget, daily_weights) if budget and sum(daily_weights) else [0] * len(buckets)
+    monthly_account, monthly_measured = {}, {}
+    for bucket in buckets:
+        month = bucket['startDate'][:7]
+        monthly_account[month] = monthly_account.get(month, 0) + bucket['tokens']
+    for day, entries in observed.items():
+        if start <= day <= end:
+            monthly_measured[day[:7]] = monthly_measured.get(day[:7], 0) + sum(
+                tokens(r) for r in entries if overlaps_account(r))
+    months = sorted(set(monthly_account) | set(monthly_measured))
+    deficits = {m: max(0, monthly_account.get(m, 0) - monthly_measured.get(m, 0)) for m in months}
+    credits = {m: max(0, monthly_measured.get(m, 0) - monthly_account.get(m, 0)) for m in months}
+    def month_index(month):
+        year, number = map(int, month.split('-'))
+        return year * 12 + number
+    # Attribute unresolved cross-month overlap to the closest shortage, rather
+    # than proportionally reducing every historical day (including this month).
+    offsets = []
+    pairs = sorted((abs(month_index(source) - month_index(target)), source, target)
+                   for source in months if credits[source]
+                   for target in months if deficits[target])
+    for _, source, target in pairs:
+        amount = min(credits[source], deficits[target])
+        if amount:
+            credits[source] -= amount
+            deficits[target] -= amount
+            offsets.append({'measuredExcessMonth': source, 'accountShortageMonth': target, 'tokens': amount})
+    if sum(deficits.values()) != budget:
+        raise ValueError('Monthly reconciliation does not conserve period budget')
+    allocations = [0] * len(buckets)
+    for month in months:
+        indices = [i for i, bucket in enumerate(buckets) if bucket['startDate'].startswith(month)]
+        weights = [daily_weights[i] for i in indices]
+        if deficits[month] and sum(weights):
+            for i, value in zip(indices, apportion(deficits[month], weights)):
+                allocations[i] = value
+    month_audit = [{'month': m, 'accountTokens': monthly_account.get(m, 0),
+                    'measuredTokens': monthly_measured.get(m, 0),
+                    'initialShortage': max(0, monthly_account.get(m, 0) - monthly_measured.get(m, 0)),
+                    'estimateBudget': deficits[m]} for m in months]
     rows, audit = [], []
     for bucket, reconciled_gap in zip(buckets, allocations):
         date = bucket['startDate']
@@ -80,7 +119,8 @@ def plan(account, baseline):
         gap = reconciled_gap
         info = {'date': date, 'accountTokens': reported, 'measuredOverlapTokens': measured, 'estimatedTokensAdded': 0, 'unreconciledDailyGap': daily_gap,
                 'reconciliation': {'accountTokens': account_total, 'measuredTokens': measured_period,
-                                   'estimateBudget': budget, 'measuredStartDate': start, 'measuredEndDate': end}}
+                                   'estimateBudget': budget, 'measuredStartDate': start, 'measuredEndDate': end,
+                                   'months': month_audit, 'crossMonthOffsets': offsets}}
         if not gap:
             info['reason'] = 'No remaining estimate after full-period reconciliation'
             audit.append(info)
@@ -114,7 +154,7 @@ def plan(account, baseline):
             proportions = models[model]
             breakdown = dict(zip(FIELDS, apportion(share, [proportions[key] for key in FIELDS])))
             rows.append({'date': date, 'model': model, 'tokens': breakdown, 'totalTokens': share, 'estimatedCost': share * model_costs[model] / sum(models[model].values()), 'evidenceDate': evidence_date})
-            allocations.append({'model': model, 'tokens': share})
+            allocations.append({'model': model, 'tokens': share, 'estimatedCost': rows[-1]['estimatedCost']})
         info.update({'estimatedTokensAdded': gap, 'evidenceDate': evidence_date, 'evidenceAgeDays': (dt.date.fromisoformat(date) - dt.date.fromisoformat(evidence_date)).days, 'models': allocations})
         audit.append(info)
     return rows, audit
@@ -130,7 +170,9 @@ def atomic_json(path, data):
     temporary.replace(path)
 
 
-def export_rows(rows, audit, export=EXPORT, state=STATE):
+def export_rows(rows, audit, export=None, state=None):
+    export = export or EXPORT
+    state = state or STATE
     export.mkdir(parents=True, exist_ok=True, mode=0o700)
     grouped = {}
     for row in rows:
@@ -148,10 +190,10 @@ def export_rows(rows, audit, export=EXPORT, state=STATE):
                      'cached_input_tokens': counts['cacheRead'],
                      'output_tokens': counts['output'] + counts['reasoning'],
                      'reasoning_output_tokens': counts['reasoning'], 'total_tokens': entry['totalTokens']}
-            records.append({'type': 'turn_context', 'timestamp': timestamp, 'payload': {'model': 'estimated: ' + entry['model']}})
+            records.append({'type': 'turn_context', 'timestamp': timestamp, 'payload': {'model': estimate_identity(entry)}})
             records.append({'type': 'event_msg', 'timestamp': timestamp, 'payload': {
                 'type': 'token_count', 'info': {'last_token_usage': usage}, 'rate_limits': None,
-                'estimated': True, 'estimate_source': 'full-period account excess; inferred date/model/token mix',
+                'estimated': True, 'estimate_source': 'monthly account shortage with cross-month overlap reconciliation; inferred date/model/token mix',
                 'inferred_model': entry['model'], 'evidence_date': entry['evidenceDate']}})
         target = export / (identity + '.jsonl')
         keep.add(target.name)
@@ -165,7 +207,7 @@ def export_rows(rows, audit, export=EXPORT, state=STATE):
     for old in export.glob('estimated-account-history-*.jsonl'):
         if old.name not in keep:
             old.unlink()
-    report = {'method': 'Full-period account excess after subtracting measured Codex/OpenAI Pi usage including boundary days; daily positive gaps used only as allocation weights; estimates, not measured responses',
+    report = {'method': 'Full-period account excess after subtracting measured Codex/OpenAI Pi usage including boundary days; monthly shortages offset by nearest-month measured excess; account daily gaps weight placement within months; estimates, not measured responses',
               'reconciliation': audit[0]['reconciliation'] if audit else None,
               'estimatedTokensAdded': sum(r['totalTokens'] for r in rows),
               'estimatedDays': len(grouped), 'estimatedCost': sum(r['estimatedCost'] for r in rows),
@@ -182,45 +224,75 @@ def capture(command, environment):
     return json.loads(result.stdout)
 
 
+def estimate_identity(row):
+    return 'aiusage-account-estimate/' + row['date'] + '/' + row['model']
+
+
+def presentation_name(model, aliases):
+    # Mirror Tokscale syntactic normalization and its single-hop alias matching.
+    def normalize(value):
+        value = value.lower()
+        value = re.sub(r'^(.*\S)\((minimal|low|medium|high|xhigh|auto|none)\)$', r'\1', value)
+        value = re.sub(r'-[0-9]{8}$', '', value)
+        if 'claude' in value:
+            value = re.sub(r'(?<=\d)\.(?=\d)', '-', value)
+            match = re.fullmatch(r'anthropic/claude-([^-]+)-([^-]+)-(opus|sonnet|haiku)', value)
+            if match:
+                value = 'claude-' + match[3] + '-' + match[1] + '-' + match[2]
+        return value
+    keys = {normalize(k).replace('.', '-'): normalize(v)
+            for k, v in aliases.items() if isinstance(v, str) and normalize(k) != normalize(v)}
+    normalized = normalize(model)
+    return keys.get(normalized.replace('.', '-'), normalized)
+
+
 def configure_estimate_prices(rows, environment):
-    """Price only estimate labels using observed blended costs; preserve real-model pricing."""
+    """Give each date/model its own price while merging presentation aliases."""
     config = Path(environment.get('TOKSCALE_CONFIG_DIR') or
                   str(Path(environment.get('XDG_CONFIG_HOME', HOME / '.config')) / 'tokscale'))
     target = config / 'custom-pricing.json'
     data = json.loads(target.read_text()) if target.exists() else {'models': {}}
     models = data.setdefault('models', {})
-    if not isinstance(models, dict):
-        raise ValueError('Invalid custom pricing models')
-    grouped = {}
-    for row in rows:
-        item = grouped.setdefault(row['model'], {'tokens': 0, 'cost': 0.0})
-        item['tokens'] += row['totalTokens']
-        item['cost'] += row['estimatedCost']
-    prices = {}
-    for model, values in grouped.items():
-        # A daily aggregate is not one request. Use the evidence's blended
-        # cost per token, with no fabricated context-size tier or cache rate.
-        rate = values['cost'] / values['tokens']
-        prices['estimated: ' + model] = {
-            'input_cost_per_token': rate, 'output_cost_per_token': rate,
-            'cache_read_input_token_cost': rate, 'cache_creation_input_token_cost': rate,
-            'notes': 'Estimated account history; observed blended cost per token, not an actual bill'}
-    # Only touch generated entries; preserve unrelated user overrides.
-    for name in list(models):
-        if name.startswith('estimated: ') and isinstance(models[name], dict) and models[name].get('notes', '').startswith('Estimated account history;'):
-            del models[name]
-    models.update(prices)
-    config.mkdir(parents=True, exist_ok=True)
-    atomic_json(target, data)
-    # Presentation aliases merge inferred and measured usage into one model.
-    # Keep raw IDs distinct so estimated pricing cannot affect measured rows.
     settings_path = config / 'settings.json'
     settings = json.loads(settings_path.read_text()) if settings_path.exists() else {}
     aliases = settings.setdefault('modelAliases', {})
-    if not isinstance(aliases, dict):
-        raise ValueError('Invalid model aliases')
-    aliases.update({'estimated: ' + model: model for model in grouped})
+    registry_path = config / 'aiusage-generated-aliases.json'
+    previous = json.loads(registry_path.read_text()) if registry_path.exists() else {}
+    if not isinstance(models, dict) or not isinstance(aliases, dict) or not isinstance(previous, dict):
+        raise ValueError('Invalid pricing or alias configuration')
+    marker = 'Estimated account history;'
+    owned_prices = {name for name, value in models.items() if isinstance(value, dict)
+                    and isinstance(value.get('notes'), str) and value['notes'].startswith(marker)
+                    and name.startswith(('estimated: ', 'aiusage-account-estimate/'))}
+    # Resolve measured aliases before installing synthetic aliases: Tokscale
+    # applies only one hop, so point directly at the measured display name.
+    generated = {}
+    prices = {}
+    for row in rows:
+        identity = estimate_identity(row)
+        rate = row['estimatedCost'] / row['totalTokens']
+        if identity in models and identity not in owned_prices:
+            raise ValueError('Estimate pricing conflicts with a user override')
+        display = presentation_name(row['model'], aliases)
+        if identity in aliases and aliases[identity] != previous.get(identity) and aliases[identity] != display:
+            raise ValueError('Estimate alias conflicts with a user override')
+        generated[identity] = display
+        prices[identity] = {'input_cost_per_token': rate, 'output_cost_per_token': rate,
+                           'cache_read_input_token_cost': rate, 'cache_creation_input_token_cost': rate,
+                           'notes': marker + ' date-specific observed cost per token, not an actual bill'}
+    for name in owned_prices:
+        del models[name]
+        if name.startswith('estimated: ') and aliases.get(name) == name.removeprefix('estimated: '):
+            del aliases[name]
+    for name, value in previous.items():
+        if aliases.get(name) == value:
+            del aliases[name]
+    models.update(prices)
+    aliases.update(generated)
+    config.mkdir(parents=True, exist_ok=True)
+    atomic_json(target, data)
     atomic_json(settings_path, settings)
+    atomic_json(registry_path, generated)
 
 
 def run(args):
@@ -228,16 +300,31 @@ def run(args):
     with (STATE / 'backfill.lock').open('w') as lock:
         fcntl.flock(lock, fcntl.LOCK_EX)
         snapshot = STATE / 'account-history-snapshot.json'
+        account_source = 'cached'
         if args.account:
+            account_source = 'provided'
             account = json.loads(Path(args.account).read_text())
             if account.get('dailyUsageBuckets') is None:
                 raise ValueError('Missing daily account buckets')
+            plan(account, {'contributions': []})
             atomic_json(snapshot, account)
         elif args.refresh or not snapshot.exists():
-            account = capture(['bunx', 'tokscale@latest', 'codex', 'activity', '--json'], os.environ.copy())['codexAccountActivity']
-            if account.get('status') != 'available' or account.get('dailyUsageBuckets') is None:
-                raise RuntimeError('Account history unavailable; keeping previous estimates')
-            atomic_json(snapshot, account)
+            try:
+                account = capture(['bunx', 'tokscale@latest', 'codex', 'activity', '--json'], os.environ.copy())['codexAccountActivity']
+                if account.get('status') != 'available' or account.get('dailyUsageBuckets') is None:
+                    raise RuntimeError('Account history unavailable')
+                # Validate account input before replacing the last valid snapshot.
+                plan(account, {'contributions': []})
+            except (OSError, ValueError, KeyError, RuntimeError, subprocess.TimeoutExpired):
+                if not snapshot.exists():
+                    raise RuntimeError('Account history unavailable and no cached snapshot')
+                account = json.loads(snapshot.read_text())
+                age = max(0, int(dt.datetime.now().timestamp() - snapshot.stat().st_mtime))
+                print('aiusage: account refresh failed; reconciling current measured usage against cached totals ('
+                      + str(age) + ' seconds old).', file=sys.stderr)
+            else:
+                account_source = 'refreshed'
+                atomic_json(snapshot, account)
         else:
             account = json.loads(snapshot.read_text())
         if args.baseline:
@@ -256,6 +343,9 @@ def run(args):
         configure_estimate_prices(rows, os.environ.copy())
         atomic_json(STATE / 'account-history-measured.json', baseline)
         report = export_rows(rows, audit)
+        report['accountSource'] = account_source
+        report['accountSnapshotAt'] = dt.datetime.fromtimestamp(snapshot.stat().st_mtime, dt.timezone.utc).isoformat()
+        atomic_json(STATE / 'account-history-audit.json', report)
         print(json.dumps({key: report[key] for key in ['estimatedTokensAdded', 'estimatedDays', 'accountDays']}))
 
 

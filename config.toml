@@ -104,6 +104,7 @@ files = [{ repo = "fuzzel/fuzzel.ini", dest = ".config/fuzzel/fuzzel.ini" }]
 
 [tools.scripts]
 files = [
+  { repo = "scripts/helium-chatgpt-host", dest = ".local/bin/helium-chatgpt-host", conditions = { os = ["linux"] } },
   { repo = "scripts/aiusage-account-backfill", dest = ".local/bin/aiusage-account-backfill", conditions = { os = ["linux"] } },
   { repo = "scripts/codex-cloud-usage", dest = ".local/bin/codex-cloud-usage", conditions = { os = ["linux"] } },
   { repo = "scripts/window-title-waybar", dest = ".local/bin/window-title-waybar" },
@@ -118,3 +119,8 @@ files = [
 
 [tools.fastfetch]
 files = [{ repo = "fastfetch/config.jsonc", dest = ".config/fastfetch/config.jsonc" }]
+
+[tools.helium]
+files = [
+  { repo = "helium/com.openai.codexextension.json", dest = ".config/net.imput.helium/NativeMessagingHosts/com.openai.codexextension.json", conditions = { os = ["linux"] } },
+]
