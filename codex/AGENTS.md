@@ -1,34 +1,23 @@
-When working in TypeScript:
+# Project defaults
 
-- When adding a package to a project, add it with an install command instead of manually editing package.json.
-- Avoid explicit return types unless absolutely needed.
-- `as any` should be an absolute last resort. Always use real type safety; lean on type inference instead of manually writing new types over and over again.
+Follow the repository's existing conventions first.
 
-## Commands
+## TypeScript
 
-- Run check/format/lint commands when you are done making a change. If they do not exist, suggest making them for the project.
-- Do not run dev server commands such as `bun run dev`; assume the server is already running.
-- Do not run build commands unless specifically told to.
-- Focus on checking commands such as `bun run typecheck` and `bun run lint`.
+- Install dependencies through the project's package manager.
+- Prefer inferred types and type-safe narrowing over explicit return types or `as any`.
 
-## Package Managers
+## Tooling
 
-- Use pnpm if the project already uses it; otherwise use Bun.
+- Use pnpm when the repository already uses it; otherwise use Bun.
+- Run the repository's relevant check, format, lint, and typecheck commands before finishing. If none exist, report that.
+- Run builds and development servers only when requested.
+- Put editor configuration in `.zed/`.
 
-## Tech Stack Preferences
+## Technology preferences
 
-When uncertain, prefer Tailwind, TypeScript, Bun, React, Convex, Better Auth, and Cloudflare Workers. I prefer using Oxc tools (Oxlint and Oxfmt).
+When the repository establishes no precedent, prefer TypeScript, Tailwind, Bun, React, Convex, Better Auth, Cloudflare Workers, Oxlint, and Oxfmt. Prefer Tailwind over introducing a hand-written stylesheet.
 
-## Editor
+## Dotfiles
 
-- I use Zed. Add project editor settings under `.zed/`, not `.vscode/`.
-
-## Code Style
-
-- Prefer using Tailwind over hardcoded styles.css when starting from little to no CSS.
-
-## Flux and dotfiles
-
-I use `flux`, my Rust dotfiles CLI, to manage `~/.dotfiles` and link its files and folders into application configuration paths. Its mappings live in `~/.dotfiles/config.toml`. Codex and Pi skills share files under `~/.dotfiles/skills/shared`, with harness views in `codex/skills` and `pi/skills` linked to their installed locations.
-
-Read `~/.dotfiles/docs/agents/flux.md` before changing dotfiles mappings, importing local configuration, or running Flux installation commands. Check `flux status` and preview installation with `flux apply --dry-run --diff`.
+Before changing dotfiles, Flux mappings, installed configuration links, or the Codex/Pi setup, read `~/.dotfiles/docs/agents/flux.md` and follow its workflow.
