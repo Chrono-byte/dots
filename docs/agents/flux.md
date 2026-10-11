@@ -13,13 +13,16 @@ Each `[tools.<name>]` section groups configuration for an application or tool:
 ```toml
 [tools.codex]
 files = [
-  { repo = "codex/config.toml", dest = ".codex/config.toml" },
+  { repo = "codex/config.toml", dest = ".codex/config.toml", conditions = { os = ["linux"] } },
+  { repo = "codex/config.macos.toml", dest = ".codex/config.toml", conditions = { os = ["darwin"] } },
   { repo = "codex/AGENTS.md", dest = ".codex/AGENTS.md" },
 ]
 folders = [{ repo = "codex/skills", dest = ".codex/skills" }]
 ```
 
 `repo` is relative to the dotfiles repository. `dest` is relative to the user's home directory. `files` tracks individual files; `folders` tracks a whole directory. The skills mapping covers new skills without requiring another Flux entry for every file.
+
+Codex configuration uses separate OS sources: `codex/config.toml` for Linux and `codex/config.macos.toml` for macOS. Flux links the matching source to `~/.codex/config.toml`. Keep application paths, browser plugin versions, computer-use settings, and OS-specific MCP configuration in the matching source. Apply portable preference changes to both files. The desktop app may update its linked source; inspect those changes before committing instead of copying one OS's entire config to the other.
 
 Codex and Pi skills use one shared store with two harness views:
 

@@ -86,7 +86,8 @@ folders = [{ repo = "nvim", dest = ".config/nvim" }]
 # Codex (AI assistant)
 [tools.codex]
 files = [
-  { repo = "codex/config.toml", dest = ".codex/config.toml" },
+  { repo = "codex/config.toml", dest = ".codex/config.toml", conditions = { os = ["linux"] } },
+  { repo = "codex/config.macos.toml", dest = ".codex/config.toml", conditions = { os = ["darwin"] } },
   { repo = "codex/AGENTS.md", dest = ".codex/AGENTS.md" },
 ]
 folders = [{ repo = "codex/skills", dest = ".codex/skills" }]
