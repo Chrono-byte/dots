@@ -112,13 +112,6 @@ folders = [{ repo = "mako", dest = ".config/mako" }]
 [tools.fuzzel]
 files = [{ repo = "fuzzel/fuzzel.ini", dest = ".config/fuzzel/fuzzel.ini" }]
 
-# Overrides for applications
-# For Discord, I do this to launch with Wayland. Electron by default would run under Xwayland.
-[tools.applications]
-files = [
-  { repo = "applications/com.discordapp.Discord.desktop", dest = ".local/share/applications/com.discordapp.Discord.desktop" },
-]
-
 # Scripts for various utilities
 # Most of these are simple tools for tools under Niri.
 [tools.scripts]
