@@ -1,22 +1,12 @@
 import { setTimeout as delay } from "node:timers/promises";
-import {
-  Command,
-  CommanderError,
-  InvalidArgumentError,
-  Option,
-} from "commander";
-import {
-  GhGitHubReader,
-  WatcherQueryError,
-  discoverStack,
-  resolveContext,
-} from "./github.ts";
+import { Command, CommanderError, InvalidArgumentError, Option } from "commander";
+import { GhGitHubReader, WatcherQueryError, discoverStack, resolveContext } from "./github.ts";
 import {
   runQueued,
   runSimple,
   statusQueryVerdict,
   verdictFactory,
-  type WatchClock,
+  type WatchClock
 } from "./policy.ts";
 import { renderJson, renderPretty } from "./render.ts";
 import type * as T from "./types.ts";
@@ -97,35 +87,12 @@ export function parseArgs(
         .default(false)
         .conflicts("queuedStack")
     )
-    .option(
-      "--queued-stack",
-      "watch the captured stack until all PRs merge",
-      false
-    )
-    .option(
-      "--stack-prs <n,...>",
-      "frozen bottom-to-top queue (queued mode only)",
-      stackPrList
-    )
+    .option("--queued-stack", "watch the captured stack until all PRs merge", false)
+    .option("--stack-prs <n,...>", "frozen bottom-to-top queue (queued mode only)", stackPrList)
     .option("--interval <seconds>", "poll interval", positiveNumber, 60)
-    .option(
-      "--sweep-interval <seconds>",
-      "whole-stack sweep interval",
-      positiveNumber,
-      300
-    )
-    .option(
-      "--timeout <seconds>",
-      "deadline; 0 disables it",
-      nonNegativeNumber,
-      0
-    )
-    .option(
-      "--max-query-errors <count>",
-      "consecutive query-error budget",
-      positiveInteger,
-      5
-    )
+    .option("--sweep-interval <seconds>", "whole-stack sweep interval", positiveNumber, 300)
+    .option("--timeout <seconds>", "deadline; 0 disables it", nonNegativeNumber, 0)
+    .option("--max-query-errors <count>", "consecutive query-error budget", positiveInteger, 5)
     .option("--status-only", "print one status table and exit 0", false)
     .option("--allow-draft", "do not treat a draft as a merge gate", false)
     .option("--pretty", "render human text instead of JSON", false);
@@ -146,8 +113,8 @@ export function parseArgs(
       sweepInterval: raw.sweepInterval,
       timeout: raw.timeout,
       maxQueryErrors: raw.maxQueryErrors,
-      allowDraft: raw.allowDraft,
-    },
+      allowDraft: raw.allowDraft
+    }
   };
 }
 export interface CliRuntime {
@@ -164,10 +131,10 @@ function realRuntime(): CliRuntime {
       observedAt: () => new Date().toISOString(),
       sleep: async (seconds) => {
         await delay(seconds * 1_000);
-      },
+      }
     },
     stdout: (value) => process.stdout.write(value),
-    stderr: (value) => process.stderr.write(value),
+    stderr: (value) => process.stderr.write(value)
   };
 }
 export async function main(
@@ -182,21 +149,18 @@ export async function main(
     return error.exitCode === 0 ? 0 : 64;
   }
   const render = options.pretty ? renderPretty : renderJson;
-  const emit = (verdict: T.ProgressVerdict): void =>
-    runtime.stdout(render(verdict));
+  const emit = (verdict: T.ProgressVerdict): void => runtime.stdout(render(verdict));
   let contexts: T.NonEmpty<T.PrContext>;
   try {
     const seed = await resolveContext({
       reader: runtime.reader,
       owner: options.owner,
       repo: options.repo,
-      pr: options.pr ?? options.stackPrs[0] ?? null,
+      pr: options.pr ?? options.stackPrs[0] ?? null
     });
     contexts =
       nonEmpty(options.stackPrs.map((number) => ({ ...seed, number }))) ??
-      (options.mode === "single"
-        ? [seed]
-        : await discoverStack(runtime.reader, seed));
+      (options.mode === "single" ? [seed] : await discoverStack(runtime.reader, seed));
   } catch (error) {
     if (!(error instanceof WatcherQueryError)) throw error;
     const verdict = statusQueryVerdict(
@@ -216,7 +180,7 @@ export async function main(
           contexts,
           mode: options.mode,
           statusOnly: options.statusOnly,
-          options: options.polling,
+          options: options.polling
         });
   runtime.stdout(render(verdict));
   return verdict.exitCode;

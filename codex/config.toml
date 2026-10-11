@@ -171,19 +171,11 @@ trust_level = "trusted"
 trust_level = "trusted"
 
 [desktop]
-followUpQueueMode = "queue"
-conversationDetailMode = "STEPS_PROSE"
-
-[desktop.daybreak-enabled]
-accountId = "b6e61595-2ad8-48d0-b802-8a0703769048"
-userId = "user-MbDvMaBsXJo26COI8u3TFTb7"
-enabled = false
-
-[desktop.open-in-target-preferences]
-global = "zed"
-
-[desktop.open-in-target-preferences.perPath]
-"/Users/chrono/Dev/folio-writing" = "zed"
+followUpQueueMode = "steer"
+conversationDetailMode = "STEPS_COMMANDS"
+external-agent-import-sync-enabled = false
+keepRemoteControlAwakeWhilePluggedIn = true
+sidebarShowYourDotInRecents = false
 
 [marketplaces.openai-bundled]
 source_type = "local"
@@ -213,16 +205,9 @@ NODE_REPL_INSTRUCTIONS_USE_CASE_BROWSER = ""
 NODE_REPL_INSTRUCTIONS_USE_CASE_CHROME = ""
 NODE_REPL_INSTRUCTIONS_USE_CASE_COMPUTER_USE = ""
 BROWSER_USE_CODEX_APP_BUILD_FLAVOR = "prod"
-BROWSER_USE_CODEX_APP_VERSION = "26.930.61225"
-NODE_REPL_TRUSTED_SERVICES = '{"browser":"/Users/chrono/.codex/plugins/cache/openai-bundled/browser/26.930.61225/scripts/browser-service.mjs","sky":"@oai/sky/service"}'
-SKY_CUA_SERVICE_PATH = "/Users/chrono/.codex/computer-use/Codex Computer Use.app"
-CODEX_CLI_PATH = "/Applications/ChatGPT.app/Contents/Resources/codex-cli/CodexCLI.app/Contents/MacOS/codex"
-
-[mcp_servers.computer-use]
-command = "./Codex Computer Use.app/Contents/SharedSupport/SkyComputerUseClient.app/Contents/MacOS/SkyComputerUseClient"
-args = ["mcp"]
-cwd = "."
-enabled = false
+BROWSER_USE_CODEX_APP_VERSION = "26.1007.21434"
+NODE_REPL_TRUSTED_SERVICES = '{"browser":"/home/chrono/.codex/plugins/cache/openai-bundled/browser/26.1007.21434/scripts/browser-service.mjs"}'
+CODEX_CLI_PATH = "/usr/lib/chatgpt/resources/codex"
 
 [shell_environment_policy.set]
 NODE_REPL_TRUSTED_BROWSER_CLIENT_SHA256S = "9230e2bd8b24b7ac7a0ba6774c64bf0d78ecdabbdd91d0ed627b02a587bae2df"
@@ -234,3 +219,21 @@ trusted_hash = "sha256:317a07045dfc95aef2e80c55428a2f817e2768be867e3b1ef29a73da8
 
 [apps.asdk_app_sites_7e9112d74e5c81919775353498aab0d9]
 enabled = false
+
+[apps.asdk_app_sites_b4bbf109c85c81919ce10f1a4c3a252e]
+enabled = true
+
+[projects."/home/chrono/Dev/picopowerpal"]
+trust_level = "trusted"
+
+[projects."/home/chrono/Dev/member-activity-bot"]
+trust_level = "trusted"
+
+[projects."/home/chrono/Dev/Coven"]
+trust_level = "trusted"
+
+[projects."/home/chrono/Dev/proton-bridge-mcp"]
+trust_level = "trusted"
+
+[projects."/home/chrono/Dev/frame-finder"]
+trust_level = "trusted"

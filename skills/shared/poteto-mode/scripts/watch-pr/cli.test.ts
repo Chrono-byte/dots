@@ -24,11 +24,11 @@ function testRuntime(reader: GitHubReader): {
         observedAt: () => "2026-07-26T00:00:00.000Z",
         async sleep() {
           throw new Error("test unexpectedly slept");
-        },
+        }
       },
       stdout: (value) => stdout.push(value),
-      stderr: (value) => stderr.push(value),
-    },
+      stderr: (value) => stderr.push(value)
+    }
   };
 }
 
@@ -47,8 +47,8 @@ describe("parseArgs", () => {
         sweepInterval: 300,
         timeout: 0,
         maxQueryErrors: 5,
-        allowDraft: false,
-      },
+        allowDraft: false
+      }
     });
   });
 
@@ -67,7 +67,7 @@ describe("parseArgs", () => {
         "--max-query-errors",
         "3",
         "--allow-draft",
-        "--pretty",
+        "--pretty"
       ],
       silentIo
     );
@@ -78,7 +78,7 @@ describe("parseArgs", () => {
       sweepInterval: 30,
       timeout: 0,
       maxQueryErrors: 3,
-      allowDraft: true,
+      allowDraft: true
     });
     expect(parsed.pretty).toBe(true);
   });
@@ -92,7 +92,7 @@ describe("parseArgs", () => {
       ["--max-query-errors", "1.5"],
       ["--stack", "--queued-stack"],
       ["--stack-prs", "1,2"],
-      ["--queued-stack", "--stack-prs", "1,1"],
+      ["--queued-stack", "--stack-prs", "1,1"]
     ];
     for (const argv of invalid) {
       const harness = testRuntime(fakeReader());
@@ -107,7 +107,7 @@ describe("rendering", () => {
   const context = {
     owner: "owner",
     repo: "repo",
-    number: parsePrNumber(1),
+    number: parsePrNumber(1)
   };
   const status = {
     schemaVersion: 1,
@@ -132,10 +132,10 @@ describe("rendering", () => {
           baseRefName: "main",
           state: "MERGED",
           mergedAt: "now",
-          isDraft: false,
-        },
-      },
-    ],
+          isDraft: false
+        }
+      }
+    ]
   } satisfies WatcherVerdict;
 
   it("emits compact valid JSON by default", () => {
@@ -167,16 +167,7 @@ describe("main", () => {
     const reader = fakeReader();
     const harness = testRuntime(reader);
     const code = await main(
-      [
-        "--owner",
-        "owner",
-        "--repo",
-        "repo",
-        "--queued-stack",
-        "--stack-prs",
-        "1",
-        "--status-only",
-      ],
+      ["--owner", "owner", "--repo", "repo", "--queued-stack", "--stack-prs", "1", "--status-only"],
       harness.runtime
     );
     expect(code).toBe(0);
@@ -186,7 +177,7 @@ describe("main", () => {
       kind: "STATUS",
       terminal: true,
       exitCode: 0,
-      mode: "queued-stack",
+      mode: "queued-stack"
     });
     expect(harness.stdout[0]).not.toContain('"kind":"QUEUE"');
   });
@@ -195,13 +186,10 @@ describe("main", () => {
     const reader = fakeReader({
       facts: { mergeStateStatus: "BLOCKED" },
       fastPath: { kind: "checks", checks: [passingCheck()] },
-      commitRollups: [{ oid: "head", state: "FAILURE" }],
+      commitRollups: [{ oid: "head", state: "FAILURE" }]
     });
     const harness = testRuntime(reader);
-    const code = await main(
-      ["--owner", "owner", "--repo", "repo", "--pr", "1"],
-      harness.runtime
-    );
+    const code = await main(["--owner", "owner", "--repo", "repo", "--pr", "1"], harness.runtime);
     expect(code).toBe(4);
     expect(harness.stdout).toHaveLength(1);
     expect(JSON.parse(harness.stdout[0])).toMatchObject({
@@ -209,8 +197,8 @@ describe("main", () => {
       exitCode: 4,
       blocker: {
         kind: "failing-checks",
-        ci: { kind: "ci-github-rejected" },
-      },
+        ci: { kind: "ci-github-rejected" }
+      }
     });
   });
 

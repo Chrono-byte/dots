@@ -8,7 +8,7 @@ import type {
   PullRequestFacts,
   Repository,
   ReviewThread,
-  RollupPage,
+  RollupPage
 } from "./types.ts";
 import { parsePrNumber } from "./types.ts";
 
@@ -30,7 +30,7 @@ export function passingCheck(name = "ci"): Check {
     reportedState: "SUCCESS",
     description: "",
     link: "",
-    workflow: "",
+    workflow: ""
   };
 }
 
@@ -41,7 +41,7 @@ export function pendingCheck(name = "ci"): Check {
     reportedState: "PENDING",
     description: "",
     link: "",
-    workflow: "",
+    workflow: ""
   };
 }
 
@@ -52,7 +52,7 @@ export function failedCheck(name = "ci"): Check {
     reportedState: "FAILURE",
     description: "",
     link: "",
-    workflow: "",
+    workflow: ""
   };
 }
 
@@ -63,7 +63,7 @@ export function fakeReader(
   const context = options.current ?? {
     owner: "owner",
     repo: "repo",
-    number: parsePrNumber(1),
+    number: parsePrNumber(1)
   };
   const defaults: PullRequestFacts = {
     context,
@@ -75,16 +75,14 @@ export function fakeReader(
     baseRefName: "main",
     state: "OPEN",
     mergedAt: null,
-    isDraft: false,
+    isDraft: false
   };
   let page = 0;
   return {
     calls,
     async originRepo() {
       calls.push("originRepo");
-      return options.origin === undefined
-        ? { owner: "owner", repo: "repo" }
-        : options.origin;
+      return options.origin === undefined ? { owner: "owner", repo: "repo" } : options.origin;
     },
     async currentPr(pr) {
       calls.push("currentPr");
@@ -113,6 +111,6 @@ export function fakeReader(
     async commitRollups() {
       calls.push("commitRollups");
       return options.commitRollups ?? [{ oid: "head", state: "SUCCESS" }];
-    },
+    }
   };
 }

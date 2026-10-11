@@ -7,26 +7,21 @@ import {
   parsePullRequest,
   parseReviewThreads,
   resolveChecks,
-  resolveContext,
+  resolveContext
 } from "./github.ts";
-import {
-  fakeReader,
-  failedCheck,
-  passingCheck,
-  pendingCheck,
-} from "./fakes.test-helper.ts";
+import { fakeReader, failedCheck, passingCheck, pendingCheck } from "./fakes.test-helper.ts";
 import { parsePrNumber } from "./types.ts";
 
 const context = {
   owner: "owner",
   repo: "repo",
-  number: parsePrNumber(42),
+  number: parsePrNumber(42)
 };
 
 describe("checks fallback chain", () => {
   it("uses a non-empty fast-path result without a rollup query", async () => {
     const reader = fakeReader({
-      fastPath: { kind: "checks", checks: [passingCheck("fast")] },
+      fastPath: { kind: "checks", checks: [passingCheck("fast")] }
     });
     const read = await resolveChecks(reader, context);
     expect(read.source).toBe("gh-pr-checks");
@@ -39,8 +34,8 @@ describe("checks fallback chain", () => {
       fastPath: { kind: "unusable", exitCode: 8, stderr: "" },
       rollupPages: [
         { checks: [passingCheck("first")], endCursor: "next" },
-        { checks: [failedCheck("second")], endCursor: null },
-      ],
+        { checks: [failedCheck("second")], endCursor: null }
+      ]
     });
     const read = await resolveChecks(reader, context);
     expect(read.source).toBe("graphql-rollup");
@@ -48,18 +43,16 @@ describe("checks fallback chain", () => {
     expect(reader.calls).toEqual([
       "checksFastPath",
       "checkRollupPage:null",
-      "checkRollupPage:next",
+      "checkRollupPage:next"
     ]);
   });
 
   it("falls back when valid fast-path JSON represented an empty list", async () => {
     const reader = fakeReader({
       fastPath: { kind: "checks", checks: [] },
-      rollupPages: [{ checks: [pendingCheck("fallback")], endCursor: null }],
+      rollupPages: [{ checks: [pendingCheck("fallback")], endCursor: null }]
     });
-    expect((await resolveChecks(reader, context)).checks[0].name).toBe(
-      "fallback"
-    );
+    expect((await resolveChecks(reader, context)).checks[0].name).toBe("fallback");
     expect(reader.calls).toEqual(["checksFastPath", "checkRollupPage:null"]);
   });
 
@@ -68,12 +61,10 @@ describe("checks fallback chain", () => {
       fastPath: {
         kind: "unusable",
         exitCode: 8,
-        stderr: "credential cannot read checks",
-      },
+        stderr: "credential cannot read checks"
+      }
     });
-    await expect(resolveChecks(reader, context)).rejects.toBeInstanceOf(
-      ChecksUnavailable
-    );
+    await expect(resolveChecks(reader, context)).rejects.toBeInstanceOf(ChecksUnavailable);
     expect(reader.calls).toEqual(["checksFastPath", "checkRollupPage:null"]);
   });
 });
@@ -87,7 +78,7 @@ describe("rollup node mapping", () => {
       ["COMPLETED", "SKIPPED", "skipped", "SKIPPED"],
       ["COMPLETED", "ACTION_REQUIRED", "failed", "ACTION_REQUIRED"],
       ["COMPLETED", "TIMED_OUT", "failed", "FAILURE"],
-      ["COMPLETED", "FUTURE_VALUE", "failed", "FAILURE"],
+      ["COMPLETED", "FUTURE_VALUE", "failed", "FAILURE"]
     ] as const;
     for (const [status, conclusion, kind, reportedState] of cases) {
       expect(
@@ -95,7 +86,7 @@ describe("rollup node mapping", () => {
           __typename: "CheckRun",
           name: "ci",
           status,
-          conclusion,
+          conclusion
         })
       ).toMatchObject({ kind, reportedState });
     }
@@ -107,14 +98,14 @@ describe("rollup node mapping", () => {
         __typename: "CheckRun",
         name: "Code Review Gate",
         status: "IN_PROGRESS",
-        conclusion: null,
+        conclusion: null
       })
     ).toMatchObject({ kind: "code-review-gate" });
     expect(
       mapRollupNode({
         __typename: "StatusContext",
         context: "Code Review Gate",
-        state: "PENDING",
+        state: "PENDING"
       })
     ).toMatchObject({ kind: "code-review-gate" });
   });
@@ -124,14 +115,14 @@ describe("rollup node mapping", () => {
       mapRollupNode({
         __typename: "StatusContext",
         context: "ci",
-        state: "EXPECTED",
+        state: "EXPECTED"
       })
     ).toMatchObject({ kind: "pending", reportedState: "PENDING" });
     expect(
       mapRollupNode({
         __typename: "StatusContext",
         context: "ci",
-        state: "FUTURE_VALUE",
+        state: "FUTURE_VALUE"
       })
     ).toMatchObject({ kind: "failed", reportedState: "FUTURE_VALUE" });
     expect(mapRollupNode({ __typename: "FutureNode" })).toBeNull();
@@ -148,37 +139,31 @@ describe("closed enum parsing", () => {
     baseRefName: "main",
     state: "OPEN",
     mergedAt: null,
-    isDraft: false,
+    isDraft: false
   };
 
   it("accepts mergeStateStatus CONFLICTING", () => {
     expect(
-      parsePullRequest(
-        { ...rawPullRequest, mergeStateStatus: "CONFLICTING" },
-        context
-      ).mergeStateStatus
+      parsePullRequest({ ...rawPullRequest, mergeStateStatus: "CONFLICTING" }, context)
+        .mergeStateStatus
     ).toBe("CONFLICTING");
   });
 
   it("reads gh's empty reviewDecision as no decision rather than a parse failure", () => {
     expect(
-      parsePullRequest({ ...rawPullRequest, reviewDecision: "" }, context)
-        .reviewDecision
+      parsePullRequest({ ...rawPullRequest, reviewDecision: "" }, context).reviewDecision
     ).toBeNull();
   });
 
   it("still rejects an unknown reviewDecision", () => {
-    expect(() =>
-      parsePullRequest({ ...rawPullRequest, reviewDecision: "MAYBE" }, context)
-    ).toThrow(WatcherQueryError);
+    expect(() => parsePullRequest({ ...rawPullRequest, reviewDecision: "MAYBE" }, context)).toThrow(
+      WatcherQueryError
+    );
   });
 
   it("rejects unknown enum values as retryable errors carrying the raw value", () => {
     try {
-      parsePullRequest(
-        { ...rawPullRequest, mergeStateStatus: "FUTURE_STATE" },
-        context
-      );
+      parsePullRequest({ ...rawPullRequest, mergeStateStatus: "FUTURE_STATE" }, context);
       throw new Error("expected parser to throw");
     } catch (error) {
       expect(error).toBeInstanceOf(WatcherQueryError);
@@ -186,7 +171,7 @@ describe("closed enum parsing", () => {
       expect(error.failure).toMatchObject({
         kind: "missing-key",
         retryable: true,
-        rawValue: '"FUTURE_STATE"',
+        rawValue: '"FUTURE_STATE"'
       });
     }
   });
@@ -209,10 +194,10 @@ it("annotates Bugbot threads with distinct review-pass counts", () => {
                       createdAt: "now",
                       path: "a.ts",
                       line: 1,
-                      author: { login: "bugbot" },
-                    },
-                  ],
-                },
+                      author: { login: "bugbot" }
+                    }
+                  ]
+                }
               },
               {
                 id: "two",
@@ -224,10 +209,10 @@ it("annotates Bugbot threads with distinct review-pass counts", () => {
                       createdAt: "now",
                       path: null,
                       line: null,
-                      author: { login: "cursor" },
-                    },
-                  ],
-                },
+                      author: { login: "cursor" }
+                    }
+                  ]
+                }
               },
               {
                 id: "resolved",
@@ -239,16 +224,16 @@ it("annotates Bugbot threads with distinct review-pass counts", () => {
                       createdAt: "now",
                       path: null,
                       line: null,
-                      author: { login: "bugbot" },
-                    },
-                  ],
-                },
-              },
-            ],
-          },
-        },
-      },
-    },
+                      author: { login: "bugbot" }
+                    }
+                  ]
+                }
+              }
+            ]
+          }
+        }
+      }
+    }
   };
   const threads = parseReviewThreads(response);
   expect(threads).toHaveLength(2);
@@ -264,7 +249,7 @@ describe("context and stack discovery", () => {
         reader,
         owner: "explicit",
         repo: "repo",
-        pr: context.number,
+        pr: context.number
       })
     ).toEqual({ owner: "explicit", repo: "repo", number: context.number });
     expect(reader.calls).toEqual([]);
@@ -277,7 +262,7 @@ describe("context and stack discovery", () => {
         reader,
         owner: null,
         repo: null,
-        pr: context.number,
+        pr: context.number
       })
     ).toEqual({ owner: "local", repo: "checkout", number: context.number });
     expect(reader.calls).toEqual(["originRepo"]);
@@ -288,18 +273,18 @@ describe("context and stack discovery", () => {
       {
         number: parsePrNumber(41),
         headRefName: "base-feature",
-        baseRefName: "main",
+        baseRefName: "main"
       },
       {
         number: context.number,
         headRefName: "feature",
-        baseRefName: "base-feature",
+        baseRefName: "base-feature"
       },
       {
         number: parsePrNumber(43),
         headRefName: "upstack",
-        baseRefName: "feature",
-      },
+        baseRefName: "feature"
+      }
     ]);
     expect(ordered.map((item) => Number(item.number))).toEqual([41, 42, 43]);
   });

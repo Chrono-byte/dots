@@ -37,3 +37,6 @@ export AI_GATEWAY_API_KEY='vck_8V8fLFoK5GTNwCGmQoKZdON1sE9cljCCzss0NcR9RGVpmXlqc
 
 # Unity CLI
 case ":${PATH}:" in *:"$HOME/.local/bin":*) ;; *) export PATH="$HOME/.local/bin:$PATH" ;; esac
+
+# Pi
+export PATH="/home/chrono/.pi/agent/bin:$PATH"

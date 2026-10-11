@@ -1,0 +1,13 @@
+{
+  "ignorePatterns": ["node_modules/", "bun.lock"],
+  "useTabs": false,
+  "trailingComma": "none",
+  "overrides": [
+    {
+      "files": ["*.mjs"],
+      "options": {
+        "useTabs": true
+      }
+    }
+  ]
+}

@@ -1,13 +1,5 @@
 import { afterEach, describe, expect, it } from "bun:test";
-import {
-  chmod,
-  mkdir,
-  mkdtemp,
-  readFile,
-  readdir,
-  rm,
-  writeFile,
-} from "node:fs/promises";
+import { chmod, mkdir, mkdtemp, readFile, readdir, rm, writeFile } from "node:fs/promises";
 import { realpathSync } from "node:fs";
 import { tmpdir } from "node:os";
 import { join } from "node:path";
@@ -17,7 +9,7 @@ import {
   openStore,
   parseVerdict,
   type OpenStoreOptions,
-  type Store,
+  type Store
 } from "./store.ts";
 
 const SCRIPT = join(import.meta.dir, "orch.ts");
@@ -36,10 +28,7 @@ async function makeDirectory(): Promise<string> {
   return directory;
 }
 
-function useStore(
-  directory: string,
-  options?: OpenStoreOptions
-): Store {
+function useStore(directory: string, options?: OpenStoreOptions): Store {
   const store = openStore(directory, options);
   handles.push(store);
   return store;
@@ -55,18 +44,10 @@ async function initializedStore(): Promise<{
   return { directory, store };
 }
 
-function git({
-  args,
-  repo,
-}: {
-  args: readonly string[];
-  repo: string;
-}): string {
+function git({ args, repo }: { args: readonly string[]; repo: string }): string {
   const result = Bun.spawnSync(["git", "-C", repo, ...args]);
   if (result.exitCode !== 0) {
-    throw new Error(
-      `git ${args.join(" ")} failed: ${result.stderr.toString()}`
-    );
+    throw new Error(`git ${args.join(" ")} failed: ${result.stderr.toString()}`);
   }
   return result.stdout.toString().trim();
 }
@@ -98,14 +79,14 @@ async function makeGitStack(directory: string): Promise<{
     repo,
     mergedSha: git({ repo, args: ["rev-parse", "stack/merged"] }),
     closedSha: git({ repo, args: ["rev-parse", "stack/closed"] }),
-    openSha: git({ repo, args: ["rev-parse", "stack/open"] }),
+    openSha: git({ repo, args: ["rev-parse", "stack/open"] })
   };
 }
 
 async function withFakeGt<T>({
   directory,
   operation,
-  output,
+  output
 }: {
   directory: string;
   operation: (outputPath: string) => Promise<T>;
@@ -167,7 +148,7 @@ function runCli(
   return {
     code: result.exitCode,
     stdout: result.stdout.toString(),
-    stderr: result.stderr.toString(),
+    stderr: result.stderr.toString()
   };
 }
 
@@ -187,18 +168,11 @@ describe("Store", () => {
 
     expect(await store.init()).toEqual({ store: directory });
     const firstUnits = await readFile(join(directory, "units.tsv"), "utf8");
-    const firstLedger = await readFile(
-      join(directory, "ledger.tsv"),
-      "utf8"
-    );
+    const firstLedger = await readFile(join(directory, "ledger.tsv"), "utf8");
 
     expect(await store.init()).toEqual({ store: directory });
-    expect(await readFile(join(directory, "units.tsv"), "utf8")).toBe(
-      firstUnits
-    );
-    expect(await readFile(join(directory, "ledger.tsv"), "utf8")).toBe(
-      firstLedger
-    );
+    expect(await readFile(join(directory, "units.tsv"), "utf8")).toBe(firstUnits);
+    expect(await readFile(join(directory, "ledger.tsv"), "utf8")).toBe(firstLedger);
     expect((await readdir(directory)).sort()).toEqual([
       ".orch.lock",
       "frontier.json",
@@ -206,7 +180,7 @@ describe("Store", () => {
       "inbox",
       "ledger.tsv",
       "preferences.md",
-      "units.tsv",
+      "units.tsv"
     ]);
 
     await store.close();
@@ -220,19 +194,20 @@ describe("Store", () => {
       await store.units.add({
         id: "u1",
         track: "build",
-        brief: "briefs/u1.md",
+        brief: "briefs/u1.md"
       })
     ).toMatchObject({ id: "u1", state: "pending" });
-    expect(
-      await store.units.add({ id: "=SUM(A1)", track: "+build" })
-    ).toMatchObject({ id: "'=SUM(A1)", track: "'+build" });
+    expect(await store.units.add({ id: "=SUM(A1)", track: "+build" })).toMatchObject({
+      id: "'=SUM(A1)",
+      track: "'+build"
+    });
 
     const updated = await store.units.set({
       id: "u1",
       state: "done",
       branch: "poteto/u1",
       pr: 184530,
-      sha: "abc123",
+      sha: "abc123"
     });
     expect(updated).toEqual({
       id: "u1",
@@ -241,19 +216,17 @@ describe("Store", () => {
       branch: "poteto/u1",
       pr: "184530",
       sha: "abc123",
-      brief: "briefs/u1.md",
+      brief: "briefs/u1.md"
     });
     expect(await store.units.get("u1")).toEqual(updated);
-    expect(
-      await store.units.list({ state: "done", track: "build" })
-    ).toEqual([updated]);
+    expect(await store.units.list({ state: "done", track: "build" })).toEqual([updated]);
     expect(await store.units.counts()).toEqual({ done: 1, pending: 1 });
-    await expect(
-      store.units.add({ id: "u1", track: "build" })
-    ).rejects.toThrow("unit u1 already exists");
-    await expect(
-      store.units.set({ id: "missing", state: "done" })
-    ).rejects.toBeInstanceOf(NotFoundError);
+    await expect(store.units.add({ id: "u1", track: "build" })).rejects.toThrow(
+      "unit u1 already exists"
+    );
+    await expect(store.units.set({ id: "missing", state: "done" })).rejects.toBeInstanceOf(
+      NotFoundError
+    );
   });
 
   it("records, replaces, checks, and summarizes typed ledger verdicts", async () => {
@@ -270,8 +243,8 @@ describe("Store", () => {
           json: {
             pr: "184530",
             sha: "abc123",
-            verdict: "NOT-VERIFIED",
-          },
+            verdict: "NOT-VERIFIED"
+          }
         });
       }
     }
@@ -282,23 +255,21 @@ describe("Store", () => {
       sha: "abc123",
       verdict: "unit-test-verified",
       evidence: "reports/verify.md",
-      verifier: "sol",
+      verifier: "opus"
     });
-    expect(await store.ledger.check({ pr: 184530, sha: "abc123" })).toEqual(
-      recorded
-    );
+    expect(await store.ledger.check({ pr: 184530, sha: "abc123" })).toEqual(recorded);
     expect(await store.ledger.summary()).toEqual({
-      "unit-test-verified": 1,
+      "unit-test-verified": 1
     });
 
     await store.ledger.record({
       pr: 184530,
       sha: "abc123",
       verdict: "live-ui-verified",
-      evidence: "reports/live.md",
+      evidence: "reports/live.md"
     });
     expect(await store.ledger.summary()).toEqual({
-      "live-ui-verified": 1,
+      "live-ui-verified": 1
     });
   });
 
@@ -309,14 +280,14 @@ describe("Store", () => {
       agent: "worker-1",
       unit: "u1",
       status: "done",
-      report: "reports/u1.md",
+      report: "reports/u1.md"
     });
     expect(first.pointer).toMatchObject({ unit: "u1", status: "done" });
     expect(first.filename).toEndWith(".tsv");
     await store.inbox.push({
       agent: "worker-2",
       unit: "u2",
-      status: "failed",
+      status: "failed"
     });
 
     expect(await store.inbox.count()).toBe(2);
@@ -325,11 +296,9 @@ describe("Store", () => {
     expect(await store.inbox.drain()).toHaveLength(2);
     expect(await store.inbox.count()).toBe(0);
     expect(await readdir(join(directory, "inbox"))).toEqual([]);
-    expect(
-      (await readdir(directory)).filter((name) =>
-        name.startsWith(".inbox-drain-")
-      )
-    ).toEqual([]);
+    expect((await readdir(directory)).filter((name) => name.startsWith(".inbox-drain-"))).toEqual(
+      []
+    );
   });
 
   it("replaces a stale lock whose holder pid is dead", async () => {
@@ -340,11 +309,9 @@ describe("Store", () => {
 
     const stale: string[] = [];
     const recovered = useStore(directory, {
-      onStaleLock: (holder) => stale.push(holder),
+      onStaleLock: (holder) => stale.push(holder)
     });
-    expect(
-      await recovered.units.add({ id: "u1", track: "build" })
-    ).toMatchObject({ id: "u1" });
+    expect(await recovered.units.add({ id: "u1", track: "build" })).toMatchObject({ id: "u1" });
     expect(stale).toEqual([String(exited.pid)]);
     await recovered.close();
     expect(await readdir(directory)).not.toContain(".orch.lock");
@@ -356,18 +323,16 @@ describe("Store", () => {
     await writeFile(join(directory, ".orch.lock"), `${process.pid}\n`);
 
     const blocked = useStore(directory);
-    await expect(
-      blocked.units.add({ id: "u1", track: "build" })
-    ).rejects.toThrow(`store lock held by pid ${process.pid}`);
+    await expect(blocked.units.add({ id: "u1", track: "build" })).rejects.toThrow(
+      `store lock held by pid ${process.pid}`
+    );
 
     const stolen: string[] = [];
     const forced = useStore(directory, {
       force: true,
-      onLockStolen: (holder) => stolen.push(holder),
+      onLockStolen: (holder) => stolen.push(holder)
     });
-    expect(
-      await forced.units.add({ id: "u1", track: "build" })
-    ).toMatchObject({ id: "u1" });
+    expect(await forced.units.add({ id: "u1", track: "build" })).toMatchObject({ id: "u1" });
     expect(stolen).toEqual([String(process.pid)]);
     await forced.close();
     expect(await readdir(directory)).not.toContain(".orch.lock");
@@ -381,12 +346,13 @@ describe("Store", () => {
         id: "release",
         question: "Ship now?",
         options: "ship,wait",
-        defaultAnswer: "wait",
+        defaultAnswer: "wait"
       })
     ).toMatchObject({ kind: "open", id: "release" });
-    expect(
-      await store.standing.add({ line: "Never force push." })
-    ).toEqual({ number: 1, line: "Never force push." });
+    expect(await store.standing.add({ line: "Never force push." })).toEqual({
+      number: 1,
+      line: "Never force push."
+    });
 
     const first = await store.status.render();
     expect(first.changed).toBe("first render");
@@ -396,14 +362,13 @@ describe("Store", () => {
     );
     expect((await store.status.render()).changed).toBe("no derived changes");
 
-    expect(
-      await store.gates.resolve({ id: "release", answer: "ship" })
-    ).toMatchObject({ kind: "resolved", answer: "ship" });
+    expect(await store.gates.resolve({ id: "release", answer: "ship" })).toMatchObject({
+      kind: "resolved",
+      answer: "ship"
+    });
     expect((await store.status.render()).changed).toBe("open gates 1->0");
     expect(await store.gates.list()).toEqual([]);
-    expect(await store.standing.show()).toEqual([
-      { number: 1, line: "Never force push." },
-    ]);
+    expect(await store.standing.show()).toEqual([{ number: 1, line: "Never force push." }]);
   });
 
   it("resolves the ordered Graphite frontier and validates an optional pin", async () => {
@@ -426,28 +391,28 @@ describe("Store", () => {
               pr: 10,
               branches: "stack/merged",
               sha: stack.mergedSha,
-              state: "MERGED",
+              state: "MERGED"
             },
             {
               pr: 13,
               branches: "stack/closed",
               sha: stack.closedSha,
-              state: "CLOSED",
+              state: "CLOSED"
             },
             {
               pr: 11,
               branches: "stack/open",
               sha: stack.openSha,
-              state: "OPEN",
-            },
+              state: "OPEN"
+            }
           ],
-          lowestUnmerged: 11,
+          lowestUnmerged: 11
         });
         expect(
           (
             await store.frontier.set({
               repo: stack.repo,
-              prs: [10, 13, 11],
+              prs: [10, 13, 11]
             })
           ).generation
         ).toBe(2);
@@ -455,26 +420,22 @@ describe("Store", () => {
         await expect(
           store.frontier.set({
             repo: stack.repo,
-            prs: [10, 11, 12],
+            prs: [10, 11, 12]
           })
-        ).rejects.toThrow(
-          "frontier pin mismatch: missing from gt: 12; extra in gt: 13"
-        );
+        ).rejects.toThrow("frontier pin mismatch: missing from gt: 12; extra in gt: 13");
         await expect(
           store.frontier.set({
             repo: stack.repo,
-            prs: [13, 10, 11],
+            prs: [13, 10, 11]
           })
-        ).rejects.toThrow(
-          "frontier pin mismatch: order differs: expected 13,10,11; gt 10,13,11"
-        );
+        ).rejects.toThrow("frontier pin mismatch: order differs: expected 13,10,11; gt 10,13,11");
         await expect(
           store.frontier.set({
             repo: stack.repo,
-            prs: [10, 10],
+            prs: [10, 10]
           })
         ).rejects.toThrow("--prs must not contain duplicates");
-      },
+      }
     });
   });
 
@@ -486,12 +447,10 @@ describe("Store", () => {
       directory,
       output: "◯ main\nthis line is not Graphite output\n",
       operation: async () => {
-        await expect(
-          store.frontier.set({ repo: stack.repo })
-        ).rejects.toThrow(
+        await expect(store.frontier.set({ repo: stack.repo })).rejects.toThrow(
           'gt log short output has an unparseable line 2: "this line is not Graphite output"'
         );
-      },
+      }
     });
   });
 
@@ -499,34 +458,24 @@ describe("Store", () => {
     const { directory, store } = await initializedStore();
 
     await writeFile(join(directory, "units.tsv"), "wrong\n");
-    await expect(store.units.list()).rejects.toThrow(
-      "units.tsv has an invalid header"
-    );
+    await expect(store.units.list()).rejects.toThrow("units.tsv has an invalid header");
     await writeFile(
       join(directory, "units.tsv"),
       "id\ttrack\tstate\tbranch\tpr\tsha\tbrief\nshort\trow\n"
     );
-    await expect(store.units.list()).rejects.toThrow(
-      "units.tsv has a malformed row"
-    );
+    await expect(store.units.list()).rejects.toThrow("units.tsv has a malformed row");
 
     await writeFile(
       join(directory, "ledger.tsv"),
       "pr\tsha\tverdict\tevidence\tverifier\tts\n1\tsha\tinvalid\treport\tme\tnow\n"
     );
-    await expect(store.ledger.summary()).rejects.toThrow(
-      "ledger.tsv has invalid verdict invalid"
-    );
+    await expect(store.ledger.summary()).rejects.toThrow("ledger.tsv has invalid verdict invalid");
 
     await writeFile(join(directory, "frontier.json"), '{"generation":"1"}\n');
-    await expect(store.frontier.show()).rejects.toThrow(
-      "frontier.json has an invalid shape"
-    );
+    await expect(store.frontier.show()).rejects.toThrow("frontier.json has an invalid shape");
 
     await writeFile(join(directory, "inbox", "bad.tsv"), "too\tshort\n");
-    await expect(store.inbox.peek()).rejects.toThrow(
-      "inbox pointer bad.tsv is malformed"
-    );
+    await expect(store.inbox.peek()).rejects.toThrow("inbox pointer bad.tsv is malformed");
   });
 
   it("rejects operations after close", async () => {
@@ -561,10 +510,7 @@ describe("orch CLI", () => {
     const env = { ...process.env, ORCH_STORE: directory };
     expect(runCli(["init"], env).code).toBe(0);
 
-    const added = runCli(
-      ["unit", "add", "u1", "--track", "build", "--json"],
-      env
-    );
+    const added = runCli(["unit", "add", "u1", "--track", "build", "--json"], env);
     expect(added.code).toBe(0);
     expect(JSON.parse(added.stdout)).toEqual({
       id: "u1",
@@ -573,7 +519,7 @@ describe("orch CLI", () => {
       branch: "",
       pr: "",
       sha: "",
-      brief: "",
+      brief: ""
     });
   });
 
@@ -581,36 +527,15 @@ describe("orch CLI", () => {
     const directory = await makeDirectory();
     expect(runCli(["--store", directory, "init"]).code).toBe(0);
 
-    const missingRepo = runCli([
-      "--store",
-      directory,
-      "frontier",
-      "set",
-    ]);
+    const missingRepo = runCli(["--store", directory, "frontier", "set"]);
     expect(missingRepo.code).toBe(1);
-    expect(missingRepo.stderr).toContain(
-      "set --repo <dir> or ORCH_REPO"
-    );
+    expect(missingRepo.stderr).toContain("set --repo <dir> or ORCH_REPO");
 
-    const userError = runCli([
-      "--store",
-      directory,
-      "unit",
-      "add",
-      "",
-      "--track",
-      "build",
-    ]);
+    const userError = runCli(["--store", directory, "unit", "add", "", "--track", "build"]);
     expect(userError.code).toBe(1);
     expect(userError.stderr).toContain("unit id must not be empty");
 
-    const missingUnit = runCli([
-      "--store",
-      directory,
-      "unit",
-      "get",
-      "missing",
-    ]);
+    const missingUnit = runCli(["--store", directory, "unit", "get", "missing"]);
     expect(missingUnit.code).toBe(2);
     expect(missingUnit.stderr).toContain("unit missing not found");
 
@@ -621,13 +546,13 @@ describe("orch CLI", () => {
       "ledger",
       "check",
       "184530",
-      "abc123",
+      "abc123"
     ]);
     expect(missingLedger.code).toBe(2);
     expect(JSON.parse(missingLedger.stdout)).toEqual({
       pr: "184530",
       sha: "abc123",
-      verdict: "NOT-VERIFIED",
+      verdict: "NOT-VERIFIED"
     });
     expect(missingLedger.stderr).toBe("");
   });

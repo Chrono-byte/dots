@@ -1,18 +1,12 @@
 import { parsePrNumber } from "./types.ts";
-import type {
-  CiClean,
-  GitHubMergeAllowed,
-  PrContext,
-  ReadyPr,
-  TerminalVerdict,
-} from "./types.ts";
+import type { CiClean, GitHubMergeAllowed, PrContext, ReadyPr, TerminalVerdict } from "./types.ts";
 
 type ReadyVerdict = Extract<TerminalVerdict, { readonly kind: "READY" }>;
 
 const context = {
   owner: "octocat",
   repo: "hello-world",
-  number: parsePrNumber(123),
+  number: parsePrNumber(123)
 } satisfies PrContext;
 const cleanCi = {
   kind: "ci-clean",
@@ -24,8 +18,8 @@ const cleanCi = {
       reportedState: "SUCCESS",
       description: "",
       link: "",
-      workflow: "",
-    },
+      workflow: ""
+    }
   ],
   failed: [],
   pending: [],
@@ -34,8 +28,8 @@ const cleanCi = {
     kind: "allowed",
     basis: "merge-state",
     mergeStateStatus: "CLEAN",
-    headRollupState: "SUCCESS",
-  },
+    headRollupState: "SUCCESS"
+  }
 } satisfies CiClean;
 const readyPr = {
   kind: "ready-pr",
@@ -47,9 +41,9 @@ const readyPr = {
     gate: {
       state: "OPEN",
       reviewDecision: "APPROVED",
-      draft: "not-draft",
-    },
-  },
+      draft: "not-draft"
+    }
+  }
 } satisfies ReadyPr;
 const ready = {
   schemaVersion: 1,
@@ -59,7 +53,7 @@ const ready = {
   kind: "READY",
   terminal: true,
   exitCode: 0,
-  scope: { kind: "single", pr: readyPr },
+  scope: { kind: "single", pr: readyPr }
 } satisfies ReadyVerdict;
 
 void ready;
@@ -70,7 +64,7 @@ const refused = {
   kind: "allowed",
   basis: "rollup",
   mergeStateStatus: "BLOCKED",
-  headRollupState: "FAILURE",
+  headRollupState: "FAILURE"
 } as const;
 
 // @ts-expect-error BLOCKED with a failing rollup is a refusal, not an allowance.

@@ -1,0 +1,12 @@
+{
+  "repository": "https://github.com/cursor/plugins",
+  "path": "pstack",
+  "commit": "9d76bcab133aefcccb16121d7be874e6aa823729",
+  "version": "0.15.17",
+  "previous_commit": "e43c7ee26e0038c6c1fa8380dd34ce86ff94cb2a",
+  "harnesses": [
+    "codex",
+    "pi"
+  ],
+  "notes": "Shared files with harness-specific invocation, delegation, model, and session adaptations."
+}

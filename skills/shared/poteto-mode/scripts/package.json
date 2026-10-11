@@ -4,13 +4,18 @@
   "type": "module",
   "scripts": {
     "test": "bun test orch watch-pr",
-    "typecheck": "tsc --project watch-pr/tsconfig.json --noEmit --strict"
+    "typecheck": "tsc --project watch-pr/tsconfig.json --noEmit --strict",
+    "lint": "oxlint .",
+    "format": "oxfmt --config .oxfmtrc.json --write .",
+    "format:check": "oxfmt --config .oxfmtrc.json --check ."
   },
   "dependencies": {
     "commander": "14.0.0"
   },
   "devDependencies": {
     "bun-types": "latest",
+    "oxfmt": "^0.72.0",
+    "oxlint": "^1.87.0",
     "typescript": "latest"
   }
 }
