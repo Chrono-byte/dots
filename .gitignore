@@ -1,4 +1,3 @@
-# OS files
 .DS_Store
 Thumbs.db
 *.swp
@@ -6,40 +5,31 @@ Thumbs.db
 *~
 .#*
 
-# Editor files
 .idea/
 .vscode/
 .vim/
 .swapfile
 
-# Temporary files
 *.tmp
 *.temp
 *.log
 .codex
 
-# Backup files
 *.bak
 *.backup
 
-# Node modules (if configs contain web stuff)
 node_modules/
 
-# Python cache
 __pycache__/
 *.pyc
 
-# System files
 .directory
 desktop.ini
 
-# Codex-managed built-in skills
 /codex/skills/.system/
 
-# The harness views share the helper dependency directory through symlinks.
 !/codex/skills/poteto-mode/scripts/node_modules
 !/pi/skills/poteto-mode/scripts/node_modules
 
-# Machine-local shell secrets
 /.zshrc.secrets
 /zsh/.zshrc.secrets

@@ -56,7 +56,6 @@ trap 'rm -f "$config_tmp"' EXIT HUP INT TERM
 } > "$config_tmp"
 
 /usr/bin/ssh -G -F "$config_tmp" git@forgejo.disilla.org >/dev/null
-# Run interactively so the passphrase goes directly to Apple's ssh-add.
 /usr/bin/ssh-add --apple-use-keychain "$key_path"
 
 if [ -f "$config_path" ] && ! cmp -s "$config_path" "$config_tmp"; then
@@ -64,7 +63,6 @@ if [ -f "$config_path" ] && ! cmp -s "$config_path" "$config_tmp"; then
   cp -p "$config_path" "$backup_path"
   printf 'Backed up SSH configuration to %s\n' "$backup_path"
 fi
-# Preserve the destination if the configuration is managed through a symlink.
 cat "$config_tmp" > "$config_path"
 echo 'Keychain configured for GitHub and Forgejo.'
 echo 'Verify with: ssh -T git@forgejo.disilla.org'

@@ -128,7 +128,6 @@ Item {
 
     var query = searchText.slice(4).trim()
 
-    // folder browsing mode
     if (query.startsWith("/") || query.startsWith("~")) {
       var resolvedQuery = query.replace(/^~/, root.homeDir)
       var hasTrailingSlash = resolvedQuery.endsWith("/")
@@ -215,7 +214,6 @@ Item {
       return searchResults
     }
 
-    // recent projects mode
     var filtered = query === "" ? root.projects : root.projects.filter(function(p) {
       return p.name.toLowerCase().indexOf(query.toLowerCase()) !== -1
           || p.path.toLowerCase().indexOf(query.toLowerCase()) !== -1

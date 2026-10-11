@@ -1,8 +1,3 @@
-/**
- * Calls Cloudflare's siteverify endpoint. One retry on transient (5xx + network)
- * failures, with a tight timeout. Returns the upstream JSON unmodified plus
- * Worker metadata.
- */
 
 import { SiteverifyError } from './errors.js';
 import type { Env, SiteverifyRequest, SiteverifyResponse } from './types.js';
@@ -17,11 +12,6 @@ export interface ValidateResult {
 	durationMs: number;
 }
 
-/**
- * Validate a Turnstile token against Cloudflare's siteverify endpoint.
- *
- * @throws SiteverifyError on Worker-level failures (missing secret, unreachable upstream, timeout)
- */
 export async function validate(req: SiteverifyRequest, env: Env, workerVersion: string): Promise<ValidateResult> {
 	if (!env.TURNSTILE_SECRET_KEY) {
 		throw new SiteverifyError(500, 'missing-input-secret', 'TURNSTILE_SECRET_KEY not configured');
@@ -48,9 +38,6 @@ export async function validate(req: SiteverifyRequest, env: Env, workerVersion: 
 					duration_ms: durationMs,
 					worker_version: workerVersion,
 				};
-				// Hostname-mismatch defense. If the customer set EXPECTED_HOSTNAME,
-				// reject responses whose hostname doesn't match — defends against
-				// cross-site token replay even if a token leaks.
 				if (data.success && env.EXPECTED_HOSTNAME && data.hostname && data.hostname !== env.EXPECTED_HOSTNAME) {
 					const rejected: SiteverifyResponse = {
 						...data,
@@ -62,8 +49,6 @@ export async function validate(req: SiteverifyRequest, env: Env, workerVersion: 
 				return { response: data, upstreamStatus: result.status, durationMs };
 			}
 			if (!RETRY_ON_STATUSES.has(result.status) || attempt === 1) {
-				// Don't retry on 4xx, return the upstream body as-is so customers
-				// see exactly what siteverify said.
 				const data = (await result.json().catch(() => ({}))) as Partial<SiteverifyResponse>;
 				const response: SiteverifyResponse = {
 					success: false,
@@ -73,7 +58,6 @@ export async function validate(req: SiteverifyRequest, env: Env, workerVersion: 
 				};
 				return { response, upstreamStatus: result.status, durationMs };
 			}
-			// 5xx + first attempt: retry
 		} catch (err) {
 			lastErr = err;
 			if (attempt === 1) break;

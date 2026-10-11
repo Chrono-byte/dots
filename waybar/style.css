@@ -1,4 +1,3 @@
-* {
   border: none;
   border-radius: 999px;
   font-family: "SF Mono", "SF Pro Display", sans-serif;
@@ -9,7 +8,6 @@
 
 window#waybar {
   background: rgba(31, 32, 35, 0.999);
-  /*border-bottom: 1px solid #2f3136;*/
   color: #f6f5f4;
 }
 

@@ -1,19 +1,4 @@
 #!/usr/bin/env bash
-# Creates a Turnstile widget via the Cloudflare API.
-#
-# Reads:
-#   $CLOUDFLARE_API_TOKEN (required)
-#
-# Args:
-#   --account-id <id>        Cloudflare account ID
-#   --name <name>            Widget name (e.g. "myproject (Spin)")
-#   --domains <a,b,c>        Comma-separated domain list (include localhost,127.0.0.1)
-#   --mode <managed|invisible|non-interactive>  Default: managed
-#
-# Outputs JSON to stdout. Exit 0 on success, 1 on failure. Diagnostics on stderr.
-#   ok:    {"status":"ok","sitekey":"<key>","secret":"<secret>"}
-#   error: {"status":"error","code":<code>,"message":"<msg>"}
-#     code 10000 → token lacks Account.Turnstile:Edit
 
 set -uo pipefail
 

@@ -58,14 +58,12 @@ Item {
         opacity: 1.0
       }
 
-      // Show details when not in compact mode and there's something to show
       ColumnLayout {
         visible: !(mainInstance?.compactMode ?? false) && (mainInstance?.tailscaleRunning ?? false) && ((mainInstance?.showIpAddress ?? false) || (mainInstance?.showPeerCount ?? false))
         spacing: 2
         Layout.leftMargin: Style.marginXS
         Layout.rightMargin: Style.marginS
 
-        // IP Address
         NText {
           visible: (mainInstance?.showIpAddress ?? false) && (mainInstance?.tailscaleIp ?? false)
           text: mainInstance?.tailscaleIp || ""
@@ -74,7 +72,6 @@ Item {
           font.family: Settings.data.ui.fontFixed
         }
 
-        // Peer count
         NText {
           visible: mainInstance?.showPeerCount ?? false
           text: (mainInstance?.peerCount || 0) + " " + pluginApi?.tr("panel.peers")

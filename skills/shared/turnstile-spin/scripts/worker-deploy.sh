@@ -1,21 +1,4 @@
 #!/usr/bin/env bash
-# Deploys the managed siteverify Worker template to the user's account
-# and sets TURNSTILE_SECRET_KEY as a Worker secret.
-#
-# Reads:
-#   $CLOUDFLARE_API_TOKEN (required)
-#   $WIDGET_SECRET        (required; secret captured from widget-create.sh)
-#
-# Args:
-#   --name <worker-name>   Base name; appends a hash suffix if taken
-#   --deploy-dir <path>    Where to extract the template. Default: /tmp/turnstile-siteverify-deploy
-#
-# Outputs JSON. Exit 0 on success, non-zero on failure.
-#   ok:            {"status":"ok","worker_url":"<url>","worker_name":"<name>"}
-#   conflict:      {"status":"error","reason":"name_conflict_after_retry"}
-#   deploy_failed: {"status":"error","reason":"deploy_failed"}
-#   set_secret:    {"status":"error","reason":"set_secret_failed","worker_name":"<name>"}
-#   url_parse:     {"status":"error","reason":"url_parse_failed","worker_name":"<name>"}
 
 set -uo pipefail
 
@@ -38,8 +21,6 @@ deploy() {
   local target_name="$1"
   rm -rf "$DEPLOY_DIR"
   npx --yes degit cloudflare/skills/skills/turnstile-spin/templates/worker "$DEPLOY_DIR" >/dev/null 2>&1
-  # Capture both streams. Wrangler prints the success URL and version ID on
-  # stdout; progress indicators on stderr. Capturing only stderr loses the URL.
   (cd "$DEPLOY_DIR" && npx wrangler deploy --name "$target_name") >"$deploy_log" 2>&1
 }
 
@@ -62,9 +43,6 @@ if ! deploy "$NAME"; then
   fi
 fi
 
-# Set the secret. Use `echo` (not `printf '%s'`); wrangler secret put expects
-# newline-terminated stdin; printf without a trailing newline lands an empty
-# secret in the runtime even though wrangler reports success.
 secret_log=$(mktemp)
 set_secret() {
   echo "$WIDGET_SECRET" | (cd "$DEPLOY_DIR" && npx wrangler secret put TURNSTILE_SECRET_KEY --name "$NAME") >"$secret_log" 2>&1
@@ -81,9 +59,6 @@ fi
 rm -f "$secret_log"
 sleep 5
 
-# Extract the deployed URL. Try workers.dev first, then any https URL in the
-# log that is not the well-known cloudflare.com host (custom domain deploys
-# and Workers for Platforms don't always land at a workers.dev hostname).
 worker_url=$(grep -oE 'https://[a-zA-Z0-9._-]+\.workers\.dev' "$deploy_log" | head -1)
 if [ -z "$worker_url" ]; then
   worker_url=$(grep -oE 'https://[a-zA-Z0-9.-]+(/[^[:space:]]*)?' "$deploy_log" \

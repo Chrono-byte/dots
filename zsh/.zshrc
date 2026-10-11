@@ -1,9 +1,6 @@
 zmodload zsh/zprof
 
-# flux hook
-# flux remote check 2>&1
 
-# Plugins
 plugins=(
   git
   fnm
@@ -18,25 +15,19 @@ plugins=(
 
 source "$HOME/.zshrc.common"
 
-# Linux/GNU-specific aliases.
 alias ls='ls --color=auto'
 alias grep='grep --color=auto'
 alias fgrep='fgrep --color=auto'
 alias egrep='egrep --color=auto'
 alias oc-clean-models="rm $HOME/.local/state/opencode/model.json $HOME/.cache/opencode/models.json"
 
-# zprof
 
-# Vite+ bin (https://viteplus.dev)
 . "$HOME/.vite-plus/env"
 
-# Optional machine-local secrets. This file is not managed by Flux.
 if [[ -r "$HOME/.zshrc.secrets" ]]; then
   source "$HOME/.zshrc.secrets"
 fi
 
-# Unity CLI
 case ":${PATH}:" in *:"$HOME/.local/bin":*) ;; *) export PATH="$HOME/.local/bin:$PATH" ;; esac
 
-# Pi
 export PATH="/home/chrono/.pi/agent/bin:$PATH"

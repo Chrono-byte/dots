@@ -15,7 +15,6 @@ Item {
     }
   }
 
-  // Watch for settings changes (when pluginSettings object is replaced)
   property var settingsWatcher: pluginApi?.pluginSettings
   onSettingsWatcherChanged: {
     if (settingsWatcher) {
@@ -63,8 +62,6 @@ Item {
   property var _realPeerList: []
   property var exitNodeStatus: null
 
-  // Dev/testing: override the peer list with a short mock to reproduce few-device layouts.
-  // Toggle via: qs -c noctalia-shell ipc call plugin:tailscale setMockPeers
   property bool useMockData: false
   readonly property var mockPeerList: [
     {
@@ -111,15 +108,12 @@ Item {
 
   readonly property var peerList: useMockData ? mockPeerList : _realPeerList
 
-  // Helper to filter IPv4 addresses from Tailscale (100.x.x.x range)
   function filterIPv4(ips) {
     if (!ips || !ips.length)
       return [];
     return ips.filter(ip => ip.startsWith("100."));
   }
 
-  // Some devices (e.g. Android) report "localhost" as their HostName.
-  // In that case, derive a meaningful name from the first label of DNSName.
   function resolveHostName(hostName, dnsName) {
     if (hostName && hostName.toLowerCase() !== "localhost")
       return hostName;
@@ -129,8 +123,6 @@ Item {
     return label || hostName;
   }
 
-  // Extract the Tailscale short name from DNSName (e.g. "tp-g6.tail68e513.ts.net." → "tp-g6").
-  // This is what `tailscale file cp` and other commands expect as a target.
   function tailscaleName(dnsName) {
     if (!dnsName) return ""
     return dnsName.split(".")[0] || ""
@@ -170,25 +162,20 @@ Item {
             root.peerCount = 0;
             root._realPeerList = [];
             root.exitNodeStatus = null;
-            // Capture the pending authentication URL exposed by the daemon.
             var newAuthUrl = data.AuthURL || "";
             root.authUrl = newAuthUrl;
-            // If a login attempt is in progress and the daemon has surfaced a
-            // URL that differs from the one cached at click-time, it means the
-            // URL was regenerated (fresh) — open it immediately.
-            if (root._loginInProgress
-                && !root._loginUrlOpened
+            if (root._awaitingFreshAuthUrl
+                && !root._authUrlOpenedForLogin
                 && newAuthUrl.length > 0
                 && newAuthUrl !== root._preLoginAuthUrl) {
-              root._openAuthUrl(newAuthUrl);
+              root._openAuthUrlOnce(newAuthUrl);
             }
           } else if (root.tailscaleRunning && data.Self && data.Self.TailscaleIPs && data.Self.TailscaleIPs.length > 0) {
             root.tailscaleIp = filterIPv4(data.Self.TailscaleIPs)[0] || data.Self.TailscaleIPs[0];
             root.tailscaleStatus = "Connected";
             root.authUrl = "";
-            // Login flow settled — reset flags so the next attempt starts clean
-            root._loginInProgress = false;
-            root._loginUrlOpened = false;
+            root._awaitingFreshAuthUrl = false;
+            root._authUrlOpenedForLogin = false;
             root._preLoginAuthUrl = "";
             loginTimeoutTimer.stop();
 
@@ -212,7 +199,6 @@ Item {
             root._realPeerList = peers;
             root.peerCount = peers.length;
 
-            // Extract exit node status if present
             if (data.ExitNodeStatus) {
               root.exitNodeStatus = {
                 "ID": data.ExitNodeStatus.ID || "",
@@ -275,28 +261,15 @@ Item {
 
   property string lastExitNodeAction: ""
 
-  // ─── Login flow state ────────────────────────────────────────────────────
-  // A login attempt is tracked across two asynchronous sources that may deliver
-  // a fresh AuthURL: (1) stdout/stderr of `tailscale up` and (2) the periodic
-  // `tailscale status --json` poll. Whichever arrives first wins; the other is
-  // deduped via `_loginUrlOpened`.
-  property bool _loginUrlOpened: false
-  property bool _loginInProgress: false
-  // Snapshot of authUrl taken at click-time. Used to detect when the daemon
-  // has regenerated the URL so we never open a stale/expired one.
+  property bool _authUrlOpenedForLogin: false
+  property bool _awaitingFreshAuthUrl: false
   property string _preLoginAuthUrl: ""
 
-  /**
-   * Open an authentication URL in the default browser, with anti-double-open
-   * protection. Resets login-flow state.
-   *
-   * @param {string} url Authentication URL to open
-   */
-  function _openAuthUrl(url) {
-    if (root._loginUrlOpened) return;
+  function _openAuthUrlOnce(url) {
+    if (root._authUrlOpenedForLogin) return;
     if (!url || url.length === 0) return;
-    root._loginUrlOpened = true;
-    root._loginInProgress = false;
+    root._authUrlOpenedForLogin = true;
+    root._awaitingFreshAuthUrl = false;
     loginTimeoutTimer.stop();
     Logger.d("Tailscale", "Opening auth URL: " + url);
     Qt.openUrlExternally(url);
@@ -307,20 +280,17 @@ Item {
     );
   }
 
-  // Safety net: if no fresh AuthURL surfaces within 10s after a login click,
-  // either open whatever is cached (best effort) or show an error toast.
   Timer {
     id: loginTimeoutTimer
     interval: 10000
     repeat: false
     onTriggered: {
-      if (!root._loginInProgress || root._loginUrlOpened) return;
-      root._loginInProgress = false;
+      if (!root._awaitingFreshAuthUrl || root._authUrlOpenedForLogin) return;
+      root._awaitingFreshAuthUrl = false;
       Logger.w("Tailscale", "Login timeout: no fresh AuthURL received within 10s");
       if (root.authUrl && root.authUrl.length > 0) {
-        // Last resort: open the cached URL (may be the stale one)
         Logger.w("Tailscale", "Falling back to cached (possibly stale) AuthURL");
-        root._openAuthUrl(root.authUrl);
+        root._openAuthUrlOnce(root.authUrl);
       } else {
         ToastService.showError(
           pluginApi?.tr("toast.title"),
@@ -335,12 +305,12 @@ Item {
     id: loginProcess
 
     function _handleLine(data) {
-      if (root._loginUrlOpened) return;
+      if (root._authUrlOpenedForLogin) return;
       var line = data.trim();
       Logger.d("Tailscale", "Login output: " + line);
       var urlMatch = line.match(/https?:\/\/\S+/);
       if (urlMatch) {
-        root._openAuthUrl(urlMatch[0]);
+        root._openAuthUrlOnce(urlMatch[0]);
       }
     }
 
@@ -353,20 +323,15 @@ Item {
     }
 
     onExited: function (exitCode, exitStatus) {
-      Logger.d("Tailscale", "Login exited (code " + exitCode + "), urlOpened=" + root._loginUrlOpened);
-      if (exitCode !== 0 && !root._loginUrlOpened) {
+      Logger.d("Tailscale", "Login exited (code " + exitCode + "), urlOpened=" + root._authUrlOpenedForLogin);
+      if (exitCode !== 0 && !root._authUrlOpenedForLogin) {
         Logger.e("Tailscale", "tailscale up failed (exit " + exitCode + "), waiting on status poll for fresh AuthURL");
       }
-      // Do NOT reset _loginUrlOpened here — the status poll may still deliver
-      // the fresh URL after process exit. The flag is reset by _openAuthUrl
-      // and by the login-state transitions in statusProcess.
       statusDelayTimer.start();
     }
   }
 
-  // ─── Taildrop state ──────────────────────────────────────────────────────
 
-  // Possible values: "idle", "receiving", "sending", "error"
   property string taildropState: "idle"
   property string taildropMessage: ""
 
@@ -384,11 +349,8 @@ Item {
 
   readonly property string taildropDownloadDir: _expandPath(pluginApi?.pluginSettings?.taildropDownloadDir || pluginApi?.manifest?.metadata?.defaultSettings?.taildropDownloadDir || "~/Downloads")
 
-  // "operator" = no priv-esc (requires `sudo tailscale set --operator $USER`)
-  // "pkexec"   = use pkexec to run as root
   readonly property string taildropReceiveMode: pluginApi?.pluginSettings?.taildropReceiveMode || pluginApi?.manifest?.metadata?.defaultSettings?.taildropReceiveMode || "operator"
 
-  // Snapshot of filenames in download dir taken just before receive starts
   property var _preScanFiles: []
 
   Process {
@@ -404,7 +366,6 @@ Item {
         root._preScanFiles = [];
       }
       Logger.d("Tailscale", "Pre-scan: " + root._preScanFiles.length + " files");
-      // Now start the actual receive
       var dir = root.taildropDownloadDir;
       if (root.taildropReceiveMode === "pkexec") {
         taildropReceiveProcess.command = ["pkexec", "tailscale", "file", "get", dir];
@@ -462,7 +423,6 @@ Item {
       if (exitCode === 0) {
         root.taildropState = "idle";
         root.taildropMessage = "";
-        // Scan post-receive to diff new files
         postScanProcess.command = ["ls", "-1", root.taildropDownloadDir];
         postScanProcess.running = true;
         Logger.i("Tailscale", "Taildrop receive completed, running post-scan");
@@ -516,12 +476,10 @@ Item {
       Logger.w("Tailscale", "Already receiving");
       return;
     }
-    // Pre-scan the download dir; the scan's onExited launches the actual receive
     preScanProcess.command = ["ls", "-1", root.taildropDownloadDir];
     preScanProcess.running = true;
   }
 
-  // files: array of local file paths, peerTarget: "hostname:" or "ip:"
   function sendFilesViaTaildrop(files, peerTarget) {
     if (!root.tailscaleInstalled || !root.tailscaleRunning) {
       Logger.w("Tailscale", "Cannot send: tailscale not running");
@@ -609,20 +567,6 @@ Item {
     toggleProcess.running = true;
   }
 
-  /**
-   * Trigger the Tailscale authentication flow.
-   *
-   * @description
-   * Always runs `tailscale up --force-reauth` to force the daemon to generate
-   * a fresh AuthURL (any cached one may be expired). The fresh URL is then
-   * opened from whichever channel delivers it first:
-   *  - stdout/stderr of `tailscale up` (parsed by loginProcess)
-   *  - the next `tailscale status --json` poll (via statusProcess)
-   * Deduped through `_openAuthUrl` / `_loginUrlOpened`.
-   *
-   * Guard: no-op when not in NeedsLogin state to avoid disconnecting an
-   * already-authenticated session.
-   */
   function loginTailscale() {
     if (!root.tailscaleInstalled)
       return;
@@ -631,13 +575,10 @@ Item {
       return;
     }
 
-    // Start a fresh login attempt
-    root._loginInProgress = true;
-    root._loginUrlOpened = false;
+    root._awaitingFreshAuthUrl = true;
+    root._authUrlOpenedForLogin = false;
     root._preLoginAuthUrl = root.authUrl;
 
-    // --force-reauth forces the daemon to regenerate the AuthURL even if a
-    // (possibly expired) one is still cached in its session state.
     var loginServer = pluginApi?.pluginSettings?.loginServer || "";
     var cmd = ["tailscale", "up", "--accept-routes", "--force-reauth"];
     if (loginServer.trim() !== "") {
@@ -646,7 +587,6 @@ Item {
     loginProcess.command = cmd;
     loginProcess.running = true;
 
-    // Arm the safety-net timeout and kick an early status refresh
     loginTimeoutTimer.restart();
     statusDelayTimer.start();
   }
@@ -703,13 +643,10 @@ Item {
       loginTailscale();
     }
 
-    // Taildrop IPC: qs ipc call plugin:tailscale receive
     function receive() {
       startTaildropReceive();
     }
 
-    // Dev/testing: toggle mock peer list to reproduce few-device layouts.
-    // Usage: qs -c noctalia-shell ipc call plugin:tailscale setMockPeers
     function setMockPeers() {
       root.useMockData = !root.useMockData;
       Logger.d("Tailscale", "Mock peer data " + (root.useMockData ? "enabled" : "disabled"));

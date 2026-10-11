@@ -21,7 +21,6 @@ Item {
     Quickshell.execDetached(["sh", "-c", "printf '%s' '" + escaped + "' | wl-copy"])
   }
 
-  // Shared state for context menu
   property var selectedPeer: null
   property var selectedPeerDelegate: null
   property var sendTargetPeer: null
@@ -33,7 +32,6 @@ Item {
     initialPath: Quickshell.env("HOME") ?? ""
     onAccepted: function(paths) {
       if (!mainInstance || !root.sendTargetPeer || paths.length === 0) return
-      // Use Tailscale DNS name (not system HostName) to avoid LAN DNS resolution
       var tsName = mainInstance.tailscaleName(root.sendTargetPeer.DNSName)
       var target = (tsName || root.sendTargetPeer.TailscaleIPs[0]) + ":"
       mainInstance.sendFilesViaTaildrop(paths, target)
@@ -279,14 +277,12 @@ Item {
     if (!mainInstance?.peerList) return []
     var peers = mainInstance.peerList.slice()
     
-    // Filter out disconnected peers if setting is enabled
     if (hideDisconnected) {
       peers = peers.filter(function(peer) {
         return peer.Online === true
       })
     }
 
-    // Filter out Mullvad exit nodes if setting is enabled
     if (hideMullvadExitNodes) {
       peers = peers.filter(function(peer) {
         return !(peer.DNSName || "").endsWith(".mullvad.ts.net.")
@@ -294,10 +290,8 @@ Item {
     }
     
     peers.sort(function(a, b) {
-      // Online peers first
       if (a.Online && !b.Online) return -1
       if (!a.Online && b.Online) return 1
-      // Then alphabetically by hostname
       var nameA = (a.HostName || normalizeFqdn(a.DNSName) || "").toLowerCase()
       var nameB = (b.HostName || normalizeFqdn(b.DNSName) || "").toLowerCase()
       return nameA.localeCompare(nameB)
@@ -387,7 +381,6 @@ Item {
             }
           }
 
-          // Exit node status
           Rectangle {
             Layout.fillWidth: true
             Layout.preferredHeight: exitNodeLayout.implicitHeight + Style.marginS * 2
@@ -437,7 +430,6 @@ Item {
             }
           }
 
-          // Warning banner for missing terminal configuration
           Rectangle {
             Layout.fillWidth: true
             Layout.preferredHeight: terminalWarningLayout.implicitHeight + Style.marginM * 2
@@ -609,7 +601,6 @@ Item {
         }
       }
 
-      // Taildrop receive button
       NButton {
         Layout.fillWidth: true
         visible: (mainInstance?.tailscaleRunning ?? false) && (mainInstance?.taildropEnabled ?? true)

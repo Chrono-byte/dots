@@ -1,15 +1,3 @@
-/**
- * tests/3 — Deploy-to-clean-account smoke test.
- *
- * Asserts that a clean `wrangler deploy` of this Worker into an empty account
- * completes in under 4 seconds (Spin's MVP target). This test is gated on
- * CLOUDFLARE_API_TOKEN + CLOUDFLARE_ACCOUNT_ID being set in the environment;
- * skipped in normal CI runs.
- *
- * Run with:
- *   CLOUDFLARE_API_TOKEN=... CLOUDFLARE_ACCOUNT_ID=... \
- *     npx vitest run test/deploy.test.ts
- */
 
 import { describe, expect, it } from 'vitest';
 import { execSync, spawnSync } from 'node:child_process';
@@ -45,7 +33,6 @@ describeIfCreds('deploy-to-clean-account speed', () => {
 	}, 30_000);
 
 	it('cleans up the test Worker', () => {
-		// Idempotent — if the dry-run never produced a real Worker, this is a no-op.
 		execSync(`npx wrangler delete --name ${workerName} 2>&1 || true`, { stdio: 'ignore' });
 	});
 });

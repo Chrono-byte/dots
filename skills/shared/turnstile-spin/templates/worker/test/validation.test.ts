@@ -1,19 +1,3 @@
-/**
- * tests/4 — Validation surface.
- *
- * Tests the endpoints that Turnstile Spin's wizard relies on during its
- * post-deploy validation step:
- *
- *   - GET /health           returns {ok: true, version}
- *   - GET /                 returns the same shape
- *   - POST / with dummy     returns a structured error (success: false, error-codes,
- *                           _worker metadata) rather than a bare 500
- *   - hostname mismatch     when EXPECTED_HOSTNAME is set
- *
- * These match the assertions in the wizard's Step 7. If any of these fail,
- * the wizard's validation step will fail, and the customer will see a
- * misleading "setup complete" message followed by a broken integration.
- */
 
 import { describe, expect, it, vi, beforeEach, afterEach } from 'vitest';
 import worker, { WORKER_VERSION } from '../src/index.js';
@@ -81,7 +65,6 @@ describe('validation surface — dummy siteverify returns structured error', () 
 			_worker?: { duration_ms: number; worker_version: string };
 		};
 
-		// Wizard's required assertions:
 		expect(body.success).toBe(false);
 		expect(Array.isArray(body['error-codes'])).toBe(true);
 		expect(body['error-codes'].length).toBeGreaterThan(0);
@@ -91,11 +74,9 @@ describe('validation surface — dummy siteverify returns structured error', () 
 	});
 
 	it('returns structured error on Worker-level failure (no bare 500)', async () => {
-		// Force the upstream to be unreachable.
 		vi.spyOn(globalThis, 'fetch').mockImplementationOnce(async () => {
 			throw new TypeError('network unreachable');
 		});
-		// Disable the retry loop by also failing the second attempt.
 		vi.spyOn(globalThis, 'fetch').mockImplementationOnce(async () => {
 			throw new TypeError('network unreachable');
 		});
@@ -109,7 +90,6 @@ describe('validation surface — dummy siteverify returns structured error', () 
 			ENV,
 		);
 
-		// Worker-level failure still returns a *parseable* error body.
 		const body = (await res.json()) as { success: boolean; 'error-codes': string[]; _worker?: unknown };
 		expect(body.success).toBe(false);
 		expect(body['error-codes'][0]).toBe('upstream-unreachable');
@@ -150,7 +130,6 @@ describe('validation surface — telemetry marker passthrough', () => {
 	afterEach(() => vi.restoreAllMocks());
 
 	it('passes data-action through to siteverify and surfaces it in the response', async () => {
-		// Upstream echoes the action field. Spin marker should survive.
 		vi.spyOn(globalThis, 'fetch').mockImplementationOnce(async () => {
 			return new Response(
 				JSON.stringify({
@@ -180,8 +159,6 @@ describe('validation surface — telemetry marker passthrough', () => {
 
 describe('validation surface — post-deploy form is reachable', () => {
 	it('GET /post-deploy returns 404 when ASSETS binding is missing (test env)', async () => {
-		// In the unit-test env we don't have the ASSETS binding wired, so the
-		// handler falls through. The real Worker has the binding from wrangler.toml.
 		const res = await worker.fetch(new Request('https://w/post-deploy'), ENV);
 		expect(res.status).toBe(404);
 	});

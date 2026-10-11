@@ -45,7 +45,6 @@ for mode, path in tracked_entries(ROOT):
         repo = ROOT
         entries = [(mode, path)]
     for entry_mode, entry_path in entries:
-        # Dependencies are installed locally; these links can be absent on a fresh clone.
         if entry_mode == "120000" and pathlib.Path(entry_path).name != "node_modules":
             link = repo / entry_path
             if not link.is_symlink() or not link.exists():

@@ -1,7 +1,3 @@
-/**
- * Unit tests for the Worker. These don't hit Cloudflare's real siteverify —
- * see integration.test.ts for that.
- */
 
 import { describe, expect, it, vi, beforeEach, afterEach } from 'vitest';
 import worker from '../src/index.js';
@@ -95,7 +91,6 @@ describe('POST / (siteverify proxy) — JSON body', () => {
 		expect(body.success).toBe(true);
 		expect(body._worker?.worker_version).toMatch(/^\d+\.\d+\.\d+$/);
 
-		// Verify it called the right upstream
 		expect(globalThis.fetch).toHaveBeenCalledOnce();
 		expect((globalThis.fetch as ReturnType<typeof vi.fn>).mock.calls[0]?.[0]).toBe(SITEVERIFY_URL);
 	});

@@ -1,7 +1,4 @@
-# Lazy-loaded completions and slow initialization
-# This file is loaded after the shell prompt appears to improve startup time
 
-# Tool completions (only load if commands exist)
 [[ -n $(command -v glab) ]] && eval "$(glab completion -s zsh 2>/dev/null || true)"
 [[ -n $(command -v flux) ]] && eval "$(flux completion zsh 2>/dev/null || true)"
 [[ -n $(command -v pnpm) ]] && eval "$(pnpm completion zsh 2>/dev/null || true)"
@@ -9,5 +6,4 @@
 [[ -n $(command -v bun) ]] && [ -s "$HOME/.bun/_bun" ] && source "$HOME/.bun/_bun"
 [[ -n $(command -v tailscale) ]] && [ -s "${fpath[1]}/_tailscale" ] && source "${fpath[1]}/_tailscale"
 [[ -n $(command -v fnm) ]] && eval "$(fnm completions --shell zsh 2>/dev/null || true)"
-# Zed does not ship zsh completions, so use generic file/path completion
 compdef _files zed

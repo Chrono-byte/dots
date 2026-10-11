@@ -67,23 +67,18 @@ files = [
 [tools.starship]
 files = [{ repo = "starship/starship.toml", dest = ".config/starship.toml" }]
 
-# Alacritty (Terminal emulator)
 [tools.alacritty]
 files = [{ repo = "alacritty/alacritty.toml", dest = ".config/alacritty/alacritty.toml" }]
 
-# Zed (Editor)
 [tools.zed]
 files = [{ repo = "zed/settings.json", dest = ".config/zed/settings.json" }]
 
-# Ghostty (Terminal emulator)
 [tools.ghostty]
 folders = [{ repo = "ghostty", dest = ".config/ghostty" }]
 
-# Neovim
 [tools.nvim]
 folders = [{ repo = "nvim", dest = ".config/nvim" }]
 
-# Codex (AI assistant)
 [tools.codex]
 files = [
   { repo = "codex/config.toml", dest = ".codex/config.toml", conditions = { os = ["linux"] } },
@@ -92,28 +87,21 @@ files = [
 ]
 folders = [{ repo = "codex/skills", dest = ".codex/skills" }]
 
-# Pi setup includes its own link to the shared skills view.
 [tools."pi/agent"]
 folders = [{ repo = "pi/agent", dest = ".pi/agent" }]
 
-# Niri (Window manager)
 [tools.niri]
 folders = [{ repo = "niri", dest = ".config/niri" }]
 
-# Noctalia (Desktop shell thing under Niri)
 [tools.noctalia]
 folders = [{ repo = "noctalia", dest = ".config/noctalia" }]
 
-# Mako (Notification daemon)
 [tools.mako]
 folders = [{ repo = "mako", dest = ".config/mako" }]
 
-# Fuzzel (Launcher)
 [tools.fuzzel]
 files = [{ repo = "fuzzel/fuzzel.ini", dest = ".config/fuzzel/fuzzel.ini" }]
 
-# Scripts for various utilities
-# Most of these are simple tools for tools under Niri.
 [tools.scripts]
 files = [
   { repo = "scripts/aiusage-account-backfill", dest = ".local/bin/aiusage-account-backfill", conditions = { os = ["linux"] } },
@@ -122,7 +110,6 @@ files = [
   { repo = "scripts/niri-dynamic-float", dest = ".local/bin/niri-dynamic-float" },
 ]
 
-# Background service that handles the Bitwarden floating window from Zen/Helium
 [tools.systemd]
 files = [
   { repo = "systemd/user/codex-cloud-usage.service", dest = ".config/systemd/user/codex-cloud-usage.service", conditions = { os = ["linux"] } },

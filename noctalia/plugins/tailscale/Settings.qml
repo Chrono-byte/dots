@@ -9,7 +9,6 @@ ColumnLayout {
 
   property var pluginApi: null
 
-  // Local state - initialized from saved settings or defaults
   property int editRefreshInterval:
     pluginApi?.pluginSettings?.refreshInterval ||
     pluginApi?.manifest?.metadata?.defaultSettings?.refreshInterval ||
@@ -82,7 +81,6 @@ ColumnLayout {
 
   spacing: Style.marginM
 
-  // Title section
   NText {
     text: pluginApi?.tr("settings.title")
     font.pointSize: Style.fontSizeXL
@@ -96,7 +94,6 @@ ColumnLayout {
     wrapMode: Text.Wrap
   }
 
-  // Refresh interval section
   NDivider {
     Layout.fillWidth: true
     Layout.topMargin: Style.marginM
@@ -117,7 +114,6 @@ ColumnLayout {
     onValueChanged: root.editRefreshInterval = value
   }
 
-  // Display options section
   NDivider {
     Layout.fillWidth: true
     Layout.topMargin: Style.marginM
@@ -190,7 +186,6 @@ ColumnLayout {
     onToggled: checked => root.editHideMullvadExitNodes = checked
   }
 
-  // Authentication section
   NDivider {
     Layout.fillWidth: true
     Layout.topMargin: Style.marginM
@@ -210,7 +205,6 @@ ColumnLayout {
     onTextChanged: root.editLoginServer = text
   }
 
-  // Terminal section
   NDivider {
     Layout.fillWidth: true
     Layout.topMargin: Style.marginM
@@ -253,7 +247,6 @@ ColumnLayout {
     onValueChanged: root.editPingCount = value
   }
 
-  // Peer action section
   NDivider {
     Layout.fillWidth: true
     Layout.topMargin: Style.marginM
@@ -279,7 +272,6 @@ ColumnLayout {
     onSelected: key => root.editDefaultPeerAction = key
   }
 
-  // Taildrop section
   NDivider {
     Layout.fillWidth: true
     Layout.topMargin: Style.marginM
@@ -321,7 +313,6 @@ ColumnLayout {
     onSelected: key => root.editTaildropReceiveMode = key
   }
 
-  // Save function - called by the dialog
   function saveSettings() {
     if (!pluginApi) {
       Logger.e("Tailscale", "Cannot save: pluginApi is null")

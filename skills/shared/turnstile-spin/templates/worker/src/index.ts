@@ -1,23 +1,3 @@
-/**
- * turnstile-siteverify — the managed siteverify backend for Turnstile Spin.
- *
- * A drop-in implementation of Cloudflare Turnstile server-side validation
- * built entirely on Workers. Customers deploy this Worker into their account
- * via Turnstile Spin (AI agent or Deploy-to-Cloudflare button) and point
- * their frontend at it.
- *
- * Accepts both `application/x-www-form-urlencoded` and `application/json`
- * bodies. Forwards the token to Cloudflare's siteverify endpoint using a
- * secret stored as a Worker secret. Emits structured logs visible in Workers
- * Observability.
- *
- * Endpoints:
- *   POST /              siteverify proxy (main entry point)
- *   POST /siteverify    alias of POST /
- *   GET  /health        health check, returns {ok: true, version}
- *   GET  /              same as /health
- *   GET  /post-deploy   the post-deploy form (served from public/)
- */
 
 import { SiteverifyError, errorResponse } from './errors.js';
 import { logSiteverify } from './observability.js';
@@ -52,10 +32,6 @@ async function parseBody(request: Request): Promise<SiteverifyRequest> {
 	if (contentType.includes('application/json')) {
 		const body = (await request.json()) as Record<string, unknown>;
 		return {
-			// `response` is accepted for compatibility with code migrated from reCAPTCHA/hCaptcha,
-			// whose backends POST {secret, response, remoteip}. Spin's Worker holds the secret,
-			// so callers should send {token} or {cf-turnstile-response}; we accept {response}
-			// too so migrated backends work without backend code changes.
 			token: String(body.token ?? body['cf-turnstile-response'] ?? body.response ?? ''),
 			remoteip: body.remoteip ? String(body.remoteip) : undefined,
 			idempotency_key: body.idempotency_key ? String(body.idempotency_key) : undefined,
@@ -94,7 +70,6 @@ async function handleSiteverify(request: Request, env: Env): Promise<Response> {
 			});
 			return jsonResponse(body, err.status, env);
 		}
-		// Body parse failure (malformed JSON, etc.)
 		const body = errorResponse('bad-request', Date.now() - startedAt, WORKER_VERSION);
 		logSiteverify('error', {
 			durationMs: Date.now() - startedAt,
@@ -105,7 +80,6 @@ async function handleSiteverify(request: Request, env: Env): Promise<Response> {
 		return jsonResponse(body, 400, env);
 	}
 
-	// Fall back to CF-Connecting-IP if customer didn't pass remoteip explicitly.
 	const remoteip = parsed.remoteip ?? request.headers.get('CF-Connecting-IP') ?? undefined;
 	const requestForValidate: SiteverifyRequest = { ...parsed, remoteip };
 
@@ -121,9 +95,6 @@ async function handleSiteverify(request: Request, env: Env): Promise<Response> {
 			idempotencyKeyPresent: !!parsed.idempotency_key,
 		});
 
-		// Per spec, return 200 even on validation failure — callers should check
-		// response.success, not the HTTP status. (Matches Cloudflare's own
-		// siteverify behavior; the Worker is a thin proxy.)
 		return jsonResponse(response, 200, env);
 	} catch (err) {
 		if (err instanceof SiteverifyError) {
@@ -172,9 +143,6 @@ export default {
 			return handleHealth(env);
 		}
 
-		// Post-deploy form (served from public/post-deploy.html via the ASSETS binding).
-		// The form prefills the Worker URL and lets a Deploy-button user create a widget
-		// without leaving the flow.
 		if (request.method === 'GET' && url.pathname === '/post-deploy') {
 			if (env.ASSETS) {
 				return env.ASSETS.fetch(new Request(new URL('/post-deploy.html', url.origin)));
