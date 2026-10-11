@@ -8,5 +8,15 @@
     "codex",
     "pi"
   ],
-  "notes": "Shared files with harness-specific invocation, delegation, model, and session adaptations."
+  "notes": "Shared files with harness-specific invocation, delegation, model, and session adaptations.",
+  "excluded_skills": [
+    "make-bot-ui"
+  ],
+  "excluded_playbooks": [
+    "orchestrate",
+    "autopilot-full",
+    "autopilot-stack",
+    "shipping",
+    "multi-phase-plan"
+  ]
 }

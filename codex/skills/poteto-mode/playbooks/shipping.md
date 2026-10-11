@@ -1,1 +1,0 @@
-../../../../skills/shared/poteto-mode/playbooks/shipping.md

@@ -65,11 +65,11 @@ The default answer is `$poteto-mode`, which runs most of the others when its ste
 | Know what a small diff could break outside itself | [`$blast-radius`](../blast-radius/SKILL.md) |
 | Settle types and module shape before code that crosses a function boundary | [`$architect`](../architect/SKILL.md) |
 | Get several attempts at one brief, merged into the best one | [`$arena`](../arena/SKILL.md) |
-| Run parallel checks over slices, or race workers, as cloud agents | [`$swarm`](../swarm/SKILL.md) |
+| Run parallel checks over slices, or race native subagents | [`$swarm`](../swarm/SKILL.md) |
 | Have different models review a diff and try to break it | [`$interrogate`](../interrogate/SKILL.md) |
 | Fix a bug test-first when a cheap local test exists | [`$tdd`](../tdd/SKILL.md) |
 | Apply TypeScript rules to `.ts` or `.tsx` work | [`$typescript-best-practices`](../typescript-best-practices/SKILL.md) |
-| Strip comments before review, using a reviewer that didn't write them | [`$no-comments`](../no-comments/SKILL.md) |
+| Review comments using a native reviewer and bundled rules | [`$no-comments`](../no-comments/SKILL.md) |
 | Clean AI tells out of prose | [`$unslop`](../unslop/SKILL.md) |
 | Write docs, an RFC, a README, a PR description, or a commit message to a standard | [`$technical-writing`](../technical-writing/SKILL.md) |
 | Hear the last reply again in plain words | [`$bro`](../bro/SKILL.md) |
@@ -82,7 +82,6 @@ The default answer is `$poteto-mode`, which runs most of the others when its ste
 | Turn their own working habits into a personal mode skill | [`$automate-me`](../automate-me/SKILL.md) |
 | Turn what a finished task taught into skill edits | [`$reflect`](../reflect/SKILL.md) |
 | Stop agents from repeating the same mistakes in this repo | [`$correct`](../correct/SKILL.md) |
-| Build a page whose buttons wake a Grok Bot over a webhook | [`$make-bot-ui`](../make-bot-ui/SKILL.md) |
 | Find their way around pstack | `$poteto-help` |
 
 If a skill directory next to this one is missing from the table, read its frontmatter and route by its description. The `principle-*` directories are covered under principles below.
@@ -94,28 +93,24 @@ Close calls:
 - `$architect` implements right after it settles the design. Add "with checkpoint" to review the design before it writes code.
 - `$interrogate` reviews the diff. `$blast-radius` looks for breakage outside the diff and proves the one fact that makes the change safe.
 - `$recall` rebuilds context across recent chats. `$ketchup` covers only this chat since the user's last message. Resuming one specific chat or branch is the Session pickup playbook.
-- `$figure-it-out` designs one rigorous run. The Orchestrate playbook runs a program that spans days and many PRs. The Autonomous run playbook drives one task to a finish condition.
+- `$figure-it-out` designs one rigorous run. The Autonomous run playbook drives one task to a finish condition.
 
 Not in pstack:
 
-- `/deslop`, `control-cli`, and `control-ui` ship in the `cursor-team-kit` plugin.
 - `/loop` and `/create-skill` are upstream Cursor features. Use supported scheduling tools and the installed skill-authoring conventions in this harness.
-- pstack has no `/orchestrate` skill. Orchestrate is a `$poteto-mode` playbook. If the slash menu shows `/orchestrate`, another plugin provides it.
 
 ## Playbooks and principles
 
 Playbooks are step lists inside `$poteto-mode`, not skills, so they have no slash command. Inside `$poteto-mode`, describing the task picks one, and these phrases name one directly:
 
 - "babysit this pr" or "check on pr 123" runs Babysit. It drives the PR to merge-ready and stops there. It doesn't merge unless the user asks to merge, land, or ship.
-- "land the stack" runs Shipping.
 - "take over this branch" runs Session pickup.
 - "pause safely" runs Pause safely.
-- "full autopilot on this queue" runs Autopilot-full. "stack them, don't ship" runs Autopilot-stack.
 - "run the eval playbook" runs Eval.
 
 Without `$poteto-mode`, a phrase such as "babysit this pr" can start another workflow for the same job instead. The Playbooks section of [`poteto-mode`](../poteto-mode/SKILL.md) lists every playbook and when it applies. [Guide page 6](https://github.com/cursor/plugins/blob/main/pstack/docs/guide/06-verify-and-ship.md) covers opening, babysitting, and landing a PR.
 
-pstack has no planning skill. Use the harness’s planning tools when available. For work that spans phases or stacked PRs, asking `$poteto-mode` for a plan runs the [Multi-phase plan playbook](../poteto-mode/playbooks/multi-phase-plan.md), which writes the plan and doesn't implement it. For a design question, the Prototype playbook or `$architect` settles it in code first.
+Use the harness’s planning tools to write a plan without implementing it. For a design question, the Prototype playbook or `$architect` settles it in code first.
 
 Principles are one-rule skills that `$poteto-mode` reads and cites in its replies. The user rarely invokes one. They steer with the names instead, as in "apply prove it works. show me the real output." Typing `/principle-<name>` still loads one on demand. [Guide page 8](https://github.com/cursor/plugins/blob/main/pstack/docs/guide/08-principles.md) lists them.
 
@@ -123,13 +118,13 @@ Principles are one-rule skills that `$poteto-mode` reads and cites in its replie
 
 | Symptom | Fix |
 |---|---|
-| The mode stopped applying after a few turns | It was started with Enter. Start it as a Custom Mode, or start each task with `$poteto-mode`. |
+| The mode stopped applying after a few turns | Start each task with `$poteto-mode`. |
 | A question got treated as the next step of the last task | Say "new task", or say the turn doesn't need the mode. |
 | A new model choice had no effect | The rule from `$setup-pstack` applies to new chats. Start one. |
 | Runs cost more than expected | See the cost paragraph under Get set up. |
 | A skill didn't load on its own | Only `$setup-pstack` loads from the user's words. The others load when the user types them or when `$poteto-mode` runs them, and it doesn't run every skill. |
-| Parallel agents overwrote each other | Give each agent its own worktree, or run them as cloud agents, which each get their own machine. |
-| An overnight run moved but finished nothing | `/loop` needs a check that can pass or fail, not a duration. See [guide page 7](https://github.com/cursor/plugins/blob/main/pstack/docs/guide/07-overnight.md). |
+| Parallel agents overwrote each other | Give each agent its own worktree and explicit file ownership. |
+| An overnight run moved but finished nothing | Use a supported watcher and a check that can pass or fail, rather than assuming a scheduling command exists. See [guide page 7](https://github.com/cursor/plugins/blob/main/pstack/docs/guide/07-overnight.md). |
 | The reply claims success from a green build | Ask for the real command, flow, stored value, or profile. That's the prove-it-works principle. |
 
 For a run that drifts, [`references/prompting.md`](references/prompting.md) has one-line steers. [Guide page 10](https://github.com/cursor/plugins/blob/main/pstack/docs/guide/10-recipes-and-pitfalls.md) has more pitfalls and the recipes worth copying.
