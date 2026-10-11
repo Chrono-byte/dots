@@ -1,0 +1,261 @@
+#!/usr/bin/python3
+"""Record reported Codex cloud usage for Tokscale; never estimate missing history."""
+import argparse
+import asyncio
+import fcntl
+import datetime as dt
+import json
+import math
+import os
+from pathlib import Path
+import re
+import sqlite3
+import sys
+
+HOME = Path.home()
+ROOT = Path(os.environ.get('AIUSAGE_STATE_DIR', HOME / '.local/state/aiusage'))
+EXPORT = Path(os.environ.get('AIUSAGE_CLOUD_DIR', HOME / '.local/share/aiusage/codex-cloud/sessions'))
+CODEX = Path(os.environ.get('CODEX_HOME', HOME / '.codex'))
+COUNTERS = {
+    'inputTokens': 'input_tokens', 'outputTokens': 'output_tokens',
+    'cachedInputTokens': 'cached_input_tokens',
+    'reasoningOutputTokens': 'reasoning_output_tokens', 'totalTokens': 'total_tokens',
+}
+
+
+def normalize_usage(value):
+    if not isinstance(value, dict):
+        raise ValueError('Missing reported usage')
+    result = {}
+    for source, target in COUNTERS.items():
+        count = value.get(source)
+        if (isinstance(count, bool) or not isinstance(count, (int, float))
+                or not math.isfinite(count) or count < 0 or count != int(count)):
+            raise ValueError('Invalid reported usage')
+        result[target] = int(count)
+    if result['cached_input_tokens'] > result['input_tokens']:
+        raise ValueError('Cached input exceeds input')
+    if result['total_tokens'] != result['input_tokens'] + result['output_tokens']:
+        raise ValueError('Inconsistent reported total')
+    if value.get('cacheWriteInputTokens', 0):
+        raise ValueError('Unsupported cache-write usage; refusing to lose counters')
+    return result
+
+
+class Recorder:
+    def __init__(self, root=ROOT, export=EXPORT):
+        root.mkdir(parents=True, exist_ok=True, mode=0o700)
+        export.mkdir(parents=True, exist_ok=True, mode=0o700)
+        self.export = export
+        self.local_threads = set()
+        self.db = sqlite3.connect(root / 'usage.sqlite')
+        self.db.execute('''CREATE TABLE IF NOT EXISTS samples (
+            thread TEXT NOT NULL, turn TEXT NOT NULL, fingerprint TEXT NOT NULL,
+            model TEXT NOT NULL, timestamp TEXT NOT NULL, usage TEXT NOT NULL,
+            PRIMARY KEY(thread, turn, fingerprint))''')
+        self.db.commit()
+        # Re-export committed state after a crash between commit and atomic export.
+        for (thread,) in self.db.execute('SELECT DISTINCT thread FROM samples'):
+            self.write_thread(thread)
+
+    def record(self, params, model, timestamp=None):
+        thread, turn = params.get('threadId', ''), params.get('turnId', '')
+        if not re.fullmatch(r'[a-zA-Z0-9-]{1,100}', thread) or not turn:
+            raise ValueError('Invalid event identity')
+        if not isinstance(model, str) or not model:
+            raise ValueError('Unknown model; event cannot be attributed')
+        if thread in self.local_threads:
+            return False
+        info = params.get('tokenUsage', {})
+        last = normalize_usage(info.get('last'))
+        total = normalize_usage(info.get('total'))
+        if not last['total_tokens']:
+            return False
+        fingerprint = json.dumps(total, sort_keys=True)
+        when = timestamp or dt.datetime.now(dt.timezone.utc).isoformat()
+        cursor = self.db.execute('INSERT OR IGNORE INTO samples VALUES (?,?,?,?,?,?)',
+                                 (thread, turn, fingerprint, model, when, json.dumps(last)))
+        self.db.commit()
+        if not cursor.rowcount:
+            return False
+        self.write_thread(thread)
+        return True
+
+    def write_thread(self, thread):
+        rows = self.db.execute('SELECT model,timestamp,usage FROM samples WHERE thread=? ORDER BY rowid', (thread,)).fetchall()
+        if not rows:
+            return
+        records = [{'type': 'session_meta', 'timestamp': rows[0][1], 'payload': {
+            'id': thread, 'source': 'exec', 'originator': 'aiusage-cloud',
+            'model_provider': 'openai', 'cwd': str(self.export.parent / 'Codex Cloud')}}]
+        for model, when, usage in rows:
+            records.append({'type': 'turn_context', 'timestamp': when, 'payload': {'model': model}})
+            records.append({'type': 'event_msg', 'timestamp': when, 'payload': {
+                'type': 'token_count', 'info': {'last_token_usage': json.loads(usage)}, 'rate_limits': None}})
+        target = self.export / (thread + '.jsonl')
+        temporary = target.with_suffix('.tmp')
+        temporary.write_text(''.join(json.dumps(row) + '\n' for row in records))
+        temporary.chmod(0o600)
+        temporary.replace(target)
+
+    def exclude_local_threads(self):
+        state = CODEX / 'state_5.sqlite'
+        if not state.exists():
+            return
+        try:
+            with sqlite3.connect(state.as_uri() + '?mode=ro', uri=True) as local:
+                self.local_threads = {row[0] for row in local.execute('SELECT id FROM threads')}
+            for identity in self.local_threads:
+                (self.export / (identity + '.jsonl')).unlink(missing_ok=True)
+        except sqlite3.Error:
+            raise RuntimeError('Cannot check for local overlap; refusing to duplicate usage')
+
+    def totals(self):
+        rows = self.db.execute('SELECT usage FROM samples').fetchall()
+        return {'responses': len(rows), 'tokens': sum(json.loads(r[0])['total_tokens'] for r in rows)}
+
+
+class Connection:
+    def __init__(self, socket, recorder):
+        self.socket, self.recorder = socket, recorder
+        self.pending, self.models, self.subscribed = {}, {}, set()
+        self.events = asyncio.Queue()
+        self.serial = 0
+
+    async def rpc(self, method, params=None):
+        self.serial += 1
+        identity = self.serial
+        future = asyncio.get_running_loop().create_future()
+        self.pending[identity] = future
+        try:
+            await self.socket.send(json.dumps({'id': identity, 'method': method, **({} if params is None else {'params': params})}))
+            return await asyncio.wait_for(future, 30)
+        finally:
+            self.pending.pop(identity, None)
+
+    async def receive(self):
+        try:
+            async for frame in self.socket:
+                message = json.loads(frame)
+                if message.get('id') in self.pending and ('result' in message or 'error' in message):
+                    future = self.pending[message['id']]
+                    if not future.done():
+                        if 'error' in message:
+                            future.set_exception(RuntimeError('Cloud request failed: ' + str(message['error'].get('code'))))
+                        else:
+                            future.set_result(message['result'])
+                elif message.get('method') in ['thread/tokenUsage/updated', 'thread/started', 'thread/settings/updated', 'turn/started']:
+                    await self.events.put(message)
+        finally:
+            for future in self.pending.values():
+                if not future.done():
+                    future.set_exception(ConnectionError('Cloud connection closed'))
+
+    async def refresh(self):
+        self.recorder.exclude_local_threads()
+        result = await self.rpc('thread/list', {'limit': 100, 'sortKey': 'updated_at', 'sortDirection': 'desc', 'archived': False})
+        for thread in result.get('data', []):
+            identity = thread['id']
+            if identity in self.recorder.local_threads:
+                continue
+            if thread.get('model'):
+                self.models[identity] = thread['model']
+            if identity not in self.subscribed:
+                resumed = await self.rpc('thread/resume', {'threadId': identity})
+                self.models[identity] = resumed.get('model') or thread.get('model')
+                self.subscribed.add(identity)
+
+    async def consume(self):
+        while True:
+            event = await self.events.get()
+            params = event.get('params', {})
+            identity = params.get('threadId')
+            if event['method'] == 'thread/started':
+                thread = params.get('thread', {})
+                if thread.get('model'):
+                    self.models[thread['id']] = thread['model']
+                continue
+            if event['method'] in ['turn/started', 'thread/settings/updated']:
+                if identity:
+                    result = await self.rpc('thread/read', {'threadId': identity, 'includeTurns': False})
+                    self.models[identity] = result.get('thread', {}).get('model')
+                continue
+            if identity in self.recorder.local_threads:
+                continue
+            if not self.models.get(identity):
+                result = await self.rpc('thread/read', {'threadId': identity, 'includeTurns': False})
+                self.models[identity] = result.get('thread', {}).get('model')
+            try:
+                self.recorder.record(params, self.models.get(identity))
+            except ValueError as error:
+                print(str(error) + ' (no usage recorded)', file=sys.stderr, flush=True)
+
+
+async def connected(recorder, once):
+    import websockets
+    tokens = json.loads((CODEX / 'auth.json').read_text())['tokens']
+    async with websockets.connect('wss://codex-cloud-backend.chatgpt.com/',
+        subprotocols=['codex-app-server', 'codex-client.desktop', 'openai-bearer.' + tokens['access_token']],
+        additional_headers={'X-OpenAI-Product-Sku': 'codex', 'ChatGPT-Account-Id': tokens['account_id']},
+        open_timeout=20, max_size=32 * 1024 * 1024) as socket:
+        connection = Connection(socket, recorder)
+        receiver = asyncio.create_task(connection.receive())
+        consumer = asyncio.create_task(connection.consume())
+        try:
+            await connection.rpc('initialize', {'clientInfo': {'name': 'aiusage', 'version': '0.1'}, 'capabilities': {'experimentalApi': True}})
+            await socket.send(json.dumps({'method': 'initialized'}))
+            await connection.refresh()
+            print(json.dumps({'status': 'connected', 'subscribedThreads': len(connection.subscribed), **recorder.totals()}), flush=True)
+            if once:
+                await asyncio.sleep(2)
+                return
+            while True:
+                await asyncio.sleep(30)
+                if receiver.done():
+                    await receiver
+                    raise ConnectionError('Cloud connection closed')
+                if consumer.done():
+                    await consumer
+                await connection.refresh()
+        finally:
+            for task in [receiver, consumer]:
+                task.cancel()
+            await asyncio.gather(receiver, consumer, return_exceptions=True)
+
+
+async def run(once):
+    ROOT.mkdir(parents=True, exist_ok=True, mode=0o700)
+    lock = (ROOT / 'recorder.lock').open('w')
+    try:
+        fcntl.flock(lock, fcntl.LOCK_EX | fcntl.LOCK_NB)
+    except BlockingIOError:
+        raise SystemExit('Cloud usage recorder is already running')
+    recorder = Recorder()
+    recorder.exclude_local_threads()
+    while True:
+        try:
+            await connected(recorder, once)
+            if once:
+                return
+        except Exception as error:
+            # Never log authentication or raw server frames.
+            print('Cloud usage connection unavailable (' + type(error).__name__ + ')', file=sys.stderr, flush=True)
+            if once:
+                raise SystemExit(1)
+            await asyncio.sleep(30)
+
+
+if __name__ == '__main__':
+    parser = argparse.ArgumentParser(description=__doc__)
+    parser.add_argument('--once', action='store_true', help='Validate the connection and subscriptions, then exit')
+    parser.add_argument('--status', action='store_true', help='Show recorded response and token counts')
+    args = parser.parse_args()
+    if args.status:
+        if not (ROOT / 'usage.sqlite').exists():
+            print(json.dumps({'responses': 0, 'tokens': 0}))
+        else:
+            with sqlite3.connect((ROOT / 'usage.sqlite').as_uri() + '?mode=ro', uri=True) as db:
+                rows = db.execute('SELECT usage FROM samples').fetchall()
+                print(json.dumps({'responses': len(rows), 'tokens': sum(json.loads(r[0])['total_tokens'] for r in rows)}))
+    else:
+        asyncio.run(run(args.once))

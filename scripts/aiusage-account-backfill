@@ -1,0 +1,272 @@
+#!/usr/bin/python3
+"""Fill daily Codex account gaps using explicitly estimated local model/token mixes."""
+import argparse
+import datetime as dt
+import fcntl
+import json
+import os
+from pathlib import Path
+import subprocess
+import sys
+
+HOME = Path.home()
+STATE = Path(os.environ.get('AIUSAGE_STATE_DIR', HOME / '.local/state/aiusage'))
+EXPORT = Path(os.environ.get('AIUSAGE_HISTORY_DIR', HOME / '.local/share/aiusage/codex-account-estimates/sessions'))
+LIVE = Path(os.environ.get('AIUSAGE_CLOUD_DIR', HOME / '.local/share/aiusage/codex-cloud/sessions'))
+FIELDS = ('input', 'output', 'cacheRead', 'reasoning')
+
+
+def apportion(total, weights):
+    """Largest-remainder allocation conserves the integer daily total exactly."""
+    denominator = sum(weights)
+    if total < 0 or not denominator or any(w < 0 for w in weights):
+        raise ValueError('Invalid allocation')
+    values = [total * weight // denominator for weight in weights]
+    remainders = [total * weight % denominator for weight in weights]
+    for index in sorted(range(len(weights)), key=lambda i: (-remainders[i], i))[:total - sum(values)]:
+        values[index] += 1
+    return values
+
+
+def is_model_candidate(row):
+    model = row.get('modelId', '')
+    return row.get('client') in ('pi', 'codex') and model.startswith(('gpt-', 'o1', 'o3', 'o4'))
+
+
+def overlaps_account(row):
+    providers = set(row.get('providerId', '').split(', '))
+    return row.get('client') == 'codex' or (row.get('client') == 'pi' and (providers & {'openai', 'openai-codex'} or is_model_candidate(row)))
+
+
+def tokens(row):
+    return sum(max(0, int(row.get('tokens', {}).get(k, 0))) for k in (*FIELDS, 'cacheWrite'))
+
+
+def plan(account, baseline):
+    observed = {day['date']: day.get('clients', []) for day in baseline.get('contributions', [])}
+    candidates = {day: [row for row in rows if is_model_candidate(row) and tokens(row) > 0] for day, rows in observed.items()}
+    candidates = {day: rows for day, rows in candidates.items() if rows}
+    buckets = sorted(account.get('dailyUsageBuckets') or [], key=lambda b: b['startDate'])
+    dates = [dt.date.fromisoformat(b['startDate']) for b in buckets]
+    if len(set(dates)) != len(dates):
+        raise ValueError('Duplicate account dates')
+    for bucket in buckets:
+        value = bucket['tokens']
+        if isinstance(value, bool) or not isinstance(value, int) or value < 0:
+            raise ValueError('Invalid account daily total')
+    if not dates:
+        return [], []
+    # The account and local day boundaries are not guaranteed to match. Subtract
+    # every measured day in the range, including zero-account dates and both
+    # neighboring days, before allocating any remaining historical estimate.
+    start = (min(dates) - dt.timedelta(days=1)).isoformat()
+    end = (max(dates) + dt.timedelta(days=1)).isoformat()
+    measured_period = sum(tokens(r) for day, entries in observed.items()
+                          if start <= day <= end for r in entries if overlaps_account(r))
+    account_total = sum(b['tokens'] for b in buckets)
+    budget = max(0, account_total - measured_period)
+    daily_weights = [max(0, b['tokens'] - sum(tokens(r) for r in observed.get(b['startDate'], [])
+                     if overlaps_account(r))) for b in buckets]
+    allocations = apportion(budget, daily_weights) if budget and sum(daily_weights) else [0] * len(buckets)
+    rows, audit = [], []
+    for bucket, reconciled_gap in zip(buckets, allocations):
+        date = bucket['startDate']
+        dt.date.fromisoformat(date)
+        reported = bucket['tokens']
+        if isinstance(reported, bool) or not isinstance(reported, int) or reported < 0:
+            raise ValueError('Invalid account daily total')
+        measured = sum(tokens(r) for r in observed.get(date, []) if overlaps_account(r))
+        daily_gap = max(0, reported - measured)
+        gap = reconciled_gap
+        info = {'date': date, 'accountTokens': reported, 'measuredOverlapTokens': measured, 'estimatedTokensAdded': 0, 'unreconciledDailyGap': daily_gap,
+                'reconciliation': {'accountTokens': account_total, 'measuredTokens': measured_period,
+                                   'estimateBudget': budget, 'measuredStartDate': start, 'measuredEndDate': end}}
+        if not gap:
+            info['reason'] = 'No remaining estimate after full-period reconciliation'
+            audit.append(info)
+            continue
+        # Never attribute an old day to a model seen only in newer local history.
+        eligible = sorted(day for day in candidates if day <= date)
+        if not eligible:
+            info['reason'] = 'No prior local model evidence; skipped'
+            audit.append(info)
+            continue
+        evidence_date = eligible[-1]
+        models = {}
+        model_costs = {}
+        for candidate in candidates[evidence_date]:
+            model = candidate['modelId']
+            model_costs[model] = model_costs.get(model, 0.0) + max(0.0, float(candidate.get('cost', 0)))
+            counts = models.setdefault(model, {key: 0 for key in FIELDS})
+            for key in FIELDS:
+                counts[key] += max(0, int(candidate.get('tokens', {}).get(key, 0)))
+        names = sorted(models)
+        model_weights = [sum(models[name].values()) for name in names]
+        if not sum(model_weights):
+            info['reason'] = 'No usable token mix; skipped'
+            audit.append(info)
+            continue
+        shares = apportion(gap, model_weights)
+        allocations = []
+        for model, share in zip(names, shares):
+            if not share:
+                continue
+            proportions = models[model]
+            breakdown = dict(zip(FIELDS, apportion(share, [proportions[key] for key in FIELDS])))
+            rows.append({'date': date, 'model': model, 'tokens': breakdown, 'totalTokens': share, 'estimatedCost': share * model_costs[model] / sum(models[model].values()), 'evidenceDate': evidence_date})
+            allocations.append({'model': model, 'tokens': share})
+        info.update({'estimatedTokensAdded': gap, 'evidenceDate': evidence_date, 'evidenceAgeDays': (dt.date.fromisoformat(date) - dt.date.fromisoformat(evidence_date)).days, 'models': allocations})
+        audit.append(info)
+    return rows, audit
+
+
+def atomic_json(path, data):
+    text = json.dumps(data, indent=2) + '\n'
+    if path.exists() and path.read_text() == text:
+        return
+    temporary = path.with_suffix('.tmp')
+    temporary.write_text(text)
+    temporary.chmod(0o600)
+    temporary.replace(path)
+
+
+def export_rows(rows, audit, export=EXPORT, state=STATE):
+    export.mkdir(parents=True, exist_ok=True, mode=0o700)
+    grouped = {}
+    for row in rows:
+        grouped.setdefault(row['date'], []).append(row)
+    keep = set()
+    for date, entries in grouped.items():
+        identity = 'estimated-account-history-' + date
+        timestamp = date + 'T12:00:00Z'
+        records = [{'type': 'session_meta', 'timestamp': timestamp, 'payload': {
+            'id': identity, 'source': 'exec', 'originator': 'aiusage-account-history-estimated',
+            'model_provider': 'openai', 'cwd': str(export.parent / 'Estimated Codex account history')}}]
+        for entry in entries:
+            counts = entry['tokens']
+            usage = {'input_tokens': counts['input'] + counts['cacheRead'],
+                     'cached_input_tokens': counts['cacheRead'],
+                     'output_tokens': counts['output'] + counts['reasoning'],
+                     'reasoning_output_tokens': counts['reasoning'], 'total_tokens': entry['totalTokens']}
+            records.append({'type': 'turn_context', 'timestamp': timestamp, 'payload': {'model': 'estimated: ' + entry['model']}})
+            records.append({'type': 'event_msg', 'timestamp': timestamp, 'payload': {
+                'type': 'token_count', 'info': {'last_token_usage': usage}, 'rate_limits': None,
+                'estimated': True, 'estimate_source': 'full-period account excess; inferred date/model/token mix',
+                'inferred_model': entry['model'], 'evidence_date': entry['evidenceDate']}})
+        target = export / (identity + '.jsonl')
+        keep.add(target.name)
+        text = ''.join(json.dumps(record) + '\n' for record in records)
+        if not target.exists() or target.read_text() != text:
+            temporary = target.with_suffix('.tmp')
+            temporary.write_text(text)
+            temporary.chmod(0o600)
+            temporary.replace(target)
+    # Reconciliation replaces prior estimates, including days that now have complete logs.
+    for old in export.glob('estimated-account-history-*.jsonl'):
+        if old.name not in keep:
+            old.unlink()
+    report = {'method': 'Full-period account excess after subtracting measured Codex/OpenAI Pi usage including boundary days; daily positive gaps used only as allocation weights; estimates, not measured responses',
+              'reconciliation': audit[0]['reconciliation'] if audit else None,
+              'estimatedTokensAdded': sum(r['totalTokens'] for r in rows),
+              'estimatedDays': len(grouped), 'estimatedCost': sum(r['estimatedCost'] for r in rows),
+              'costMethod': 'Observed model cost per token from local evidence; approximate, not billed cost',
+              'accountDays': len(audit), 'days': audit}
+    atomic_json(state / 'account-history-audit.json', report)
+    return report
+
+
+def capture(command, environment):
+    result = subprocess.run(command, env=environment, capture_output=True, text=True, timeout=120)
+    if result.returncode:
+        raise RuntimeError('Tokscale data fetch failed')
+    return json.loads(result.stdout)
+
+
+def configure_estimate_prices(rows, environment):
+    """Price only estimate labels using observed blended costs; preserve real-model pricing."""
+    config = Path(environment.get('TOKSCALE_CONFIG_DIR') or
+                  str(Path(environment.get('XDG_CONFIG_HOME', HOME / '.config')) / 'tokscale'))
+    target = config / 'custom-pricing.json'
+    data = json.loads(target.read_text()) if target.exists() else {'models': {}}
+    models = data.setdefault('models', {})
+    if not isinstance(models, dict):
+        raise ValueError('Invalid custom pricing models')
+    grouped = {}
+    for row in rows:
+        item = grouped.setdefault(row['model'], {'tokens': 0, 'cost': 0.0})
+        item['tokens'] += row['totalTokens']
+        item['cost'] += row['estimatedCost']
+    prices = {}
+    for model, values in grouped.items():
+        # A daily aggregate is not one request. Use the evidence's blended
+        # cost per token, with no fabricated context-size tier or cache rate.
+        rate = values['cost'] / values['tokens']
+        prices['estimated: ' + model] = {
+            'input_cost_per_token': rate, 'output_cost_per_token': rate,
+            'cache_read_input_token_cost': rate, 'cache_creation_input_token_cost': rate,
+            'notes': 'Estimated account history; observed blended cost per token, not an actual bill'}
+    # Only touch generated entries; preserve unrelated user overrides.
+    for name in list(models):
+        if name.startswith('estimated: ') and isinstance(models[name], dict) and models[name].get('notes', '').startswith('Estimated account history;'):
+            del models[name]
+    models.update(prices)
+    config.mkdir(parents=True, exist_ok=True)
+    atomic_json(target, data)
+    # Presentation aliases merge inferred and measured usage into one model.
+    # Keep raw IDs distinct so estimated pricing cannot affect measured rows.
+    settings_path = config / 'settings.json'
+    settings = json.loads(settings_path.read_text()) if settings_path.exists() else {}
+    aliases = settings.setdefault('modelAliases', {})
+    if not isinstance(aliases, dict):
+        raise ValueError('Invalid model aliases')
+    aliases.update({'estimated: ' + model: model for model in grouped})
+    atomic_json(settings_path, settings)
+
+
+def run(args):
+    STATE.mkdir(parents=True, exist_ok=True, mode=0o700)
+    with (STATE / 'backfill.lock').open('w') as lock:
+        fcntl.flock(lock, fcntl.LOCK_EX)
+        snapshot = STATE / 'account-history-snapshot.json'
+        if args.account:
+            account = json.loads(Path(args.account).read_text())
+            if account.get('dailyUsageBuckets') is None:
+                raise ValueError('Missing daily account buckets')
+            atomic_json(snapshot, account)
+        elif args.refresh or not snapshot.exists():
+            account = capture(['bunx', 'tokscale@latest', 'codex', 'activity', '--json'], os.environ.copy())['codexAccountActivity']
+            if account.get('status') != 'available' or account.get('dailyUsageBuckets') is None:
+                raise RuntimeError('Account history unavailable; keeping previous estimates')
+            atomic_json(snapshot, account)
+        else:
+            account = json.loads(snapshot.read_text())
+        if args.baseline:
+            baseline = json.loads(Path(args.baseline).read_text())
+        else:
+            environment = os.environ.copy()
+            roots = [entry for entry in environment.get('TOKSCALE_EXTRA_DIRS', '').split(',') if entry and entry != 'codex:' + str(EXPORT)]
+            if 'codex:' + str(LIVE) not in roots:
+                roots.append('codex:' + str(LIVE))
+            environment['TOKSCALE_EXTRA_DIRS'] = ','.join(roots)
+            baseline = capture(['bunx', 'tokscale@latest', 'graph', '--client', 'codex', '--client', 'pi'], environment)
+        rows, audit = plan(account, baseline)
+        if args.dry_run:
+            print(json.dumps({'estimatedTokensAdded': sum(r['totalTokens'] for r in rows), 'estimatedDays': len({r['date'] for r in rows}), 'accountDays': len(audit)}))
+            return
+        configure_estimate_prices(rows, os.environ.copy())
+        atomic_json(STATE / 'account-history-measured.json', baseline)
+        report = export_rows(rows, audit)
+        print(json.dumps({key: report[key] for key in ['estimatedTokensAdded', 'estimatedDays', 'accountDays']}))
+
+
+if __name__ == '__main__':
+    parser = argparse.ArgumentParser(description=__doc__)
+    parser.add_argument('--account', help='Use an existing daily account export')
+    parser.add_argument('--baseline', help='Use a measured-only Tokscale graph export')
+    parser.add_argument('--refresh', action='store_true', help='Refresh account totals before reconciling')
+    parser.add_argument('--dry-run', action='store_true')
+    try:
+        run(parser.parse_args())
+    except (OSError, ValueError, KeyError, RuntimeError, subprocess.TimeoutExpired) as error:
+        print('History reconciliation failed (' + type(error).__name__ + '): ' + str(error), file=sys.stderr)
+        raise SystemExit(1)

@@ -1,0 +1,13 @@
+[Unit]
+Description=Record Codex cloud token usage for aiusage
+After=network-online.target
+
+[Service]
+Type=simple
+ExecStart=%h/.local/bin/codex-cloud-usage
+Restart=on-failure
+RestartSec=30
+UMask=0077
+
+[Install]
+WantedBy=default.target

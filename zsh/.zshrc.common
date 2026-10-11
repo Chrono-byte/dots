@@ -1,6 +1,28 @@
 # Portable interactive Zsh configuration shared by Linux and macOS.
 
-alias aiusage="bunx tokscale@latest"
+unalias aiusage 2>/dev/null
+function aiusage() {
+  if [[ "$OSTYPE" == linux* ]] && command -v systemctl >/dev/null 2>&1 \
+    && [[ -e "$HOME/.config/systemd/user/codex-cloud-usage.service" ]]; then
+    systemctl --user start codex-cloud-usage.service 2>/dev/null
+  fi
+  local cloud_sessions="$HOME/.local/share/aiusage/codex-cloud/sessions"
+  local history_sessions="$HOME/.local/share/aiusage/codex-account-estimates/sessions"
+  local history_scan=""
+  case "$1" in
+    submit|autosubmit|import|login|logout|delete-submitted-data) ;;
+    *)
+      history_scan=",codex:$history_sessions"
+      if [[ -x "$HOME/.local/bin/aiusage-account-backfill" ]]; then
+        "$HOME/.local/bin/aiusage-account-backfill" --refresh >/dev/null || \
+          print -u2 "aiusage: history refresh failed; using the last estimates."
+      fi
+      ;;
+  esac
+  TOKSCALE_EXTRA_DIRS="${TOKSCALE_EXTRA_DIRS:+$TOKSCALE_EXTRA_DIRS,}codex:$cloud_sessions$history_scan" \
+    bunx tokscale@latest "$@"
+}
+
 
 # Make a user-installed fnm visible before Oh My Zsh loads its plugin.
 typeset -U path PATH

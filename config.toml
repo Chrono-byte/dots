@@ -123,6 +123,8 @@ files = [
 # Most of these are simple tools for tools under Niri.
 [tools.scripts]
 files = [
+  { repo = "scripts/aiusage-account-backfill", dest = ".local/bin/aiusage-account-backfill", conditions = { os = ["linux"] } },
+  { repo = "scripts/codex-cloud-usage", dest = ".local/bin/codex-cloud-usage", conditions = { os = ["linux"] } },
   { repo = "scripts/window-title-waybar", dest = ".local/bin/window-title-waybar" },
   { repo = "scripts/niri-dynamic-float", dest = ".local/bin/niri-dynamic-float" },
 ]
@@ -130,6 +132,7 @@ files = [
 # Background service that handles the Bitwarden floating window from Zen/Helium
 [tools.systemd]
 files = [
+  { repo = "systemd/user/codex-cloud-usage.service", dest = ".config/systemd/user/codex-cloud-usage.service", conditions = { os = ["linux"] } },
   { repo = "systemd/user/niri-dynamic-float.service", dest = ".config/systemd/user/niri-dynamic-float.service" },
 ]
 
