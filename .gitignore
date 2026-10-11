@@ -39,3 +39,7 @@ desktop.ini
 # The harness views share the helper dependency directory through symlinks.
 !/codex/skills/poteto-mode/scripts/node_modules
 !/pi/skills/poteto-mode/scripts/node_modules
+
+# Machine-local shell secrets
+/.zshrc.secrets
+/zsh/.zshrc.secrets

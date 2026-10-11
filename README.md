@@ -42,3 +42,11 @@ Pi's [my-pi-setup](https://forgejo.disilla.org/chrono/my-pi-setup) repository is
 ### Checks
 
 Run `python3 docs/check-dotfiles.py` (Python 3.11+) and `flux --config ~/.dotfiles/config.toml doctor` to check mappings and links. Preview installation with `flux --config ~/.dotfiles/config.toml apply --dry-run --diff`.
+
+### Local shell secrets
+
+Both zsh configurations optionally source `~/.zshrc.secrets` when it is readable. A missing file is fine. Flux does not install or manage this file.
+
+For a new local file, copy `zsh/.zshrc.secrets.example` to `~/.zshrc.secrets`, then edit it locally as needed. The example contains no credential and makes no exports. Do not overwrite an existing secrets file or commit credentials. Repository copies named `.zshrc.secrets` at the root or under `zsh/` are ignored.
+
+The revoked AI Gateway key was removed from the current shell configurations. Git history still contains it; this change does not rewrite history.
