@@ -5,7 +5,6 @@ personality = "pragmatic"
 service_tier = "priority"
 approvals_reviewer = "auto_review"
 
-
 [tui]
 status_line = ["model-with-reasoning", "context-remaining", "current-dir", "five-hour-limit"]
 theme = "one-half-dark"
@@ -174,7 +173,13 @@ followUpQueueMode = "steer"
 conversationDetailMode = "STEPS_COMMANDS"
 external-agent-import-sync-enabled = false
 keepRemoteControlAwakeWhilePluggedIn = true
-sidebarShowYourDotInRecents = false
+sidebarShowYourDotInRecents = true
+
+[desktop.open-in-target-preferences]
+global = "zed"
+
+[desktop.open-in-target-preferences.perPath]
+"/home/chrono/Dev/proton-bridge-mcp" = "zed"
 
 [marketplaces.openai-bundled]
 source_type = "local"
