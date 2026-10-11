@@ -1,0 +1,9 @@
+{
+  "name": "com.openai.codexextension",
+  "description": "ChatGPT native messaging host for Helium",
+  "path": "/home/chrono/.local/bin/helium-chatgpt-host",
+  "type": "stdio",
+  "allowed_origins": [
+    "chrome-extension://hehggadaopoacecdllhhajmbjkdcmajg/"
+  ]
+}

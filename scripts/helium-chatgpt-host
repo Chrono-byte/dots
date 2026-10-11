@@ -1,0 +1,102 @@
+#!/usr/bin/python3
+"""Run Helium's native host from the installed ChatGPT package, including sidebar v2."""
+
+import datetime as dt
+import fcntl
+import hashlib
+import json
+import os
+from pathlib import Path
+import platform
+import sys
+import tempfile
+
+
+RESOURCES = Path('/usr/lib/chatgpt/resources')
+HOST_NAME = 'com.openai.codexextension'
+EXTENSION_ID = 'hehggadaopoacecdllhhajmbjkdcmajg'
+ORIGIN = f'chrome-extension://{EXTENSION_ID}/'
+
+
+def prepare():
+    architecture = {'x86_64': 'x64', 'aarch64': 'arm64'}.get(platform.machine())
+    if architecture is None:
+        raise RuntimeError(f'Unsupported architecture: {platform.machine()}')
+    plugin = RESOURCES / 'plugins/openai-bundled/plugins/chrome'
+    version = json.loads((plugin / '.codex-plugin/plugin.json').read_text())['version']
+    codex_home = Path(os.environ.get('CODEX_HOME', Path.home() / '.codex')).resolve()
+    paths = {
+        'browserClientPath': str(plugin / 'scripts/browser-client.mjs'),
+        'browserServicePath': str(plugin / 'scripts/browser-service.mjs'),
+        'codexCliPath': str(RESOURCES / 'codex'),
+        'codexHome': str(codex_home),
+        'extensionHostPath': str(plugin / f'extension-host/linux/{architecture}/extension-host'),
+        'nodePath': str(RESOURCES / 'cua_node/bin/node'),
+        'nodeModuleDirs': [str(RESOURCES / 'cua_node/lib/node_modules')],
+        'nodeReplPath': str(RESOURCES / 'cua_node/bin/node_repl'),
+        'resourcesPath': str(RESOURCES),
+    }
+    for key, value in paths.items():
+        if key not in ('codexHome', 'nodeModuleDirs', 'resourcesPath') and not Path(value).is_file():
+            raise RuntimeError(f'Installed ChatGPT package is missing {key}: {value}')
+    for key in ('extensionHostPath', 'codexCliPath', 'nodePath', 'nodeReplPath'):
+        if not os.access(paths[key], os.X_OK):
+            raise RuntimeError(f'Installed ChatGPT executable is unavailable: {paths[key]}')
+
+    install_id = 'helium-chatgpt-' + hashlib.sha256(str(RESOURCES).encode()).hexdigest()[:32]
+    entry = {
+        'schemaVersion': 2,
+        'appServerProtocolVersion': 2,
+        'appVersion': version,
+        'channel': 'prod',
+        'cliVersion': version,
+        'entryId': install_id + '-' + version,
+        'extensionBuildChannels': ['prod'],
+        'extensionIds': [EXTENSION_ID],
+        'installId': install_id,
+        'nativeHostNames': [HOST_NAME],
+        'nativeHostProtocolVersion': 2,
+        'nativeHostVersion': version,
+        'paths': paths,
+        'proxyHost': '127.0.0.1',
+        'proxyPort': 0,
+        'updatedAt': dt.datetime.now(dt.timezone.utc).isoformat(),
+    }
+    state_home = Path(os.environ.get('XDG_STATE_HOME', Path.home() / '.local/state'))
+    directory = state_home / 'openai-codex'
+    directory.mkdir(parents=True, exist_ok=True, mode=0o700)
+    registry = directory / 'chrome-native-hosts-v2.json'
+    with (directory / 'helium-chatgpt-host.lock').open('a') as lock:
+        fcntl.flock(lock, fcntl.LOCK_EX)
+        existing = json.loads(registry.read_text()) if registry.exists() else {'schemaVersion': 2, 'entries': []}
+        if existing.get('schemaVersion') != 2 or not isinstance(existing.get('entries'), list):
+            raise RuntimeError('Unsupported native host registry; refusing to overwrite it')
+        entries = [item for item in existing['entries'] if not isinstance(item, dict) or item.get('installId') != install_id]
+        entries.append(entry)
+        descriptor, temporary = tempfile.mkstemp(prefix='.helium-host-', dir=directory)
+        try:
+            with os.fdopen(descriptor, 'w') as output:
+                json.dump({**existing, 'entries': entries}, output, indent=2)
+                output.write('\n')
+            os.replace(temporary, registry)
+        finally:
+            Path(temporary).unlink(missing_ok=True)
+    return paths['extensionHostPath'], version
+
+
+def main():
+    if sys.argv[1:] != ['--prepare'] and (len(sys.argv) < 2 or sys.argv[1] != ORIGIN):
+        raise RuntimeError('Expected the registered ChatGPT extension origin or --prepare')
+    host, version = prepare()
+    if sys.argv[1:] == ['--prepare']:
+        print(f'ChatGPT {version}: native host protocol v2 registered')
+        return
+    os.execv(host, [host, *sys.argv[1:]])
+
+
+if __name__ == '__main__':
+    try:
+        main()
+    except (OSError, ValueError, KeyError, RuntimeError) as error:
+        print(f'helium-chatgpt-host: {error}', file=sys.stderr)
+        sys.exit(1)
