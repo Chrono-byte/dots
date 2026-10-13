@@ -1,8 +1,8 @@
 #:schema https://raw.githubusercontent.com/openai/codex/refs/heads/main/codex-rs/core/config.schema.json
-model = "gpt-6.1-sol"
+model = "gpt-6-luna"
 model_reasoning_effort = "high"
 personality = "pragmatic"
-service_tier = "priority"
+service_tier = "fast"
 approvals_reviewer = "auto_review"
 
 [tui]
@@ -247,4 +247,7 @@ trust_level = "trusted"
 trust_level = "trusted"
 
 [projects."/home/chrono/Dev/nextcloud-mcp"]
+trust_level = "trusted"
+
+[projects."/home/chrono/Dev/Guildmaster"]
 trust_level = "trusted"
