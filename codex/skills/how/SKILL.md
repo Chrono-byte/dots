@@ -10,7 +10,7 @@ Read the `# budget` line from the harness’s pstack model configuration along w
 
 Explore the codebase to answer "how does X work?" questions. Produce architectural explanations at the level of a senior engineer onboarding onto a subsystem, enough to build a working mental model, not so much that it reads like annotated source code.
 
-Every spawn is a Codex subagent with a general-purpose prompt and a read-only constraint; do not edit files. Explorers use the `how explorer` line in the `pstack-models.md` rule (default `gpt-5.6-luna`), and every explainer uses the `how explainer` line (default `gpt-5.6-sol`). Set `model` to that line's value, or to the default if the rule or the line is missing. Leave `model` unset when the value is `auto` or `inherit-parent`. If the Codex subagent tool rejects a slug, use the default and say so. If it rejects the default, use the closest valid slug of the same family from its error message.
+Every spawn is a Codex subagent with a general-purpose prompt and a read-only constraint; do not edit files. Explorers use the `how explorer` line in the `pstack-models.md` rule (default `gpt-6-luna`), and every explainer uses the `how explainer` line (default `gpt-6.1-sol`). Set `model` to that line's value, or to the default if the rule or the line is missing. Leave `model` unset when the value is `auto` or `inherit-parent`. If the Codex subagent tool rejects a slug, use the default and say so. If it rejects the default, use the closest valid slug of the same family from its error message.
 
 ## 1. Assess complexity
 
