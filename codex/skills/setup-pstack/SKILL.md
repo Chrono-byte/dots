@@ -42,23 +42,23 @@ Write `~/.codex/pstack-models.md` with a `# budget` line with the chosen label a
 # pstack model configuration. One line per role. Delete a line to fall back to the skill default.
 # `inherit-parent` or `auto` as a value: the role runs on the parent chat model (omit the subagent model override). Alias entries in a panel list still count toward its fan-out.
 # budget: large (xhigh)
-feature, refactoring: gpt-5.6-luna
-bug-fix: gpt-5.6-luna
-perf-issue: gpt-5.6-luna
-hillclimb: gpt-5.6-luna
-judgment and prose: gpt-5.6-sol
-hardest tasks: gpt-5.6-sol
-how explorer: gpt-5.6-luna
-how explainer: gpt-5.6-sol
-why investigators: gpt-5.6-luna
-why synthesizer: gpt-5.6-sol
-reflect tooling: gpt-5.6-luna
-reflect judgment, divergent, synthesizer: gpt-5.6-sol
-arena runners: gpt-5.6-sol, gpt-5.6-luna
-arena cross-judge pool: gpt-5.6-sol, gpt-5.6-luna
-swarm workers: gpt-5.6-luna
-architect runners: gpt-5.6-sol, gpt-5.6-luna
-interrogate reviewers: gpt-5.6-sol, gpt-5.6-luna
+feature, refactoring: gpt-6-luna
+bug-fix: gpt-6-luna
+perf-issue: gpt-6-luna
+hillclimb: gpt-6-luna
+judgment and prose: gpt-6.1-sol
+hardest tasks: gpt-6.1-sol
+how explorer: gpt-6-luna
+how explainer: gpt-6.1-sol
+why investigators: gpt-6-luna
+why synthesizer: gpt-6.1-sol
+reflect tooling: gpt-6-luna
+reflect judgment, divergent, synthesizer: gpt-6.1-sol
+arena runners: gpt-6.1-sol, gpt-6-luna
+arena cross-judge pool: gpt-6.1-sol, gpt-6-luna
+swarm workers: gpt-6-luna
+architect runners: gpt-6.1-sol, gpt-6-luna
+interrogate reviewers: gpt-6.1-sol, gpt-6-luna
 ```
 
 ### 6. Confirm

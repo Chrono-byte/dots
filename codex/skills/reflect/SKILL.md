@@ -24,15 +24,15 @@ Each reviewer and the synthesizer name a role line in the `pstack-models.md` rul
 
 | Lens | Role line | Default `model` | Prompt template |
 |---|---|---|---|
-| Judgment | `reflect judgment, divergent, synthesizer` | `gpt-5.6-sol` | `references/judgment-reviewer.md` |
-| Tooling | `reflect tooling` | `gpt-5.6-luna` | `references/tooling-reviewer.md` |
-| Divergent | `reflect judgment, divergent, synthesizer` | `gpt-5.6-sol` | `references/divergent-reviewer.md` |
+| Judgment | `reflect judgment, divergent, synthesizer` | `gpt-6.1-sol` | `references/judgment-reviewer.md` |
+| Tooling | `reflect tooling` | `gpt-6-luna` | `references/tooling-reviewer.md` |
+| Divergent | `reflect judgment, divergent, synthesizer` | `gpt-6.1-sol` | `references/divergent-reviewer.md` |
 
 Pass each template verbatim, substituting the transcript path or digest where marked. Reviewers return findings in the subagent result.
 
 ## 3. Synthesize
 
-One subagent delegation call with a general-purpose prompt, `model` from the `reflect judgment, divergent, synthesizer` line (default `gpt-5.6-sol`), full tool access with file edits prohibited for read-only work. It spot-verifies citations through MCP, and readonly strips MCPs. Pass `references/synthesizer.md` verbatim, with each reviewer's full output inlined where marked. It returns an Accepted / Rejected / Backlog list.
+One subagent delegation call with a general-purpose prompt, `model` from the `reflect judgment, divergent, synthesizer` line (default `gpt-6.1-sol`), full tool access with file edits prohibited for read-only work. It spot-verifies citations through MCP, and readonly strips MCPs. Pass `references/synthesizer.md` verbatim, with each reviewer's full output inlined where marked. It returns an Accepted / Rejected / Backlog list.
 
 ## 4. Structural enforcement check
 

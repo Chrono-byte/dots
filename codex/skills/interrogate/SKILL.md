@@ -29,8 +29,8 @@ Launch all reviewers in a single message with the Codex subagent tool, one per e
 
 | Subagent | Default model |
 |----------|---------------|
-| Reviewer A | `gpt-5.6-sol` |
-| Reviewer B | `gpt-5.6-luna` |
+| Reviewer A | `gpt-6.1-sol` |
+| Reviewer B | `gpt-6-luna` |
 
 Each reviewer gets a general-purpose prompt with file edits prohibited, and `model` set to its configured entry, or its table default when there is no configured line. Omit `model` for an `auto` or `inherit-parent` entry, so that reviewer runs on the parent model.
 

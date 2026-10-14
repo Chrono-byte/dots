@@ -1,8 +1,8 @@
 #:schema https://raw.githubusercontent.com/openai/codex/refs/heads/main/codex-rs/core/config.schema.json
-model = "gpt-6-luna"
+model = "gpt-6-sol"
 model_reasoning_effort = "high"
 personality = "pragmatic"
-service_tier = "fast"
+service_tier = "default"
 approvals_reviewer = "auto_review"
 
 [tui]
@@ -186,6 +186,11 @@ global = "zed"
 "/home/chrono/Dev/proton-bridge-mcp" = "zed"
 "/home/chrono/Dev/nextcloud-mcp" = "zed"
 
+[desktop.daybreak-enabled]
+accountId = "b6e61595-2ad8-48d0-b802-8a0703769048"
+userId = "user-MbDvMaBsXJo26COI8u3TFTb7"
+enabled = true
+
 [marketplaces.openai-bundled]
 source_type = "local"
 source = "/home/chrono/.codex/.tmp/bundled-marketplaces/openai-bundled"
@@ -216,6 +221,9 @@ BROWSER_USE_CODEX_APP_BUILD_FLAVOR = "prod"
 BROWSER_USE_CODEX_APP_VERSION = "26.1007.21434"
 NODE_REPL_TRUSTED_SERVICES = '{"browser":"/home/chrono/.codex/plugins/cache/openai-bundled/browser/26.1007.21434/scripts/browser-service.mjs"}'
 CODEX_CLI_PATH = "/usr/lib/chatgpt/resources/codex"
+
+[mcp_servers.t3code]
+url = "http://100.82.193.84:3774/mcp"
 
 [shell_environment_policy.set]
 NODE_REPL_TRUSTED_BROWSER_CLIENT_SHA256S = "9230e2bd8b24b7ac7a0ba6774c64bf0d78ecdabbdd91d0ed627b02a587bae2df"
