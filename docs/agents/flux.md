@@ -8,6 +8,22 @@ Flux manages configuration stored in `~/.dotfiles` and links it into application
 flux --config ~/.dotfiles/config.toml …
 ```
 
+## Initial setup
+
+For a new checkout, clone the repository with its submodules:
+
+```sh
+git clone --recurse-submodules <repository-url> ~/.dotfiles
+```
+
+For an existing checkout, initialize its submodules:
+
+```sh
+git -C ~/.dotfiles submodule update --init --recursive
+```
+
+Install [Flux](https://forgejo.disilla.org/chrono/flux), then follow the workflow below to validate mappings, preview links, and apply the setup. Review the preview before applying. Use `--force` only when repository content should replace existing local configuration.
+
 ## Workflow
 
 1. Inspect both repository and installation state:
@@ -17,7 +33,7 @@ flux --config ~/.dotfiles/config.toml …
    flux --config ~/.dotfiles/config.toml status
    ```
 
-2. Identify the source before editing. Use `readlink` when a destination may be linked. Edit the repository source, not a copied destination.
+2. Identify the source before editing. Use `readlink` when a destination may be linked, then check `config.toml` to resolve the repository source. Edit that source, not a copied destination. If the source remains unclear, inspect the mapping and link state before editing.
 
 3. When mappings or installation state could change, preview the complete operation and inspect its diff:
 
@@ -33,9 +49,10 @@ flux --config ~/.dotfiles/config.toml …
    python3 ~/.dotfiles/docs/check-dotfiles.py
    git -C ~/.dotfiles diff --check
    flux --config ~/.dotfiles/config.toml status
+   flux --config ~/.dotfiles/config.toml doctor
    ```
 
-   For mapping changes, also confirm the path appears in `flux ls-files`. After applying, confirm destinations with `readlink` or `ls -ld`. Completion means the repository is valid and every intended destination is either already linked or was applied successfully.
+   For mapping changes, also confirm the mapped repository source path appears in `flux --config ~/.dotfiles/config.toml ls-files`. After applying, confirm destinations with `readlink` or `ls -ld`. Completion means the repository is valid and every intended destination is either already linked or was applied successfully.
 
 ## Adding and changing mappings
 
@@ -79,6 +96,6 @@ The poteto-mode helpers keep generated dependencies under `skills/shared/poteto-
 
 ## Committing and publishing
 
-`flux commit` synchronizes every tracked destination before committing, so it can import unrelated local application changes. Inspect `flux status` and the Git diff first. For a selected-file commit, use explicit `git add -- <paths>` and `git commit` instead.
+`flux --config ~/.dotfiles/config.toml commit` synchronizes every destination tracked by this Flux configuration before committing, so it can import unrelated local application changes. Inspect `flux --config ~/.dotfiles/config.toml status` and the Git diff first. For a selected-file commit, use explicit `git add -- <paths>` and `git commit` instead.
 
-Push only when publication is requested, using `flux push` or `git push`. A successful commit does not prove installation state is correct; report repository and installation outcomes separately.
+Push only when publication is requested, using `flux --config ~/.dotfiles/config.toml push` or `git push`. A successful commit does not prove installation state is correct; report repository and installation outcomes separately.
