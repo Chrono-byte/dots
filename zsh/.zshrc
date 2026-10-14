@@ -1,3 +1,9 @@
+# AppImage launchers export ARGV0, which Zsh also uses for child command names.
+# Clear the inherited launcher name before plugins invoke tools such as Rustup.
+if [[ -n "$APPIMAGE" && "$ARGV0" == "$APPIMAGE" ]]; then
+  unset ARGV0
+fi
+
 zmodload zsh/zprof
 
 
