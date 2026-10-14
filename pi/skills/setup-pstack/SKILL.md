@@ -42,23 +42,23 @@ Write `~/.pi/agent/pstack-models.md` with a `# budget` line with the chosen labe
 # pstack model configuration. One line per role. Delete a line to fall back to the skill default.
 # `inherit-parent` or `auto` as a value: the role runs on the parent chat model (omit the subagent model override). Alias entries in a panel list still count toward its fan-out.
 # budget: large (xhigh)
-feature, refactoring: openai-codex/gpt-5.6-luna
-bug-fix: openai-codex/gpt-5.6-luna
-perf-issue: openai-codex/gpt-5.6-luna
-hillclimb: openai-codex/gpt-5.6-luna
-judgment and prose: openai-codex/gpt-5.6-sol
-hardest tasks: openai-codex/gpt-5.6-sol
-how explorer: openai-codex/gpt-5.6-luna
-how explainer: openai-codex/gpt-5.6-sol
-why investigators: openai-codex/gpt-5.6-luna
-why synthesizer: openai-codex/gpt-5.6-sol
-reflect tooling: openai-codex/gpt-5.6-luna
-reflect judgment, divergent, synthesizer: openai-codex/gpt-5.6-sol
-arena runners: openai-codex/gpt-5.6-sol, openai-codex/gpt-5.6-luna
-arena cross-judge pool: openai-codex/gpt-5.6-sol, openai-codex/gpt-5.6-luna
-swarm workers: openai-codex/gpt-5.6-luna
-architect runners: openai-codex/gpt-5.6-sol, openai-codex/gpt-5.6-luna
-interrogate reviewers: openai-codex/gpt-5.6-sol, openai-codex/gpt-5.6-luna
+feature, refactoring: openai-codex/gpt-6-luna
+bug-fix: openai-codex/gpt-6-luna
+perf-issue: openai-codex/gpt-6-luna
+hillclimb: openai-codex/gpt-6-luna
+judgment and prose: openai-codex/gpt-6.1-sol
+hardest tasks: openai-codex/gpt-6.1-sol
+how explorer: openai-codex/gpt-6-luna
+how explainer: openai-codex/gpt-6.1-sol
+why investigators: openai-codex/gpt-6-luna
+why synthesizer: openai-codex/gpt-6.1-sol
+reflect tooling: openai-codex/gpt-6-luna
+reflect judgment, divergent, synthesizer: openai-codex/gpt-6.1-sol
+arena runners: openai-codex/gpt-6.1-sol, openai-codex/gpt-6-luna
+arena cross-judge pool: openai-codex/gpt-6.1-sol, openai-codex/gpt-6-luna
+swarm workers: openai-codex/gpt-6-luna
+architect runners: openai-codex/gpt-6.1-sol, openai-codex/gpt-6-luna
+interrogate reviewers: openai-codex/gpt-6.1-sol, openai-codex/gpt-6-luna
 ```
 
 ### 6. Confirm
