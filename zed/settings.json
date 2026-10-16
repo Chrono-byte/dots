@@ -99,6 +99,9 @@
   },
   "ui_font_weight": 500.0,
   "agent": {
+    "threads_sidebar": {
+      "auto_open": false
+    },
     "flexible": false,
     "default_width": 315.0,
     "tool_permissions": {

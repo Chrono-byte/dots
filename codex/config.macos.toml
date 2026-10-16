@@ -1,6 +1,6 @@
 #:schema https://raw.githubusercontent.com/openai/codex/refs/heads/main/codex-rs/core/config.schema.json
-model = "gpt-6.1-sol"
-model_reasoning_effort = "low"
+model = "gpt-6-luna"
+model_reasoning_effort = "medium"
 personality = "pragmatic"
 service_tier = "priority"
 approvals_reviewer = "auto_review"
@@ -175,8 +175,9 @@ trust_level = "trusted"
 
 [desktop]
 followUpQueueMode = "queue"
-conversationDetailMode = "STEPS_PROSE"
+conversationDetailMode = "STEPS_COMMANDS"
 show-context-window-usage = true
+confirm-before-close = "never"
 
 [desktop.daybreak-enabled]
 accountId = "b6e61595-2ad8-48d0-b802-8a0703769048"
@@ -217,8 +218,8 @@ NODE_REPL_INSTRUCTIONS_USE_CASE_BROWSER = ""
 NODE_REPL_INSTRUCTIONS_USE_CASE_CHROME = ""
 NODE_REPL_INSTRUCTIONS_USE_CASE_COMPUTER_USE = ""
 BROWSER_USE_CODEX_APP_BUILD_FLAVOR = "prod"
-BROWSER_USE_CODEX_APP_VERSION = "26.1007.21159"
-NODE_REPL_TRUSTED_SERVICES = '{"browser":"/Users/chrono/.codex/plugins/cache/openai-bundled/browser/26.1007.21159/scripts/browser-service.mjs","sky":"@oai/sky/service"}'
+BROWSER_USE_CODEX_APP_VERSION = "26.1007.71326"
+NODE_REPL_TRUSTED_SERVICES = '{"browser":"/Users/chrono/.codex/plugins/cache/openai-bundled/browser/26.1007.71326/scripts/browser-service.mjs","sky":"@oai/sky/service"}'
 SKY_CUA_SERVICE_PATH = "/Users/chrono/.codex/computer-use/Codex Computer Use.app"
 CODEX_CLI_PATH = "/Applications/ChatGPT.app/Contents/Resources/codex-cli/CodexCLI.app/Contents/MacOS/codex"
 
@@ -255,4 +256,7 @@ trust_level = "trusted"
 trust_level = "trusted"
 
 [projects."/home/chrono/Dev/frame-finder"]
+trust_level = "trusted"
+
+[projects."/Users/chrono/Dev/openboard"]
 trust_level = "trusted"
