@@ -1,6 +1,6 @@
 # Ellie's Dotfiles
 
-A dotfiles repository managed by [Flux](https://forgejo.disilla.org/chrono/flux), my Rust CLI for linking repository files into application paths under my home directory.
+A dotfiles repository managed by [Flux](https://forgejo.disilla.org/chrono/flux), my CLI for linking repository files into application paths under my home directory.
 
 ## Overview
 
