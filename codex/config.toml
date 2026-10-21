@@ -1,6 +1,6 @@
 #:schema https://raw.githubusercontent.com/openai/codex/refs/heads/main/codex-rs/core/config.schema.json
-model = "gpt-6-sol"
-model_reasoning_effort = "high"
+model = "gpt-6-luna"
+model_reasoning_effort = "medium"
 personality = "pragmatic"
 service_tier = "default"
 approvals_reviewer = "auto_review"
@@ -102,6 +102,9 @@ trust_level = "trusted"
 [projects."/home/chrono/Dev/t3code"]
 trust_level = "trusted"
 
+[projects."/home/chrono/Dev/flux-linux"]
+trust_level = "trusted"
+
 [projects."/home/chrono/Dev/velx-us"]
 trust_level = "trusted"
 
@@ -178,6 +181,7 @@ external-agent-import-sync-enabled = false
 keepRemoteControlAwakeWhilePluggedIn = true
 sidebarShowYourDotInRecents = true
 sidebar-show-projects-in-recents = true
+confirm-before-close = "never"
 
 [desktop.open-in-target-preferences]
 global = "zed"
@@ -189,7 +193,7 @@ global = "zed"
 [desktop.daybreak-enabled]
 accountId = "b6e61595-2ad8-48d0-b802-8a0703769048"
 userId = "user-MbDvMaBsXJo26COI8u3TFTb7"
-enabled = true
+enabled = false
 
 [marketplaces.openai-bundled]
 source_type = "local"
@@ -218,12 +222,9 @@ BROWSER_USE_TINYSKY_ENABLED = "1"
 NODE_REPL_INSTRUCTIONS_USE_CASE_BROWSER = ""
 NODE_REPL_INSTRUCTIONS_USE_CASE_CHROME = ""
 BROWSER_USE_CODEX_APP_BUILD_FLAVOR = "prod"
-BROWSER_USE_CODEX_APP_VERSION = "26.1007.21434"
-NODE_REPL_TRUSTED_SERVICES = '{"browser":"/home/chrono/.codex/plugins/cache/openai-bundled/browser/26.1007.21434/scripts/browser-service.mjs"}'
+BROWSER_USE_CODEX_APP_VERSION = "26.1013.40934"
+NODE_REPL_TRUSTED_SERVICES = '{"browser":"/home/chrono/.codex/plugins/cache/openai-bundled/browser/26.1013.40934/scripts/browser-service.mjs"}'
 CODEX_CLI_PATH = "/usr/lib/chatgpt/resources/codex"
-
-[mcp_servers.t3code]
-url = "http://100.82.193.84:3774/mcp"
 
 [shell_environment_policy.set]
 NODE_REPL_TRUSTED_BROWSER_CLIENT_SHA256S = "9230e2bd8b24b7ac7a0ba6774c64bf0d78ecdabbdd91d0ed627b02a587bae2df"
@@ -258,4 +259,13 @@ trust_level = "trusted"
 trust_level = "trusted"
 
 [projects."/home/chrono/Dev/Guildmaster"]
+trust_level = "trusted"
+
+[projects."/home/chrono/.t3/scratch/2026-10-16-download-the-app-epic-pen-0618cc3e"]
+trust_level = "trusted"
+
+[projects."/home/chrono/Dev/flux-linux-kernel"]
+trust_level = "trusted"
+
+[projects."/home/chrono/Dev/satet-infra"]
 trust_level = "trusted"
