@@ -1,0 +1,92 @@
+# Noctalia v5 configuration migrated from the previous Quickshell-based setup.
+
+[accessibility]
+ui_scale = 0.95
+
+[shell]
+telemetry_enabled = false
+
+[shell.launcher]
+layout = "full"
+search_position = "bottom"
+default_view = "pinned"
+categories = true
+show_settings_button = true
+show_session_button = true
+app_grid = true
+track_usage = true
+sort_by_usage = true
+pinned = [
+  "t3_code_nightly",
+  "org.gnome.Fractal",
+  "helium",
+  "com.mitchellh.ghostty",
+  "md.obsidian.Obsidian",
+  "org.mozilla.thunderbird",
+  "com.discordapp.Discord",
+  "zen-twilight",
+]
+
+[theme]
+mode = "dark"
+shell_mode = "follow"
+source = "custom"
+custom_palette = "Flexoki"
+sync_color_scheme = true
+
+[bar.default]
+position = "top"
+thickness = 34
+background_opacity = 0.93
+compositor_blur = true
+radius = 12
+margin_ends = 4
+margin_edge = 4
+padding = 6
+widget_spacing = 6
+capsule = true
+capsule_opacity = 1.0
+start = ["launcher", "active_window", "media", "workspaces"]
+center = ["clock"]
+end = ["tray", "notifications", "battery", "volume", "control-center"]
+
+[widget.clock]
+format = "{:%H:%M - %m/%d/%Y}"
+tooltip_format = "{:%a, %b %d}"
+
+[widget.active_window]
+max_length = 145
+display = "icon_and_text"
+
+[widget.media]
+max_length = 145
+artist_first = true
+hide_when_no_media = true
+
+[dock]
+enabled = true
+position = "bottom"
+auto_hide = true
+pinned = [
+  "zen-twilight",
+  "org.mozilla.thunderbird",
+  "com.discordapp.Discord",
+  "dev.zed.Zed-Nightly",
+  "com.mitchellh.ghostty",
+  "org.gnome.Nautilus",
+  "t3_code_nightly",
+]
+
+[wallpaper]
+enabled = true
+fill_mode = "crop"
+directory = "~/Pictures/Wallpapers"
+transition = ["fade", "disc", "stripes", "wipe", "pixelate", "honeycomb"]
+transition_duration = 1500
+
+[wallpaper.automation]
+enabled = false
+
+[audio]
+enable_overdrive = false
+enable_sounds = false
