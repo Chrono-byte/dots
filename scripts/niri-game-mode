@@ -1,0 +1,127 @@
+#!/usr/bin/python3
+"""Use Super instead of Alt while a focused Gamescope tile fills its output."""
+
+import argparse
+import fcntl
+import json
+import os
+from pathlib import Path
+import signal
+import socket
+
+
+OVERRIDE = Path.home() / ".local/state/niri/game-mode.kdl"
+
+
+def write_mode(gaming, path=OVERRIDE):
+    # Empty means inherit the host's modifier, rather than hard-coding Alt.
+    content = 'input { mod-key "Super"; }\n' if gaming else "// Desktop modifier inherited from host settings.\n"
+    path.parent.mkdir(parents=True, exist_ok=True)
+    if path.exists() and path.read_text() == content:
+        return
+    temporary = path.with_suffix(".tmp")
+    temporary.write_text(content)
+    temporary.replace(path)
+    print("game mode: " + ("Super" if gaming else "host default"), flush=True)
+
+
+def request(message):
+    with socket.socket(socket.AF_UNIX) as connection:
+        connection.settimeout(3)
+        connection.connect(os.environ["NIRI_SOCKET"])
+        connection.sendall((json.dumps(message) + "\n").encode())
+        with connection.makefile() as stream:
+            reply = json.loads(stream.readline())
+    if "Err" in reply:
+        raise RuntimeError(reply["Err"])
+    return reply["Ok"]
+
+
+class State:
+    def __init__(self):
+        self.windows = {}
+        self.workspaces = {}
+        self.focused = None
+        self.overview = False
+
+    def update(self, event):
+        kind, data = next(iter(event.items()))
+        if kind == "WindowsChanged":
+            self.windows = {w["id"]: w for w in data["windows"]}
+            self.focused = next((w["id"] for w in data["windows"] if w["is_focused"]), None)
+        elif kind == "WindowOpenedOrChanged":
+            window = data["window"]
+            self.windows[window["id"]] = window
+            if window["is_focused"]:
+                self.focused = window["id"]
+        elif kind == "WindowFocusChanged":
+            self.focused = data["id"]
+        elif kind == "WindowClosed":
+            self.windows.pop(data["id"], None)
+            if self.focused == data["id"]:
+                self.focused = None
+        elif kind == "WindowLayoutsChanged":
+            for window_id, layout in data["changes"]:
+                if window_id in self.windows:
+                    self.windows[window_id]["layout"] = layout
+        elif kind == "WorkspacesChanged":
+            self.workspaces = {w["id"]: w for w in data["workspaces"]}
+        elif kind == "OverviewOpenedOrClosed":
+            self.overview = data["is_open"]
+        else:
+            return False
+        return True
+
+    def is_gaming(self, outputs):
+        window = self.windows.get(self.focused)
+        if self.overview or not window or window.get("app_id") != "gamescope":
+            return False
+        workspace = self.workspaces.get(window.get("workspace_id"), {})
+        output = outputs.get(workspace.get("output"), {}).get("logical")
+        if not output:
+            return False
+        # Niri 26.04 IPC has no fullscreen flag. Use the tile (including any
+        # letterbox backdrop), so fixed-size fullscreen games also match.
+        size = window["layout"]["tile_size"]
+        return all(abs(a - b) < 1 for a, b in zip(size, (output["width"], output["height"])))
+
+
+def stop(_signal, _frame):
+    raise SystemExit(0)
+
+
+def main():
+    parser = argparse.ArgumentParser(description=__doc__)
+    parser.add_argument("--reset", action="store_true")
+    args = parser.parse_args()
+    if args.reset:
+        write_mode(False)
+        return
+
+    signal.signal(signal.SIGTERM, stop)
+    signal.signal(signal.SIGINT, stop)
+    lock_path = Path(os.environ["XDG_RUNTIME_DIR"]) / "niri-game-mode.lock"
+    with lock_path.open("w") as lock:
+        fcntl.flock(lock, fcntl.LOCK_EX | fcntl.LOCK_NB)
+        try:
+            write_mode(False)
+            state = State()
+            with socket.socket(socket.AF_UNIX) as connection:
+                connection.connect(os.environ["NIRI_SOCKET"])
+                connection.sendall(b'"EventStream"\n')
+                with connection.makefile() as stream:
+                    reply = json.loads(stream.readline())
+                    if reply != {"Ok": "Handled"}:
+                        raise RuntimeError(reply)
+                    for line in stream:
+                        if state.update(json.loads(line)):
+                            window = state.windows.get(state.focused, {})
+                            outputs = request("Outputs")["Outputs"] if window.get("app_id") == "gamescope" else {}
+                            write_mode(state.is_gaming(outputs))
+                    raise ConnectionError("Niri event stream disconnected")
+        finally:
+            write_mode(False)
+
+
+if __name__ == "__main__":
+    main()

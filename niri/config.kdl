@@ -93,6 +93,7 @@ layout {
 
 
 spawn-at-startup "noctalia"
+spawn-at-startup "gtk-launch" "bridgething"
 
 hotkey-overlay {
 }
@@ -313,4 +314,6 @@ binds {
     Mod+Shift+P { power-off-monitors; }
 }
 
-include "./noctalia.kdl"
+
+// Flux selects this machine's input and keybinding overrides.
+include optional=true "~/.config/niri-host.kdl"

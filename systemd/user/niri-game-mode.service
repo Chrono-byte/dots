@@ -1,0 +1,16 @@
+[Unit]
+Description=Use Super for desktop shortcuts while fullscreen Gamescope is focused
+After=niri.service
+BindsTo=niri.service
+PartOf=niri.service
+ConditionHost=horus
+
+[Service]
+Type=simple
+ExecStart=%h/.local/bin/niri-game-mode
+ExecStopPost=%h/.local/bin/niri-game-mode --reset
+Restart=on-failure
+RestartSec=2
+
+[Install]
+WantedBy=niri.service

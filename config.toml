@@ -92,6 +92,10 @@ folders = [{ repo = "pi/agent", dest = ".pi/agent" }]
 
 [tools.niri]
 folders = [{ repo = "niri", dest = ".config/niri" }]
+files = [
+  { repo = "niri/hosts/horus.kdl", dest = ".config/niri-host.kdl", conditions = { os = ["linux"], host = ["horus"] } },
+  { repo = "niri/hosts/shu.kdl", dest = ".config/niri-host.kdl", conditions = { os = ["linux"], host = ["shu"] } },
+]
 
 [tools.noctalia]
 folders = [{ repo = "noctalia", dest = ".config/noctalia" }]
@@ -104,6 +108,7 @@ files = [{ repo = "fuzzel/fuzzel.ini", dest = ".config/fuzzel/fuzzel.ini" }]
 
 [tools.scripts]
 files = [
+  { repo = "scripts/niri-game-mode", dest = ".local/bin/niri-game-mode", conditions = { os = ["linux"], host = ["horus"] } },
   { repo = "scripts/helium-chatgpt-host", dest = ".local/bin/helium-chatgpt-host", conditions = { os = ["linux"] } },
   { repo = "scripts/aiusage-account-backfill", dest = ".local/bin/aiusage-account-backfill", conditions = { os = ["linux"] } },
   { repo = "scripts/codex-cloud-usage", dest = ".local/bin/codex-cloud-usage", conditions = { os = ["linux"] } },
@@ -113,6 +118,7 @@ files = [
 
 [tools.systemd]
 files = [
+  { repo = "systemd/user/niri-game-mode.service", dest = ".config/systemd/user/niri-game-mode.service", conditions = { os = ["linux"], host = ["horus"] } },
   { repo = "systemd/user/codex-cloud-usage.service", dest = ".config/systemd/user/codex-cloud-usage.service", conditions = { os = ["linux"] } },
   { repo = "systemd/user/niri-dynamic-float.service", dest = ".config/systemd/user/niri-dynamic-float.service" },
 ]

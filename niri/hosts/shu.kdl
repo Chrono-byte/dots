@@ -1,0 +1,11 @@
+input {
+    mod-key "Super"
+
+    mouse {
+        accel-speed 0.0
+    }
+}
+
+// Add Shu-specific shortcut overrides here.
+binds {
+}
