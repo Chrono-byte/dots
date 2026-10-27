@@ -211,7 +211,9 @@
     "diagnostics": true,
     "metrics": true
   },
-  "edit_predictions": {},
+  "edit_predictions": {
+    "mode": "subtle"
+  },
   "ui_font_size": 16.0,
   "buffer_font_size": 15,
   "theme": {
